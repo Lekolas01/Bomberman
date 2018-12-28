@@ -1,8 +1,29 @@
+/*var boardLogic = document.createElement('script');
+boardLogic.src = 'boardLogic';
+document.head.appendChild(boardLogic); */
+
 var canvas, ctx;
 var fontSize = 18;
 
 var columns = new Array();
+var boardWidth = 20; // initial length of the gameboard
+var boardHeight = 16; // initial height of the gameboard
+var board = newMatrix(boardHeight, boardWidth);
 
+
+//draws the gameboard part within the canvas
+function drawGameboard(data, canvas, ctx, height, width) {
+    for(var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
+            if(data[i][j] === undefined) {
+                ctx.drawImage(document.getElementById('art_assets'),
+                33, 71, 104, 124, 21, 20, 87, 104);
+            } else {
+                console.log("DEFINED");
+            }
+        }
+    }
+}
 
 //--------------------------------------------------------------------------
 window.onload = function(){
@@ -19,8 +40,8 @@ window.onload = function(){
 //--------------------------------------------------------------------------
 function initializeAnimation() {
 	  // set the internal size to match
-	  canvas.width  = canvas.offsetWidth;
-	  canvas.height = canvas.offsetHeight;
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 
     var numberOfColumns = Math.round(canvas.width / fontSize);
     columns = new Array();
@@ -46,6 +67,7 @@ function animation() {
         }
         columns[i]++;
     }
+    drawGameboard(board, canvas, ctx, boardWidth, boardHeight);
 }
 
 //--------------------------------------------------------------------------
