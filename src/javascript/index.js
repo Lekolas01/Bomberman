@@ -1,56 +1,57 @@
-var canvas, ctx;
-var fontSize = 18;
-
-var columns = new Array();
-
-
-//--------------------------------------------------------------------------
-window.onload = function(){
-    canvas = document.getElementById("bomberman");
-    ctx = canvas.getContext("2d");
-    initializeAnimation();
-
-    window.onresize = initializeAnimation;
-
-    setInterval(animation, 50);
-
-}
-
-//--------------------------------------------------------------------------
-function initializeAnimation() {
-	  // set the internal size to match
-	  canvas.width  = canvas.offsetWidth;
-	  canvas.height = canvas.offsetHeight;
-
-    var numberOfColumns = Math.round(canvas.width / fontSize);
-    columns = new Array();
-    for (var i = 0; i < numberOfColumns; i++) {
-        columns[i] = canvas.height;
+var last_active = document.getElementById("a_bomber");
+function openForm() {
+    if (last_active.id !== "contact") {
+        last_active = document.getElementsByClassName("active")[0];
+        last_active.setAttribute("class", "");
+        document.getElementById("contact").setAttribute("class", "active");
     }
 
+    var popup = document.getElementById("contact_form");
+
+    popup.style.display = "block";
+
+    /*calc position of popup*/
+    popup.style.left = (document.getElementById('a_bomber').offsetWidth + document.getElementById('a_tutorial').offsetWidth) + "px";
+    popup.style.top = document.getElementById('header').offsetHeight + "px";
 }
 
-//--------------------------------------------------------------------------
-function animation() {
+function submitForm() {
+    /*if we had a real server, we would send our input to the server here*/
 
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
-    ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.fillStyle = "#00FF00";
-    ctx.font = fontSize + "px Arial";
+    var contact_form = document.getElementById("contact_form");
+    contact_form.style.opacity = 1;
+    var fade_effect = setInterval(function () {
+        if (contact_form.style.opacity > 0) {
+            contact_form.style.opacity -= 0.02;
+        } else {
+            clearInterval(fade_effect);
+            closeForm();
 
-    for(var i = 0; i < columns.length; i++) {
-        ctx.fillText(randomMatrixSymbol(), i * fontSize, columns[i] * fontSize);
 
-        if((columns[i] * fontSize) > canvas.height && Math.random() > 0.975) {
-            columns[i] = 0;
+            /*show and fade out success message*/
+            submit_success = document.getElementById("submit-success");
+
+            submit_success.style.display = "flex";
+            submit_success.style.opacity = 1;
+
+            setTimeout(function () {
+                fade_effect = setInterval(function () {
+                    if (submit_success.style.opacity > 0) {
+                        submit_success.style.opacity -= 0.01;
+                    } else {
+                        clearInterval(fade_effect);
+                        submit_success.style.display = "none";
+                    }
+                }, 20);
+            }, 2000);
         }
-        columns[i]++;
-    }
+    }, 15);
 }
 
-//--------------------------------------------------------------------------
-function randomMatrixSymbol() {
-    return String.fromCharCode(Math.floor(
-        Math.random() * 26000 + 20000
-    ));
+function closeForm() {
+    last_active.setAttribute("class", "active");
+    document.getElementById("contact").setAttribute("class", "");
+
+    document.getElementById("contact_form").style.display = "none";
+    document.getElementById("contact_form").style.opacity = 1;
 }
