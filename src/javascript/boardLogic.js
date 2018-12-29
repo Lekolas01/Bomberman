@@ -5,4 +5,4 @@ function newMatrix(height, width) {
         x[i] = new Array(width);
     }
     return x;
-}
+}   

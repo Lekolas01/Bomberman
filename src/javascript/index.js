@@ -1,14 +1,25 @@
-/*var boardLogic = document.createElement('script');
-boardLogic.src = 'boardLogic';
-document.head.appendChild(boardLogic); */
-
 var canvas, ctx;
 var fontSize = 18;
 
+var SPEED = 50;
+
 var columns = new Array();
-var boardWidth = 20; // initial length of the gameboard
-var boardHeight = 16; // initial height of the gameboard
-var board = newMatrix(boardHeight, boardWidth);
+var boardWidth = 20; // how many tiles is the gameboard wide?
+var boardHeight = 20; // how many tiles is the gameboard high?
+var tileSize = 16; // how big is one tile? (width and height)
+var score = 0;
+var loopFunctionId;
+var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
+var board = newMatrix(boardHeight, boardWidth); // saves the information about the gameboard
+
+//create enum for all types of tile that can exist on the gameboard
+var tileTypes = Object.freeze({ 
+    "wall":0,
+    "empty":1,
+    "breakable_wall": 2,
+    "bomb": 3
+});
+
 
 
 //draws the gameboard part within the canvas
@@ -17,7 +28,7 @@ function drawGameboard(data, canvas, ctx, height, width) {
         for (var j = 0; j < width; j++) {
             if(data[i][j] === undefined) {
                 ctx.drawImage(document.getElementById('art_assets'),
-                33, 71, 104, 124, 21, 20, 87, 104);
+                208, 48, 16, 16, i * tileSize, j * tileSize, tileSize, tileSize);
             } else {
                 console.log("DEFINED");
             }
@@ -29,9 +40,6 @@ function drawGameboard(data, canvas, ctx, height, width) {
 window.onload = function(){
     canvas = document.getElementById("bomberman");
     ctx = canvas.getContext("2d");
-    initializeAnimation();
-
-    window.onresize = initializeAnimation;
 
     setInterval(animation, 50);
 
@@ -39,15 +47,8 @@ window.onload = function(){
 
 //--------------------------------------------------------------------------
 function initializeAnimation() {
-	  // set the internal size to match
     canvas.width  = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-
-    var numberOfColumns = Math.round(canvas.width / fontSize);
-    columns = new Array();
-    for (var i = 0; i < numberOfColumns; i++) {
-        columns[i] = canvas.height;
-    }
 
 }
 

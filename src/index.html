@@ -8,7 +8,7 @@
 	<title>Bomberman</title>
 	<link href="style/style.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
-	<link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
 </head>
 
 <body>
@@ -19,13 +19,15 @@
 			<li><a href="#contact">Contact</a></li>
 			<li><a href="#about">About</a></li>
 		</ul>
-
 		<h1>BOMBERMAN</h1>
+
+		<!--<img id="title" src="../art/header.png">-->
 		<div id="playground">
-			<canvas id="bomberman"></canvas>
+			<canvas class="game_canvas"></canvas>
 		</div>
 	</div>
-	<img id="art_assets" src="../art/bomb_party_v4.png">
+
+	<img id="art_assets" src="../art/bomb_party_v4.png" hidden="true">
 	<script src="javascript/boardLogic.js"></script>
 	<script src="javascript/index.js"></script>
 </body>

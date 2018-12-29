@@ -1,3 +1,12 @@
+
+    /* title Picture */
+    #title {
+      display: inline-block;
+      text-align: center;
+      width: 1000px;
+      height: 130px;
+    }
+
 /*header*/
 ul#header {
   list-style-type: none;
@@ -56,7 +65,7 @@ ul#header {
       flex-flow: column;
       height: 100vh; /*let the outer wrapper contain the entire viewable content*/
     }
-    h1{
+    h1 {
       margin-top: 30px;
       font-family: 'Press Start 2P', cursive;
       font-size: 50px;
@@ -66,7 +75,7 @@ ul#header {
     #playground{
       flex-grow: 1; /*if screen is resized, this element gets 100% of the gained (or lost) size*/
       display: block;
-      min-width: 660px; /*min size, because at one point, you can't regoginze anything anymore*/
+      min-width: 660px; /*min size, because at one point, you can't recoginze anything anymore*/
       min-height: 360px;
       width: 90%;
       height: 100%;
@@ -74,8 +83,9 @@ ul#header {
       margin-top: 3%;
       margin-bottom: 3%;
     }
-
-    #bomberman{
+    
+		.game_canvas {
       width: 100%;
       height: 100%;
+			border: 2px solid black !important;
     }
