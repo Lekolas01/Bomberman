@@ -15,12 +15,25 @@ var board = newMatrix(boardHeight, boardWidth); // saves the information about t
 
 var running = false;
 
+
+class tile {
+    constructor(breakable, passable, x, y) {
+        this.breakable = breakable;
+        this.passable = passable;
+    // x and y save the position of sprite on png-file
+        this.x = x;
+        this.y = y
+    }
+}
+
+let breakable_wall = new tile(true, false);
+
 //create enum for all types of tile that can exist on the gameboard
 var tileTypes = Object.freeze({ 
-    "wall":0,
-    "empty":1,
-    "breakable_wall": 2,
-    "bomb": 3
+    "wall": new tile(false, false, 160, 64),
+    "empty": new tile(false, true, 32, 0),
+    "breakable_wall": new tile(true, false, 144, 0),
+    "bomb": new tile(false, false, 64, 80)
 });
 
 //draws the gameboard part within the canvas
@@ -28,10 +41,10 @@ function drawGameboard(data, canvas, ctx, height, width) {
     for(var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             if(data[i][j] === undefined) {
-                ctx.drawImage(document.getElementById('art_assets'),
-                160, 64, 16, 16, i * tileSize, j * tileSize, tileSize, tileSize);
+                
             } else {
-                console.log("DEFINED");
+                ctx.drawImage(document.getElementById('art_assets'),
+                data[i][j].x, data[i][j].y, 16, 16, i * tileSize, j * tileSize, tileSize, tileSize);
             }
         }
     }
@@ -45,32 +58,61 @@ window.onload = function(){
     //background music
     audioBackground = new Audio("../sound/background.mp3");
     audioBackground.loop = true;
+    // note: this sometimes throws an error,
+    // because the background music loads asynchronously (I think)
     audioBackground.play();
-
+    
     setInterval(animation, 50);
-
+    startGame();
+    
 }
 
 function startGame() {
     running = true;
-    startView.setAttribute("visibility", "hidden");
-    audioBackground.play();
+    //startView.setAttribute("visibility", "hidden");
     //TODO: init player, generate random map, init monsters
     
-    generateRandomGameboard(board, boardWidth, boardHeight);
+    generateGameboard(board, boardWidth, boardHeight);
     
     loopFunctionId = setInterval(loop, SPEED);
 }
 
-//generates a random map (unbreakable walls on the outside,
-// regular grid structure of unbreakable walls,
-// randomly generated breakable walls on the rest)
-function generateRandomGameboard(board, width, height) {
-    for(var i = 0; i < height; i++) {
-        for (var j = 0; j < width; j++) {
-            console.log(`${height} ${width}`);
+//generates a random map (
+//  unbreakable walls on the outside,
+//  regular grid structure of unbreakable walls,
+//  semi-randomly generated breakable walls on the rest)
+function generateGameboard(board, width, height) {
+    function generateOuterWall() {
+        for(var i = 0; i < width;  i++) board[0][i]        = tileTypes.wall;
+        for(var i = 1; i < height; i++) board[i][0]        = tileTypes.wall;
+        for(var i = 1; i < height; i++) board[i][width-1]  = tileTypes.wall;
+        for(var i = 1; i < width;  i++) board[height-1][i] = tileTypes.wall;
+    }
+    function generateGridTiles() {
+        for(var i = 2; i < height - 2; i+= 2) {
+            for(var j = 2; j < width - 2; j+= 2) {
+                delete board[i][j];
+                board[i][j] = tileTypes.wall;
+            }
         }
     }
+    function generateGrass() {
+        for(var i = 1; i < height - 1; i++) {
+            for (var j = 1; j < width - 1; j++) {
+                if((i % 2 != 0) || (j % 2 != 0)) {
+                    delete board[i][j]; //avoid memory corpses
+                    board[i][j] = tileTypes.empty;
+                }
+            }
+        }
+    }
+    function generateBoxes() {
+        //TODO: generate breakable walls at some parts of the grass
+    }
+
+    generateOuterWall();
+    generateGrass();
+    generateGridTiles();
 }
 
 function loop() {
