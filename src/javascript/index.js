@@ -1,9 +1,9 @@
-var last_active = document.getElementById("a_bomber");
+var last_active;
 function openForm() {
-    if (last_active.id !== "contact") {
+    if (last_active.id !== "Contact") {
         last_active = document.getElementsByClassName("active")[0];
         last_active.setAttribute("class", "");
-        document.getElementById("contact").setAttribute("class", "active");
+        document.getElementById("Contact").setAttribute("class", "active");
     }
 
     var popup = document.getElementById("contact_form");
@@ -11,7 +11,7 @@ function openForm() {
     popup.style.display = "block";
 
     /*calc position of popup*/
-    popup.style.left = (document.getElementById('a_bomber').offsetWidth + document.getElementById('a_tutorial').offsetWidth) + "px";
+    popup.style.left = (document.getElementById('Bomberman').offsetWidth + document.getElementById('Tutorial').offsetWidth) + "px";
     popup.style.top = document.getElementById('header').offsetHeight - 1 + "px";
 }
 
@@ -55,3 +55,10 @@ function closeForm() {
     document.getElementById("contact_form").style.display = "none";
     document.getElementById("contact_form").style.opacity = 1;
 }
+
+$(window).load(function(){
+    $("#header").load("nav.html #nav-bar > *", function(){
+        last_active = document.getElementById(document.title);
+    });
+    $("#contact_form").load("contact.html #contact_form > *");
+});
