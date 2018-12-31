@@ -12,7 +12,7 @@ function openForm() {
 
     /*calc position of popup*/
     popup.style.left = (document.getElementById('a_bomber').offsetWidth + document.getElementById('a_tutorial').offsetWidth) + "px";
-    popup.style.top = document.getElementById('header').offsetHeight + "px";
+    popup.style.top = document.getElementById('header').offsetHeight - 1 + "px";
 }
 
 function submitForm() {

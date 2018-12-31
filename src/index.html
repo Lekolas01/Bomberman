@@ -13,15 +13,14 @@
 </head>
 
 <body>
+	<nav id="header">
+		<li><a href="index.html" class="active" id="a_bomber">Bomberman</a></li>
+		<!--ToDo add links to corresponding html pages-->
+		<li><a href="tutorial.html" id="a_tutorial">Tutorial</a></li>
+		<li><label onclick="openForm()" id="contact">Contact</label></li>
+		<li><a href="about.html">About</a></li>
+	</nav>
 	<div id="outer">
-		<nav id="header">
-			<li><a href="index.html" class="active" id="a_bomber">Bomberman</a></li>
-			<!--ToDo add links to corresponding html pages-->
-			<li><a href="tutorial.html" id="a_tutorial">Tutorial</a></li>
-			<li><label onclick="openForm()" id="contact">Contact</label></li>
-			<li><a href="about.html">About</a></li>
-		</nav>
-
 		<h1>BOMBERMAN</h1>
 		<div id="playground">
 			<canvas id="bomberman"></canvas>
@@ -41,7 +40,7 @@
 			<div>
 				<label id="label_name" for="input_name">Your Name</label>
 				<div>
-					<input id="input_name" name="input_name" type="text" value="" size="8" tabindex="1">
+					<input id="input_name" name="input_name" type="text" value="" size="8" tabindex="1" required="true">
 				</div>
 			</div>
 
@@ -50,7 +49,7 @@
 					Email
 				</label>
 				<div>
-					<input id="input_mail" name="input_mail" type="email" spellcheck="false" value="" maxlength="255" tabindex="2">
+					<input id="input_mail" name="input_mail" type="email" spellcheck="false" value="" maxlength="255" tabindex="2" required="true">
 				</div>
 			</div>
 
@@ -64,15 +63,15 @@
 					<div id="contact_reason">
 						<input id="input_radio" name="input_radio" type="hidden" value="">
 						<div>
-							<input id="input_radio_0" name="radio_complaint" type="radio" value="complaint" tabindex="4" checked="checked">
-							<label for="Field5_0">Complaint</label>
+							<input id="input_radio_0" name="radio" type="radio" value="complaint" tabindex="4" checked="checked">
+							<label for="input_radio_0">Complaint</label>
 						</div>
 						<div>
-							<input id="input_radio_1" name="radio_compliment" type="radio" value="compliment" tabindex="5">
+							<input id="input_radio_1" name="radio" type="radio" value="compliment" tabindex="5">
 							<label for="input_radio_1">Compliment</label>
 						</div>
 						<div>
-							<input id="input_radio_2" name="radio_other" type="radio" value="other" tabindex="6">
+							<input id="input_radio_2" name="radio" type="radio" value="other" tabindex="6">
 							<label for="input_radio_2">Other</label>
 						</div>
 					</div>
@@ -85,7 +84,7 @@
 				</label>
 
 				<div>
-					<textarea id="area_message" name="area_message" spellcheck="true" rows="10" cols="50" tabindex="7"></textarea>
+					<textarea id="area_message" name="area_message" spellcheck="true" rows="10" cols="50" tabindex="7" required="true"></textarea>
 				</div>
 			</div>
 
@@ -114,7 +113,7 @@
 		</form>
 	</div>
 
-	<div id="submit-success"  class="success-popup">
+	<div id="submit-success" class="success-popup">
 		<div class="wrapper">
 			<img src="img/tick.png">
 			<label>Your request has been sent sucessfully!</label>

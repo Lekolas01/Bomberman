@@ -26,6 +26,7 @@ body {
 }
 
 #outer {
+	margin-top: 45.1px; /*menue bar*/
 	display: flex;
 	/*responsive*/
 	flex-flow: column;
@@ -63,11 +64,13 @@ h1 {
 /*header*/
 
 #header {
+	position: fixed;
 	list-style-type: none;
 	margin: 0;
-	padding: 0 0 10px;
 	overflow: hidden;
 	background-color: #333;
+	width: 100%;
+	top: 0;
 }
 
 #header li {
@@ -98,7 +101,7 @@ h1 {
 	display: none;
 	position: absolute;
 	width: 75vw;
-	min-width: 300px;
+	min-width: 350px;
 	max-width: 800px;
 	margin: auto;
 	border: 3px solid rgba(2, 70, 8, 0.85);
@@ -169,6 +172,13 @@ input[type=email] {
   width: 100%;
   padding: 2px;
 }
+  
+input[type="radio"] {
+	height: 15px;
+	width: 15px;
+	background-color: #eee;
+	border-radius: 50%;
+  }
 
 input[type=text]:focus,
 input[type=email]:focus,
