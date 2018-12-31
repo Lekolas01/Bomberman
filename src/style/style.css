@@ -55,9 +55,13 @@ h1 {
 	margin-bottom: 3%;
 }
 
-#bomberman {
+#game_canvas {
 	width: 100%;
 	height: 100%;
+}
+
+#art_assets{
+	display: none;
 }
 
 
