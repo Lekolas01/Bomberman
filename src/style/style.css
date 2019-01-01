@@ -31,6 +31,7 @@ body {
 	/*responsive*/
 	flex-flow: column;
 	height: 100vh;
+	
 	/*let the outer wrapper contain the entire viewable content*/
 }
 
@@ -42,8 +43,7 @@ h1 {
 	text-shadow: 0 0 5px white;
 }
 
-.centered_container{
-	  /*if screen is resized, this element gets 100% of the gained (or lost) size*/
+#playground {
 	flex-grow: 1;
 	width: 90%;
 	margin-top: 3%;
@@ -52,17 +52,12 @@ h1 {
 	margin-right:auto;
 }
 
-#playground {
-	display: block;
-	min-width: 660px;
-	min-height: 360px;
-	width: 100%;
-	height: 100%;
-}
-
 #game_canvas {
-	height: 100%;
-	width: 100%;
+	padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 #art_assets{
