@@ -5,13 +5,13 @@ var fontSize = 18; //for matrix anim
 var GAME_SPEED = 50; // 1 tick every 50 ms
 
 //game logic variables
-var boardWidth = 20; // how many tiles is the gameboard wide?
-var boardHeight = 20; // how many tiles is the gameboard high?
-var tileSize = 16; // how big is one tile? (width and height)
+var boardWidth; // how many tiles is the gameboard wide?
+var boardHeight; // how many tiles is the gameboard high?
+var tileSize = 15; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 // borad: saves the information about the current gameboard
-var board = newMatrix(boardHeight, boardWidth); 
+var board;
 
 var running = false; // game currently on?
 
@@ -39,6 +39,13 @@ var tileTypes = Object.freeze({
 window.onload = function(){
     canvas = document.getElementById("game_canvas");
     ctx = canvas.getContext("2d");
+    let width =   Math.round($("#playground").innerWidth());
+    let height =  Math.round($("#playground").innerHeight());
+    ctx.canvas.width  = width;
+    ctx.canvas.height = height;
+    canvas.width = width;
+    canvas.height = height;
+
 
     //background music
     // note: sometimes background music doesn't play,
@@ -46,6 +53,10 @@ window.onload = function(){
     audioBackground = new Audio("../sound/background.mp3");
     audioBackground.loop = true;
     audioBackground.play();
+
+    boardWidth = Math.floor(width / tileSize);
+    boardHeight = Math.floor(height / tileSize);
+    board = newMatrix(boardHeight, boardWidth);
     
     startGame();
 }

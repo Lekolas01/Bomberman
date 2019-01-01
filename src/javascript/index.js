@@ -57,6 +57,12 @@ function closeForm() {
 }
 
 $(window).load(function(){
+    //set playground to a 16:9 format
+    let p_width = ($("#playground").height() * (16/9) / $( window ).width()) * 100;
+    $("#playground").width( p_width + '%');
+
+
+    alert(p_width + '%');
     $("#header").load("nav.html #nav-bar > *", function(){
         var active = document.getElementsByTagName("title")[0].innerText.toLowerCase();
         last_active = document.getElementById(active);

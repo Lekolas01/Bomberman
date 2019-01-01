@@ -26,7 +26,7 @@ body {
 }
 
 #outer {
-	margin-top: 45.1px; /*menue bar*/
+	padding-top: 45.1px; /*menue bar*/
 	display: flex;
 	/*responsive*/
 	flex-flow: column;
@@ -56,8 +56,8 @@ h1 {
 }
 
 #game_canvas {
-	width: 100%;
 	height: 100%;
+	width: 100%;
 }
 
 #art_assets{

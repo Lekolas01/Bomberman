@@ -16,8 +16,8 @@ function initGameboard(board, width, height) {
     function initOuterWall() {
         for(var i = 0; i < width;  i++) board[0][i]        = tileTypes.wall;
         for(var i = 1; i < height; i++) board[i][0]        = tileTypes.wall;
-        for(var i = 1; i < height; i++) board[i][width-1]  = tileTypes.wall;
-        for(var i = 1; i < width;  i++) board[height-1][i] = tileTypes.wall;
+        for(var i = 1; i < height; i++) board[i][width]  = tileTypes.wall;
+        for(var i = 1; i < width;  i++) board[height][i] = tileTypes.wall;
     }
     function initGridTiles() {
         for(var i = 2; i < height - 2; i+= 2) {
@@ -56,7 +56,7 @@ function drawGameboard(data, canvas, ctx, height, width) {
                 
             } else {
                 ctx.drawImage(document.getElementById('art_assets'),
-                data[i][j].x, data[i][j].y, 16, 16, i * tileSize, j * tileSize, tileSize, tileSize);
+                data[i][j].x, data[i][j].y, 16, 16, i * tileSize / 2, j * tileSize / 2, tileSize/ 2, tileSize/ 2);
             }
         }
     }
