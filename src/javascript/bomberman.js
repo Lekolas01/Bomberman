@@ -10,7 +10,7 @@ var boardHeight; // how many tiles is the gameboard high?
 var tileSize = 48; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
-// borad: saves the information about the current gameboard
+// board: saves the information about the current gameboard
 var board;
 
 var running = false; // game currently on?
@@ -42,16 +42,13 @@ window.onload = function(){
     boardWidth =   Math.floor($("#playground").innerWidth() / tileSize);
     boardHeight =  Math.floor($("#playground").innerHeight()  / tileSize);
 
-    board = newMatrix(boardHeight, boardWidth);
     //fix gameboard layout
-    if(boardWidth % 2 === 0) boardWidth -= 1;
+    if(boardWidth % 2 === 0)   boardWidth -= 1;
     if(boardHeight % 2 === 0) boardHeight -= 1;
-
+    
 
     let width =   boardWidth * tileSize;
     let height =  boardHeight * tileSize;
-    ctx.canvas.width  = width;
-    ctx.canvas.height = height;
     canvas.width = width;
     canvas.height = height;
 
@@ -71,7 +68,7 @@ function startGame() {
     //startView.setAttribute("visibility", "hidden");
     //TODO: init player, init monsters
     
-    initGameboard(board, boardWidth, boardHeight);
+    board = gameboard(boardWidth, boardHeight);
     
     setInterval(loop, GAME_SPEED);
 }
@@ -88,7 +85,7 @@ function loop() {
 
 //--------------------------------------------------------------------------
 function drawScreen() {
-    drawGameboard(board, ctx, boardWidth, boardHeight);
+    drawGameboard(board, ctx);
     //drawEnemies();
     //drawBomberman();
 }
