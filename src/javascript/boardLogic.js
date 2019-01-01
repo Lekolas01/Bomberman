@@ -1,11 +1,11 @@
 //creates a new matrix of any type
 function newMatrix(height, width) {
-    var x = new Array(height);
-    for(var i = 0; i < width; i++) {
-        x[i] = new Array(width);
+    var matrix = new Array(height);
+    for (var row = 0; row < height; row++) {
+        matrix[row] = new Array(width);
     }
-    return x;
-}  
+    return matrix;
+}
 
 
 //generates a new map and saves it into board (
@@ -14,31 +14,34 @@ function newMatrix(height, width) {
 //  semi-randomly generated breakable walls on the rest (google bomberman map))
 function initGameboard(board, width, height) {
     function initOuterWall() {
-        for(var i = 0; i < width;  i++) board[0][i]        = tileTypes.wall;
-        for(var i = 1; i < height; i++) board[i][0]        = tileTypes.wall;
-        for(var i = 1; i < height; i++) board[i][width]  = tileTypes.wall;
-        for(var i = 1; i < width;  i++) board[height][i] = tileTypes.wall;
+        for (var col = 0; col < width; col++) {
+            board[0][col] = tileTypes.wall;
+            board[height - 1][col] = tileTypes.wall;
+        }
+        for (var row = 0; row < height; row++) {
+            board[row][width - 1] = tileTypes.wall;
+            board[row][0] = tileTypes.wall;
+        }
     }
-    function initGridTiles() {
-        for(var i = 2; i < height - 2; i+= 2) {
-            for(var j = 2; j < width - 2; j+= 2) {
-                delete board[i][j];
-                board[i][j] = tileTypes.wall;
+
+    function initGrass() {
+        for (var row = 1; row < height - 1; row++) {
+            for (var col = 1; col < width - 1; col++) {
+                board[row][col] = tileTypes.empty;
             }
         }
     }
-    function initGrass() {
-        for(var i = 1; i < height - 1; i++) {
-            for (var j = 1; j < width - 1; j++) {
-                if((i % 2 != 0) || (j % 2 != 0)) {
-                    delete board[i][j]; //avoid memory corpses
-                    board[i][j] = tileTypes.empty;
-                }
+
+    function initGridTiles() {
+        for (var row = 2; row < height - 2; row += 2) {
+            for (var col = 2; col < width - 2; col += 2) {
+                delete board[row][col];
+                board[row][col] = tileTypes.wall;
             }
         }
     }
     function generateBoxes() {
-        
+
         //TODO: generate breakable walls at some parts of the grass
     }
 
@@ -49,14 +52,14 @@ function initGameboard(board, width, height) {
 
 
 //draws the gameboard part within the canvas
-function drawGameboard(data, canvas, ctx, height, width) {
-    for(var i = 0; i < height; i++) {
-        for (var j = 0; j < width; j++) {
-            if(data[i][j] === undefined) {
-                
+function drawGameboard(data, ctx, width, height) {
+    //col = x coordinates, row = y
+    for (var row = 0; row < height; row++) {
+        for (var col = 0; col < width; col++) {
+            if (data[row][col] === undefined) {
             } else {
                 ctx.drawImage(document.getElementById('art_assets'),
-                data[i][j].x, data[i][j].y, 16, 16, i * tileSize / 2, j * tileSize / 2, tileSize/ 2, tileSize/ 2);
+                    data[row][col].x, data[row][col].y, 16, 16, col * tileSize, row * tileSize, tileSize, tileSize);
             }
         }
     }

@@ -1,4 +1,4 @@
-var last_active;
+let last_active;
 function openForm() {
     if (last_active.id !== "contact") {
         last_active = document.getElementsByClassName("active")[0];
@@ -62,9 +62,8 @@ $(window).load(function(){
     $("#playground").width( p_width + '%');
 
 
-    alert(p_width + '%');
     $("#header").load("nav.html #nav-bar > *", function(){
-        var active = document.getElementsByTagName("title")[0].innerText.toLowerCase();
+        let active = document.getElementsByTagName("title")[0].innerText.toLowerCase();
         last_active = document.getElementById(active);
         last_active.setAttribute("class", "active");
     });
