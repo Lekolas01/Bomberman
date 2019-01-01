@@ -60,6 +60,7 @@ $(window).load(function(){
     //set playground to a 16:9 format
     let p_width = ($("#playground").height() * (16/9) / $( window ).width()) * 100;
     $("#playground").width( p_width + '%');
+    $("#playground").css("margin-left", ((100 - p_width) / 2) + "%");
 
 
     $("#header").load("nav.html #nav-bar > *", function(){
