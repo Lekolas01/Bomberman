@@ -41,9 +41,6 @@ window.onload = function(){
     canvas = document.getElementById("game_canvas");
     ctx = canvas.getContext("2d");
 
-    board = newMatrix(boardHeight, boardWidth);
-
-
     let width =   boardWidth * tileSize;
     let height =  boardHeight * tileSize;
     ctx.canvas.width  = width;
