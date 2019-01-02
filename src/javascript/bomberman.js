@@ -3,15 +3,16 @@ var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
 var GAME_SPEED = 9; // 1 tick every 50 ms
-
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
 var tileSize = 40; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
-// borad: saves the information about the current gameboard
-var board;
+
+
+var board; // board: saves the information about the current gameboard
+var enemies; // enemies: saves the information about all currently living enemies
 
 var running = false; // game currently on?
 
@@ -40,9 +41,6 @@ window.onload = function(){
     canvas = document.getElementById("game_canvas");
     ctx = canvas.getContext("2d");
 
-    board = newMatrix(boardHeight, boardWidth);
-
-
     let width =   boardWidth * tileSize;
     let height =  boardHeight * tileSize;
     ctx.canvas.width  = width;
@@ -56,7 +54,7 @@ window.onload = function(){
     // because the background music loads asynchronously
     audioBackground = new Audio("../sound/background.mp3");
     audioBackground.loop = true;
-    audioBackground.play();
+    //audioBackground.play();
     
     startGame();
 }
@@ -66,14 +64,15 @@ function startGame() {
     //startView.setAttribute("visibility", "hidden");
     //TODO: init player, init monsters
     
-    initGameboard(board, boardWidth, boardHeight);
+    board = gameboard(boardWidth, boardHeight);
+    enemies = enemies(6);
+    printAllEnemiesStats(enemies);
     
-    setInterval(loop, GAME_SPEED);
+    renderIntervalId = setInterval(loop, GAME_SPEED);
 }
 
 // is called every 50 ms
 function loop() {
-    console.log("loop");
     frame_cnt = (frame_cnt + 1) % 120;
     //TODO:
         //move enemies
@@ -84,7 +83,7 @@ function loop() {
 
 //--------------------------------------------------------------------------
 function drawScreen() {
-    drawGameboard(board, ctx, boardWidth, boardHeight);
-    //drawEnemies();
+    drawGameboard(board, ctx);
+    drawEnemies(enemies, ctx);
     //drawBomberman();
 }
