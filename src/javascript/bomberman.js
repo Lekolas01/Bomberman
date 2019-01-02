@@ -3,6 +3,7 @@ var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
 var GAME_SPEED = 50; // 1 tick every 50 ms
+var renderIntervalId;
 
 //game logic variables
 var boardWidth; // how many tiles is the gameboard wide?
@@ -70,7 +71,7 @@ function startGame() {
     
     board = gameboard(boardWidth, boardHeight);
     
-    setInterval(loop, GAME_SPEED);
+    var renderIntervalId = setInterval(loop, GAME_SPEED);
 }
 
 // is called every 50 ms
