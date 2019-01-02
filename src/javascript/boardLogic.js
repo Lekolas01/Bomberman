@@ -56,12 +56,12 @@ function initGameboard(board, width, height) {
 let bomberman = new Character(4, 0);
 let bomberman2 = new Character(3, 1);
 let bomberman3 = new Character(2, 2);
-var cnt = 12;
+var cnt = 60;
 //draws the gameboard part within the canvas
 function drawGameboard(data, ctx, width, height) {
 
-    cnt = (cnt % (height * 12)) + 1;
-    if (cnt > (height - 2) * 12) cnt = 12;
+    cnt = (cnt % (height * 60)) + 1;
+    if (cnt > (height - 2) * 60) cnt = 60;
 
 
     //col = x coordinates, row = y
@@ -76,14 +76,14 @@ function drawGameboard(data, ctx, width, height) {
     }
     let animation2 = bomberman2.getAnimation("down");
     ctx.drawImage(document.getElementById('art_assets'),
-        animation2.x, animation2.y, 16, 16, 1 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+        animation2.x, animation2.y, 16, 16, 1 * tileSize, (cnt / 60) * tileSize, tileSize, tileSize);
 
     let animation3 = bomberman3.getAnimation("right");
     ctx.drawImage(document.getElementById('art_assets'),
-        animation3.x, animation3.y, 16, 16, 3 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+        animation3.x, animation3.y, 16, 16, 3 * tileSize, (cnt / 60) * tileSize, tileSize, tileSize);
 
     let animation = bomberman.getAnimation("up");
     ctx.drawImage(document.getElementById('art_assets'),
-        animation.x, animation.y, 16, 16, 5 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+        animation.x, animation.y, 16, 16, 5 * tileSize, (cnt / 60) * tileSize, tileSize, tileSize);
 
 }

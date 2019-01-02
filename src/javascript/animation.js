@@ -3,6 +3,7 @@ var ticks = {
     player2_tick : 0,
     monster_tick : 0
 }
+var frame_cnt = 0;
 
 class AnimationFrame {
     constructor(x, y) {
@@ -42,7 +43,9 @@ class Character {
 
 
     getAnimation(movement) {
-        ticks[this.tick] += 1; //counts next animation
+        if(frame_cnt % 15 === 0){ //every 10th frame, a new animation image is shown
+            ticks[this.tick] += 1; //counts next animation
+        }
         if (movement !== this.last_direction) { //direction changed
             ticks[this.tick] = 1; // 0 would be idle, 1 is first moving motion
         }else if(ticks[this.tick] === 12){
@@ -56,10 +59,18 @@ class Character {
             case "down":
                 return this.direction[1][ticks[this.tick] % 3];
             case "right":
+            case "left":
                 return this.direction[2][ticks[this.tick] % 4];
             default:
                 return this.direction[0][0];
         }
+    }
+
+}
+
+class Bomb{
+    constructor(){
+        
     }
 
 }

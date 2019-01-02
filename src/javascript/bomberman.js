@@ -2,12 +2,12 @@
 var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
-var GAME_SPEED = 100; // 1 tick every 50 ms
+var GAME_SPEED = 9; // 1 tick every 50 ms
 
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
-var tileSize = 32; // how big is one tile? (width and height)
+var tileSize = 40; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 // borad: saves the information about the current gameboard
@@ -74,6 +74,7 @@ function startGame() {
 // is called every 50 ms
 function loop() {
     console.log("loop");
+    frame_cnt = (frame_cnt + 1) % 120;
     //TODO:
         //move enemies
         //move bomberman
