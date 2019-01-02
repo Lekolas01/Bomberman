@@ -13,7 +13,14 @@ class AnimationFrame {
 }
 
 class Character {
-    constructor(row, tick) { //which row on asset png is player/monster
+    constructor(row, tick, pos_x, pos_y) { //which row on asset png is player/monster
+        this.idle = true;
+        
+        this.position = {
+            x: pos_x,
+            y: pos_y
+        }
+
         this.direction = new Array(3); //up, down, right
         let y = 16 * row;
 
@@ -41,8 +48,15 @@ class Character {
         ticks[this.tick] = 0;
     }
 
+    getAnimation(){
+        if(this.idle){
+            return this.getIdle();
+        }else{
+            return this.move(this.last_direction);
+        }
+    }
 
-    getAnimation(movement) {
+    move(movement) {
         if(frame_cnt % 15 === 0){ //every 10th frame, a new animation image is shown
             ticks[this.tick] += 1; //counts next animation
         }
@@ -65,6 +79,19 @@ class Character {
                 return this.direction[0][0];
         }
     }
+    getIdle(){
+        switch (this.last_direction) {
+            case "up":
+                return this.direction[0][0];
+            case "down":
+                return this.direction[1][0];
+            case "right":
+            case "left":
+                return this.direction[2][0];
+            default:
+                return this.direction[0][0];
+        }
+    }
 
 }
 
@@ -74,3 +101,9 @@ class Bomb{
     }
 
 }
+class Player extends Character{
+    constructor(row, tick, pos_x, pos_y){
+        super(row, tick, pos_x, pos_y);
+    }
+}
+
