@@ -75,9 +75,10 @@ function drawGameboard(data, ctx) {
 function drawCharacters(characterArr, ctx) {
     let animation;
     for (let i = 0; i < characterArr.length; i++) {
+        animation = characterArr[i].getAnimation();
         ctx.drawImage(document.getElementById('art_assets'),
             animation.x, animation.y, animation.dim_x, animation.dim_y,
-            characterArr[i].position.x * tileSize, characterArr[i].position.y * tileSize,
+            characterArr[i].position.pix_x, characterArr[i].position.pix_y,
             tileSize, tileSize);
     }
 }

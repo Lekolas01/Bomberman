@@ -2,7 +2,9 @@
 var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
-var GAME_SPEED = 9; // 1 tick every 50 ms
+let frame_cnt = 0;
+var GAME_SPEED = 9; // 1 tick every 9 ms
+let MOVEMENT_SPEED = 120; //Every 120 frames, characters can move 1 Tile
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
@@ -65,7 +67,7 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(6);
+    enemies = enemies(1);
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
@@ -74,6 +76,7 @@ function startGame() {
 // is called every 50 ms
 function loop() {
     frame_cnt = (frame_cnt + 1) % 120;
+    enemies[0].refreshPos();
     //TODO:
         //move enemies
         //move bomberman

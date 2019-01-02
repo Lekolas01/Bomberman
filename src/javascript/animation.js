@@ -1,5 +1,4 @@
-var ticks = [];
-var frame_cnt = 0;
+let ticks = [];
 
 class AnimationFrame {
     constructor(x, y, dim_x, dim_y) { //dim: how big is character on assets.png
@@ -11,12 +10,14 @@ class AnimationFrame {
 }
 
 class Character {
-    constructor(y, pos_x, pos_y, dim_x = 16, dim_y = 16) { //which row on asset png is player/monster
-        this.idle = true;
-        
+    constructor(y, prow, pcol, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
+        this.idle = false;
+
         this.position = {
-            x: pos_x,
-            y: pos_y
+            row: prow,
+            col: pcol,
+            pix_x: prow * tileSize,
+            pix_y: pcol * tileSize
         }
 
         this.direction = new Array(3); //up, down, right
@@ -40,26 +41,66 @@ class Character {
         this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
         this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
 
-        this.last_direction = "up"; //up per default
+        this.last_direction = "down"; //up per default
         this.tick = ticks.length;
         ticks.push(0);
     }
 
-    getAnimation(){
-        if(this.idle){
+    refreshPos() {
+        if (!this.idle) {
+            if (frame_cnt === 0) {
+                switch (this.last_direction) {
+                    case "down":
+                        this.position.row += 1;
+                        break;
+                    case "up":
+                        this.position.row -= 1;
+                        break;
+                    case "right":
+                        this.position.col += 1;
+                        break;
+                    case "left":
+                        this.position.col -= 1;
+                        break;
+                }
+            }
+            this.refreshPixelPos();
+        }
+    }
+
+    refreshPixelPos() {
+        let tmp = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1));
+        switch (this.last_direction) {
+            case "down":
+                this.position.pix_y = (this.position.row * tileSize) - tmp;
+                return;
+            case "up":
+                this.position.pix_y = (this.position.row * tileSize) + tmp;
+                return;
+            case "right":
+                this.position.pix_x = (this.position.col * tileSize) + tmp;
+                return;
+            case "left":
+                this.position.pix_x = (this.position.col * tileSize) - tmp;
+                return;
+        }
+    }
+
+    getAnimation() {
+        if (this.idle) {
             return this.getIdle();
-        }else{
+        } else {
             return this.move(this.last_direction);
         }
     }
 
     move(movement) {
-        if(frame_cnt % 15 === 0){ //every 10th frame, a new animation image is shown
+        if (frame_cnt % 10 === 0) { //every 10th frame, a new animation image is shown
             ticks[this.tick] += 1; //counts next animation
         }
         if (movement !== this.last_direction) { //direction changed
             ticks[this.tick] = 1; // 0 would be idle, 1 is first moving motion
-        }else if(ticks[this.tick] === 12){
+        } else if (ticks[this.tick] === 12) {
             ticks[this.tick] = 0;
         }
         this.last_direction = movement;
@@ -76,7 +117,7 @@ class Character {
                 return this.direction[0][0];
         }
     }
-    getIdle(){
+    getIdle() {
         switch (this.last_direction) {
             case "up":
                 return this.direction[0][0];
@@ -92,15 +133,15 @@ class Character {
 
 }
 
-class Bomb{
-    constructor(){
-        
+class Bomb {
+    constructor() {
+
     }
 
 }
-class Player extends Character{
-    constructor(row, pos_x, pos_y){
-        super(row, pos_x, pos_y);
+class Player extends Character {
+    constructor(y, row, col) {
+        super(y, row, col);
     }
 }
 
