@@ -1,6 +1,6 @@
 class Enemy extends Character {
-    constructor(row, tick,  pos_x, pos_y, health, moveSpeed, flying) {
-        super(row, tick, pos_x, pos_y);
+    constructor(row, pos_x, pos_y, health, moveSpeed, flying) {
+        super(row, pos_x, pos_y);
         this.health = health;
         this.moveSpeed = moveSpeed;
         this.flying = flying; // can this enemy type fly over walls?
@@ -10,7 +10,7 @@ class Enemy extends Character {
 // basic enemy. 1 life, rather slow, can not fly.
 class Creep extends Enemy{
     constructor(pos_x, pos_y) {
-        super(2, 2, pos_x, pos_y, 1, 5, false);
+        super(2 * 16, pos_x, pos_y, 1, 5, false);
     }
 }
 

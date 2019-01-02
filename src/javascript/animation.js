@@ -1,19 +1,17 @@
-var ticks = {
-    player1_tick : 0,
-    player2_tick : 0,
-    monster_tick : 0
-}
+var ticks = [];
 var frame_cnt = 0;
 
 class AnimationFrame {
-    constructor(x, y) {
+    constructor(x, y, dim_x, dim_y) { //dim: how big is character on assets.png
         this.x = x;
         this.y = y;
+        this.dim_x = dim_x;
+        this.dim_y = dim_y;
     }
 }
 
 class Character {
-    constructor(row, tick, pos_x, pos_y) { //which row on asset png is player/monster
+    constructor(y, pos_x, pos_y, dim_x = 16, dim_y = 16) { //which row on asset png is player/monster
         this.idle = true;
         
         this.position = {
@@ -22,30 +20,29 @@ class Character {
         }
 
         this.direction = new Array(3); //up, down, right
-        let y = 16 * row;
 
         //up
         this.direction[0] = new Array(3);
-        this.direction[0][0] = new AnimationFrame(0, y); //idle
-        this.direction[0][1] = new AnimationFrame(8 * 16, y); //animation up #1
-        this.direction[0][2] = new AnimationFrame(9 * 16, y); //animation up #
+        this.direction[0][0] = new AnimationFrame(0, y, dim_x, dim_y); //idle
+        this.direction[0][1] = new AnimationFrame(8 * dim_x, y, dim_x, dim_y); //animation up #1
+        this.direction[0][2] = new AnimationFrame(9 * dim_x, y, dim_x, dim_y); //animation up #
 
         //down
         this.direction[1] = new Array(3);
-        this.direction[1][0] = new AnimationFrame(1 * 16, y); //idle
-        this.direction[1][1] = new AnimationFrame(2 * 16, y); //animation down #1
-        this.direction[1][2] = new AnimationFrame(3 * 16, y); //animation down #2
+        this.direction[1][0] = new AnimationFrame(1 * dim_x, y, dim_x, dim_y); //idle
+        this.direction[1][1] = new AnimationFrame(2 * dim_x, y, dim_x, dim_y); //animation down #1
+        this.direction[1][2] = new AnimationFrame(3 * dim_x, y, dim_x, dim_y); //animation down #2
 
         //right
         this.direction[2] = new Array(4);
-        this.direction[2][0] = new AnimationFrame(4 * 16, y); //idle
-        this.direction[2][1] = new AnimationFrame(5 * 16, y); //animation right #1
-        this.direction[2][2] = new AnimationFrame(6 * 16, y); //animation right #2
-        this.direction[2][3] = new AnimationFrame(7 * 16, y); //animation right #3
+        this.direction[2][0] = new AnimationFrame(4 * dim_x, y, dim_x, dim_y); //idle
+        this.direction[2][1] = new AnimationFrame(5 * dim_x, y, dim_x, dim_y); //animation right #1
+        this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
+        this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
 
         this.last_direction = "up"; //up per default
-        this.tick = tick;
-        ticks[this.tick] = 0;
+        this.tick = ticks.length;
+        ticks.push(0);
     }
 
     getAnimation(){
@@ -102,8 +99,8 @@ class Bomb{
 
 }
 class Player extends Character{
-    constructor(row, tick, pos_x, pos_y){
-        super(row, tick, pos_x, pos_y);
+    constructor(row, pos_x, pos_y){
+        super(row, pos_x, pos_y);
     }
 }
 
