@@ -58,6 +58,13 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
     return board;
 }
 
+
+
+let bomberman = new Character(4, 0);
+let bomberman2 = new Character(3, 1);
+let bomberman3 = new Character(2, 2);
+var cnt = 12;
+
 //draws the gameboard part within the canvas
 function drawGameboard(data, ctx) {
     //col = x coordinates, row = y
@@ -70,4 +77,18 @@ function drawGameboard(data, ctx) {
             }
         }
     }
+
+    
+    let animation2 = bomberman2.getAnimation("down");
+    ctx.drawImage(document.getElementById('art_assets'),
+        animation2.x, animation2.y, 16, 16, 1 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+
+    let animation3 = bomberman3.getAnimation("right");
+    ctx.drawImage(document.getElementById('art_assets'),
+        animation3.x, animation3.y, 16, 16, 3 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+
+    let animation = bomberman.getAnimation("up");
+    ctx.drawImage(document.getElementById('art_assets'),
+        animation.x, animation.y, 16, 16, 5 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
+
 }

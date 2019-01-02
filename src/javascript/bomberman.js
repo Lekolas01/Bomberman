@@ -2,8 +2,7 @@
 var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
-var GAME_SPEED = 50; // 1 tick every 50 ms
-var renderIntervalId;
+var GAME_SPEED = 100; // 1 tick every 50 ms
 
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
@@ -42,13 +41,13 @@ window.onload = function(){
     canvas = document.getElementById("game_canvas");
     ctx = canvas.getContext("2d");
 
-    //fix gameboard layout
-    if(boardWidth % 2 === 0)   boardWidth -= 1;
-    if(boardHeight % 2 === 0) boardHeight -= 1;
-    
+    board = newMatrix(boardHeight, boardWidth);
+
 
     let width =   boardWidth * tileSize;
     let height =  boardHeight * tileSize;
+    ctx.canvas.width  = width;
+    ctx.canvas.height = height;
     canvas.width = width;
     canvas.height = height;
 
