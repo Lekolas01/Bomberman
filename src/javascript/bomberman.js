@@ -77,8 +77,13 @@ function startGame() {
 function loop() {
     frame_cnt = (frame_cnt + 1) % 120;
     //ToDo: Move to "moveCharacters()"
-    for(let i = 0; i < enemies.length; i++){
-        if(frame_cnt === 0) enemies[i].refreshPos();
+    if(frame_cnt === 0){
+        for(let i = 0; i < enemies.length; i++){
+            enemies[i].refreshPos();
+            if(enemies[i].position.row >= boardHeight - 1){
+                enemies[i].position.row = 2;
+            }
+        }
     }
     for(let i = 0; i < enemies.length; i++){
         enemies[i].refreshPixelPos();
