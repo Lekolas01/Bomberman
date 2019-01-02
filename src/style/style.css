@@ -26,11 +26,12 @@ body {
 }
 
 #outer {
-	margin-top: 45.1px; /*menue bar*/
+	padding-top: 45.1px; /*menue bar*/
 	display: flex;
 	/*responsive*/
 	flex-flow: column;
 	height: 100vh;
+	
 	/*let the outer wrapper contain the entire viewable content*/
 }
 
@@ -43,21 +44,24 @@ h1 {
 }
 
 #playground {
-  /*if screen is resized, this element gets 100% of the gained (or lost) size*/
 	flex-grow: 1;
-	display: block;
-	min-width: 660px;
-	min-height: 360px;
 	width: 90%;
-	height: 100%;
-	margin-left: 5%;
 	margin-top: 3%;
 	margin-bottom: 3%;
+	margin-left:auto;
+	margin-right:auto;
 }
 
-#bomberman {
-	width: 100%;
-	height: 100%;
+#game_canvas {
+	padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#art_assets{
+	display: none;
 }
 
 
