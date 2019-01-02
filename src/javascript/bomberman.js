@@ -6,9 +6,9 @@ var GAME_SPEED = 50; // 1 tick every 50 ms
 var renderIntervalId;
 
 //game logic variables
-var boardWidth; // how many tiles is the gameboard wide?
-var boardHeight; // how many tiles is the gameboard high?
-var tileSize = 48; // how big is one tile? (width and height)
+var boardWidth = 17; // how many tiles is the gameboard wide?
+var boardHeight = 13 // how many tiles is the gameboard high?
+var tileSize = 32; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 // board: saves the information about the current gameboard
@@ -40,8 +40,6 @@ var tileTypes = Object.freeze({
 window.onload = function(){
     canvas = document.getElementById("game_canvas");
     ctx = canvas.getContext("2d");
-    boardWidth =   Math.floor($("#playground").innerWidth() / tileSize);
-    boardHeight =  Math.floor($("#playground").innerHeight()  / tileSize);
 
     //fix gameboard layout
     if(boardWidth % 2 === 0)   boardWidth -= 1;
