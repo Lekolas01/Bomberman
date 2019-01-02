@@ -84,6 +84,6 @@ function loop() {
 //--------------------------------------------------------------------------
 function drawScreen() {
     drawGameboard(board, ctx);
-    drawEnemies(enemies, ctx);
+    drawCharacters(enemies, ctx);
     //drawBomberman();
 }

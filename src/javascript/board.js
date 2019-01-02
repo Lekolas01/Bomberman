@@ -22,7 +22,7 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
             board[row][0] = tileTypes.wall;
         }
     }
-    
+
     function initGrass() {
         for (var row = 1; row < height - 1; row++) {
             for (var col = 1; col < width - 1; col++) {
@@ -30,7 +30,7 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
             }
         }
     }
-    
+
     function initGridTiles() {
         for (var row = 2; row < height - 2; row += 2) {
             for (var col = 2; col < width - 2; col += 2) {
@@ -39,17 +39,17 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
             }
         }
     }
-    
+
     function initBoxes() {
-        for (var row = 1; row < height - 1; row ++) {
-            for (var col = 1; col < width - 1; col ++) {
-                if(board[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
+        for (var row = 1; row < height - 1; row++) {
+            for (var col = 1; col < width - 1; col++) {
+                if (board[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
                     board[row][col] = tileTypes.breakableWall;
                 }
             }
         }
     }
-    
+
     var board = matrix(width, height);
     initOuterWall();
     initGrass();
@@ -57,13 +57,6 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
     initBoxes();
     return board;
 }
-
-
-
-let bomberman = new Character(4, 0);
-let bomberman2 = new Character(3, 1);
-let bomberman3 = new Character(2, 2);
-var cnt = 12;
 
 //draws the gameboard part within the canvas
 function drawGameboard(data, ctx) {
@@ -77,18 +70,15 @@ function drawGameboard(data, ctx) {
             }
         }
     }
+}
 
-    
-    let animation2 = bomberman2.getAnimation("down");
-    ctx.drawImage(document.getElementById('art_assets'),
-        animation2.x, animation2.y, 16, 16, 1 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
-
-    let animation3 = bomberman3.getAnimation("right");
-    ctx.drawImage(document.getElementById('art_assets'),
-        animation3.x, animation3.y, 16, 16, 3 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
-
-    let animation = bomberman.getAnimation("up");
-    ctx.drawImage(document.getElementById('art_assets'),
-        animation.x, animation.y, 16, 16, 5 * tileSize, (cnt / 12) * tileSize, tileSize, tileSize);
-
+function drawCharacters(characterArr, ctx) {
+    let animation;
+    for (let i = 0; i < characterArr.length; i++) {
+        animation = characterArr[i].getAnimation();
+        ctx.drawImage(document.getElementById('art_assets'),
+            animation.x, animation.y, 16, 16,
+            characterArr[i].position.x * tileSize, characterArr[i].position.y * tileSize,
+            tileSize, tileSize);
+    }
 }
