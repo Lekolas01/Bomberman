@@ -58,7 +58,6 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
     return board;
 }
 
-
 //draws the gameboard part within the canvas
 function drawGameboard(data, ctx) {
     //col = x coordinates, row = y

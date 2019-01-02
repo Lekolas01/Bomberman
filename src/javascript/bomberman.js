@@ -11,8 +11,9 @@ var boardHeight = 13 // how many tiles is the gameboard high?
 var tileSize = 32; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
-// board: saves the information about the current gameboard
-var board;
+
+var board; // board: saves the information about the current gameboard
+var enemies; // enemies: saves the information about all currently living enemies
 
 var running = false; // game currently on?
 
@@ -57,7 +58,7 @@ window.onload = function(){
     // because the background music loads asynchronously
     audioBackground = new Audio("../sound/background.mp3");
     audioBackground.loop = true;
-    audioBackground.play();
+    //audioBackground.play();
     
     startGame();
 }
@@ -68,13 +69,14 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
+    enemies = enemies(6);
+    printAllEnemiesStats(enemies);
     
-    var renderIntervalId = setInterval(loop, GAME_SPEED);
+    renderIntervalId = setInterval(loop, GAME_SPEED);
 }
 
 // is called every 50 ms
 function loop() {
-    console.log("loop");
     //TODO:
         //move enemies
         //move bomberman
@@ -85,6 +87,6 @@ function loop() {
 //--------------------------------------------------------------------------
 function drawScreen() {
     drawGameboard(board, ctx);
-    //drawEnemies();
+    drawEnemies(enemies, ctx);
     //drawBomberman();
 }
