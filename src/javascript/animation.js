@@ -48,7 +48,6 @@ class Character {
 
     refreshPos() {
         if (!this.idle) {
-            if (frame_cnt === 0) {
                 switch (this.last_direction) {
                     case "down":
                         this.position.row += 1;
@@ -62,9 +61,7 @@ class Character {
                     case "left":
                         this.position.col -= 1;
                         break;
-                }
             }
-            this.refreshPixelPos();
         }
     }
 

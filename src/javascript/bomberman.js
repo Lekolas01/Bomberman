@@ -67,7 +67,7 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(1);
+    enemies = enemies(6);
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
@@ -76,9 +76,15 @@ function startGame() {
 // is called every 50 ms
 function loop() {
     frame_cnt = (frame_cnt + 1) % 120;
-    enemies[0].refreshPos();
+    //ToDo: Move to "moveCharacters()"
+    for(let i = 0; i < enemies.length; i++){
+        if(frame_cnt === 0) enemies[i].refreshPos();
+    }
+    for(let i = 0; i < enemies.length; i++){
+        enemies[i].refreshPixelPos();
+    }
     //TODO:
-        //move enemies
+        //move enemies / moveCharacters()
         //move bomberman
         //bombs tick
     drawScreen();

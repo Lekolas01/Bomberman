@@ -19,8 +19,7 @@ function enemies(numEnemies) {
     // as well as that enemy's current position on the gameboard
     var allEnemies = [];
     for(var i = 0; i < numEnemies; i++) {
-        allEnemies[i] =  new Creep(i, i + 2);
-        allEnemies[i].idle = false;
+        allEnemies.push(new Creep(i + 1, i + 2));
     }
     return allEnemies;
 }
