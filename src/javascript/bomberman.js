@@ -67,7 +67,7 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(8);
+    enemies = enemies(1);
     enemies[0].last_directions = "down";
     printAllEnemiesStats(enemies);
     
@@ -85,6 +85,7 @@ function loop() {
                 console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
                 enemies[i].move("right");
                 console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                if(i === 3) enemies[0].idle = !enemies[0].idle;
             }
             if(enemies[i].last_direction === "right" &&  enemies[i].position.col >= boardWidth - 2) {
                 console.log("change to up");
@@ -97,14 +98,15 @@ function loop() {
                 console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
                 enemies[i].move("left");
                 console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                if(i === 3) enemies[0].idle = !enemies[0].idle;
             }
             if(enemies[i].last_direction === "left" && enemies[i].position.col <= 1) {
                 console.log("change to down");
                 console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
                 enemies[i].move("down");
-                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
             }
             enemies[i].refreshPos();
+            console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
         }
     }
     let tmp = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1));

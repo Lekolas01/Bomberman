@@ -10,14 +10,14 @@ class AnimationFrame {
 }
 
 class Character {
-    constructor(y, prow, pcol, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
+    constructor(y, row, col, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
         this.idle = false;
 
         this.position = {
-            row: prow,
-            col: pcol,
-            pix_x: prow * tileSize,
-            pix_y: pcol * tileSize
+            row: row,
+            col: col,
+            pix_x: col * tileSize,
+            pix_y: row * tileSize
         }
 
         this.direction = new Array(3); //up, down, right
@@ -44,6 +44,7 @@ class Character {
         this.last_direction = "down"; //up per default
         this.tick = ticks.length;
         ticks.push(0);
+        console.log("construktor row : " + this.position.row +  " col: " + this.position.col + " pos_x " + this.position.pix_x  + " pos_y " + this.position.pix_y);
     }
 
     refreshPos() {
@@ -66,7 +67,7 @@ class Character {
     }
 
     refreshPixelPos(pix) {
-        if (!tileSize.idle) {
+        if (!this.idle) {
             switch (this.last_direction) {
                 case "down":
                     this.position.pix_y = (this.position.row * tileSize) - pix;
