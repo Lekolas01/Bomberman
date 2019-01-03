@@ -66,8 +66,8 @@ function startGame() {
     //startView.setAttribute("visibility", "hidden");
     //TODO: init player, init monsters
     
-    board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(10);
+    board = new gameboard(boardWidth, boardHeight);
+    enemies = enemies(20);
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
@@ -98,6 +98,6 @@ function loop() {
 
 //--------------------------------------------------------------------------
 function drawScreen() {
-    drawGameboard(board, ctx);
+    board.draw(ctx);
     drawCharacters(enemies, ctx);
 }
