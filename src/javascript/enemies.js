@@ -10,15 +10,20 @@ class Enemy extends Character {
     isValidMove(board, direction) {
         //console.log("isValidMove:");
         //console.log(board === undefined);
+        var diff_x, diff_y;
         switch(direction) {
-            case "up":
-                return board[this.position.row - 1][this.position.col].passable;
-            case "down":  
-                return board[this.position.row + 1][this.position.col].passable;
-            case "right": 
-                return board[this.position.row][this.position.col + 1].passable;
-            case "left": 
-                return board[this.position.row][this.position.col - 1].passable;
+            case "up":      diff_y = -1; diff_x = 0; break;
+            case "down":    diff_y =  1; diff_x = 0; break;
+            case "right":   diff_y =  0; diff_x = 1; break;
+            case "left":    diff_y =  0; diff_x =-1; break;
+        }
+
+        // check for out of bounds, for more robust code
+        if(typeof board.data[this.position.row + diff_y] !== 'undefined' && 
+           typeof board.data[this.position.row + diff_y][this.position.col + diff_x] !== 'undefined') {
+            return board.data[this.position.row + diff_y][this.position.col + diff_x].passable;
+        } else {
+            return false;
         }
     }
 
@@ -56,9 +61,10 @@ class Enemy extends Character {
         if(numDirections == 0) { // existiert keine valide Richtung -> idle = true
             this.idle = true;
         } else { // sonst wähle eine der validen Richtungen aus
-            let randDir = Math.floor((Math.random(4) * 4) % 4);
-            while(!this.isValidMove(board, this.intToDir(randDir))) {
-                randDir = Math.floor((Math.random(4) * 4) % 4);
+            this.idle = false;
+            let randDir = Math.floor((Math.random(4) * 4) % 4); //zufällige "Richtung"
+            while(!this.isValidMove(board, this.intToDir(randDir))) { // solange Richtung invalid
+                randDir = Math.floor((Math.random(4) * 4) % 4); // suche neue zufällige Richtung aus
             }
             this.move(this.intToDir(randDir));
         }

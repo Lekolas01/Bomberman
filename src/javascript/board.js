@@ -2,74 +2,78 @@
 //  unbreakable walls on the outside,
 //  regular grid structure of unbreakable walls inside,
 //  semi-randomly generated breakable walls (= boxes) on the rest (bomberman map))
-function gameboard(width, height, boxSpawnChance = 0.3) {
-    //creates a new matrix of any type
-    function matrix(width, height) {
-        var matr = new Array(height);
-        for (var row = 0; row < height; row++) {
-            matr[row] = new Array(width);
-        }
-        return matr;
-    }
+class gameboard {
+    constructor(width, height, boxSpawnChance = 0.3) {
+        this.width = width;
+        this.height = height;
+        this.data = matrix(this.width, this.height);
 
-    function initOuterWall() {
-        for (var col = 0; col < width; col++) {
-            board[0][col] = tileTypes.wall;
-            board[height - 1][col] = tileTypes.wall;
+        //creates a new matrix of any type
+        function matrix(width, height) {
+            var matr = new Array(height);
+            for (var row = 0; row < height; row++) {
+                matr[row] = new Array(width);
+            }
+            return matr;
         }
-        for (var row = 0; row < height; row++) {
-            board[row][width - 1] = tileTypes.wall;
-            board[row][0] = tileTypes.wall;
-        }
-    }
-
-    function initGrass() {
-        for (var row = 1; row < height - 1; row++) {
-            for (var col = 1; col < width - 1; col++) {
-                board[row][col] = tileTypes.empty;
+        
+        function initOuterWall(data) {
+            for (var col = 0; col < width; col++) {
+                data[0][col] = tileTypes.wall;
+                data[height - 1][col] = tileTypes.wall;
+            }
+            for (var row = 0; row < height; row++) {
+                data[row][width - 1] = tileTypes.wall;
+                data[row][0] = tileTypes.wall;
             }
         }
-    }
-
-    function initGridTiles() {
-        for (var row = 2; row < height - 2; row += 2) {
-            for (var col = 2; col < width - 2; col += 2) {
-                delete board[row][col];
-                board[row][col] = tileTypes.wall;
-            }
-        }
-    }
-
-    function initBreakableWalls() {
-        for (var row = 1; row < height - 1; row++) {
-            for (var col = 1; col < width - 1; col++) {
-                if (board[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
-                    board[row][col] = tileTypes.breakableWall;
+        
+        function initGrass(data) {
+            for (var row = 1; row < height - 1; row++) {
+                for (var col = 1; col < width - 1; col++) {
+                    data[row][col] = tileTypes.empty;
                 }
             }
         }
-    }
-
-    var board = matrix(width, height);
-    initOuterWall();
-    initGrass();
-    initGridTiles();
-    initBreakableWalls();
-    return board;
-}
-
-//draws the gameboard part within the canvas
-function drawGameboard(data, ctx) {
-    //col = x coordinates, row = y
-    for (var row = 0; row < data.length; row++) {
-        for (var col = 0; col < data[0].length; col++) {
-            if (data[row][col] === undefined) {
-            } else {
-                ctx.drawImage(document.getElementById('art_assets'),
-                    data[row][col].x, data[row][col].y, 16, 16, col * tileSize, row * tileSize, tileSize, tileSize);
+        
+        function initGridTiles(data) {
+            for (var row = 2; row < height - 2; row += 2) {
+                for (var col = 2; col < width - 2; col += 2) {
+                    delete data[row][col];
+                    data[row][col] = tileTypes.wall;
+                }
             }
         }
+        
+        function initBreakableWalls(data) {
+            for (var row = 1; row < height - 1; row++) {
+                for (var col = 1; col < width - 1; col++) {
+                    if (data[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
+                        data[row][col] = tileTypes.breakableWall;
+                    }
+                }
+            }
+        }
+
+        initOuterWall(this.data);
+        initGrass(this.data);
+        initGridTiles(this.data);
+        initBreakableWalls(this.data);
     }
+
+    //draws the gameboard part within the canvas
+    draw(ctx) {
+        //col = x coordinates, row = y
+        for (var row = 0; row < this.data.length; row++) {
+            for (var col = 0; col < this.data[0].length; col++) {
+                if (this.data[row][col] === undefined) {
+                } else {
+                    ctx.drawImage(document.getElementById('art_assets'),
+                        this.data[row][col].x, this.data[row][col].y, 16, 16, col * tileSize, row * tileSize, tileSize, tileSize);
+                }
+            }
+        }
+    }   
 }
 
 function drawCharacters(characterArr, ctx) {
