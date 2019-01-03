@@ -71,14 +71,13 @@ function drawGameboard(data, ctx) {
         }
     }
 }
-
 function drawCharacters(characterArr, ctx) {
     let animation;
     for (let i = 0; i < characterArr.length; i++) {
-        animation = characterArr[i].getAnimation();
+        animation = characterArr[i].getAnimation(); //The current image of the character, the canvas shall draw
         ctx.drawImage(document.getElementById('art_assets'),
-            animation.x, animation.y, animation.dim_x, animation.dim_y,
-            characterArr[i].position.pix_x, characterArr[i].position.pix_y,
-            tileSize, tileSize);
+            animation.x, animation.y, animation.dim_x, animation.dim_y, //animation.x/y: where on asset.png is the image animation.dim_x: how big is it (default: 16px)
+            characterArr[i].position.pix_x, characterArr[i].position.pix_y, //where on canvas exactly (in pixels, not tiles) shall the animation be drawn
+            tileSize, tileSize); //how big shall the canvas draw the animation (always as big as one tile)
     }
 }

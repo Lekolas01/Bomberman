@@ -4,7 +4,7 @@ var fontSize = 18; //for matrix anim
 
 let frame_cnt = 0;
 var GAME_SPEED = 9; // 1 tick every 9 ms
-let MOVEMENT_SPEED = 60; //Every 120 frames, characters can move 1 Tile
+let MOVEMENT_SPEED = 60; //Every 60 frames, characters can move 1 Tile (indirect propotional: Higher Number = slower)
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
@@ -76,13 +76,13 @@ function startGame() {
 
 // is called every 50 ms
 function loop() {
-    frame_cnt = (frame_cnt + 1) % 60;
+    frame_cnt = (frame_cnt + 1) % MOVEMENT_SPEED; //frame_cnt will be between 0 and MOVEMENT_SPEED - 1
     //ToDo: Move to "moveCharacters()"
-    if(frame_cnt === 0){
+    if(frame_cnt === 0){ //If we Are in the 1st frame, Change Direction and/or Move Characters in Matrix
         for(let i = 0; i < enemies.length; i++){
-            if (enemies[i].last_direction === "down" && enemies[i].position.row >= boardHeight - 2) {
+            if (enemies[i].last_direction === "down" && enemies[i].position.row >= boardHeight - 2) { //when we are moving down and are in the last row, change direction
                 enemies[i].move("right");
-                if(i === 3) enemies[0].idle = !enemies[0].idle;
+                if(i === 3) enemies[0].idle = !enemies[0].idle; //idle showcase. when set to idle character will not move. If idle is reset to false, then character moves again.
             }
             if(enemies[i].last_direction === "right" &&  enemies[i].position.col >= boardWidth - 2) {
                 enemies[i].move("up");
@@ -94,12 +94,14 @@ function loop() {
             if(enemies[i].last_direction === "left" && enemies[i].position.col <= 1) {
                 enemies[i].move("down");
             }
-            enemies[i].refreshPos();
+            enemies[i].refreshPos(); // change position in Matrix (row, col)
         }
     }
-    let tmp = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1));
+    let pix_offset = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1)); //in MOVEMENT_SPEED frames (eg. 60 Frames) character moves 1 Tile. 
+                                                                                            //So Every Frame, we add 1/60 of a tile to the current moving direcction
+                                                                                            //This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
     for(let i = 0; i < enemies.length; i++){
-        enemies[i].refreshPixelPos(tmp);
+        enemies[i].refreshPixelPos(pix_offset); //based on direction, pix_offset is added to or subtracted from dim_x or dim_y
     }
     //TODO:
         //move enemies / moveCharacters()

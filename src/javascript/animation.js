@@ -1,4 +1,4 @@
-let ticks = [];
+let ticks = []; //in this array the animation ticks for each character are stored
 
 class AnimationFrame {
     constructor(x, y, dim_x, dim_y) { //dim: how big is character on assets.png
@@ -9,14 +9,15 @@ class AnimationFrame {
     }
 }
 
+/*stores information about position on gameBoard-Matrix, Position on canvas and the animations*/
 class Character {
     constructor(y, row, col, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
-        this.idle = false;
+        this.idle = false; //is caracter currently moving?
 
         this.position = {
-            row: row,
+            row: row, //row on matrix (number of rows equals number of vertical tiles)
             col: col,
-            pix_x: col * tileSize,
+            pix_x: col * tileSize, //current position in pixel on canvas. later, this is used to calc the offset
             pix_y: row * tileSize
         } 
 
@@ -42,15 +43,16 @@ class Character {
         this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
 
         this.last_direction = "up"; //up per default
-        this.tick = ticks.length;
-        ticks.push(0);
+        this.tick = ticks.length; //whick position in the array is the tick beloning to this character
+        ticks.push(0); //create new tick variable and add it to the array (used for e.g. calculation of current animation Frame)
         console.log("construktor row : " + this.position.row +  " col: " + this.position.col + " pos_x " + this.position.pix_x  + " pos_y " + this.position.pix_y);
     }
 
+    /*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
     refreshPos() {
-        if (!this.idle) {
+        if (!this.idle) { //position is only updated, if character is currently moving
             switch (this.last_direction) {
-                case "down":
+                case "down": //based on  direction, the characters position in the matrix is updatet
                     this.position.row += 1;
                     break;
                 case "up":
@@ -66,20 +68,22 @@ class Character {
         }
     }
 
-    refreshPixelPos(pix) {
+    /*This Function calculates the offset on the canvas to simulate a smooth motion.
+    For Performance reasons, the offset is calculated outside*/
+    refreshPixelPos(pix_offset) {
         if (!this.idle) {
             switch (this.last_direction) {
                 case "down":
-                    this.position.pix_y = (this.position.row * tileSize) - pix;
+                    this.position.pix_y = (this.position.row * tileSize) - pix_offset;
                     return;
                 case "up":
-                    this.position.pix_y = (this.position.row * tileSize) + pix;
+                    this.position.pix_y = (this.position.row * tileSize) + pix_offset;
                     return;
                 case "left":
-                    this.position.pix_x = (this.position.col * tileSize) + pix;
+                    this.position.pix_x = (this.position.col * tileSize) + pix_offset;
                     return;
                 case "right":
-                    this.position.pix_x = (this.position.col * tileSize) - pix;
+                    this.position.pix_x = (this.position.col * tileSize) - pix_offset;
                     return;
             }
         }
@@ -87,7 +91,7 @@ class Character {
 
     getAnimation() {
         if (this.idle) {
-            return this.getIdle();
+            return this.getIdle(); //if idle, get idle Animation-Frame
         } else {
             return this.move(this.last_direction);
         }
@@ -99,10 +103,10 @@ class Character {
         }
         if (movement !== this.last_direction) { //direction changed
             ticks[this.tick] = 1; // 0 would be idle, 1 is first moving motion
-        } else if (ticks[this.tick] === 12) {
+        } else if (ticks[this.tick] === 12) { 
             ticks[this.tick] = 0;
         }
-        this.last_direction = movement;
+        this.last_direction = movement; //save the direction, the character is heading
 
         switch (movement) {
             case "up":
@@ -138,7 +142,7 @@ class Bomb {
     }
 
 }
-class Player extends Character {
+class Player extends Character { //ToDo: add bombs, add life etc.
     constructor(y, row, col) {
         super(y, row, col);
     }
