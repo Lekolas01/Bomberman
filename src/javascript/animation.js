@@ -21,7 +21,7 @@ class Character {
             pix_y: row * tileSize
         } 
 
-        this.direction = new Array(3); //up, down, right
+        this.direction = new Array(4); //up, down, right
 
         //up
         this.direction[0] = new Array(3);
@@ -41,6 +41,13 @@ class Character {
         this.direction[2][1] = new AnimationFrame(5 * dim_x, y, dim_x, dim_y); //animation right #1
         this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
         this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
+
+        //left
+        this.direction[3] = new Array(4);
+        this.direction[3][0] = new AnimationFrame(10 * dim_x, y, dim_x, dim_y); //idle
+        this.direction[3][1] = new AnimationFrame(11 * dim_x, y, dim_x, dim_y); //animation left #1
+        this.direction[3][2] = new AnimationFrame(12 * dim_x, y, dim_x, dim_y); //animation left #2
+        this.direction[3][3] = new AnimationFrame(13 * dim_x, y, dim_x, dim_y); //animation left #3
 
         this.last_direction = "up"; //up per default
         this.tick = ticks.length; //whick position in the array is the tick beloning to this character
@@ -114,8 +121,9 @@ class Character {
             case "down":
                 return this.direction[1][ticks[this.tick] % 3];
             case "right":
-            case "left":
                 return this.direction[2][ticks[this.tick] % 4];
+            case "left":
+                return this.direction[3][ticks[this.tick] % 4];
             default:
                 return this.direction[0][0];
         }
@@ -127,8 +135,9 @@ class Character {
             case "down":
                 return this.direction[1][0];
             case "right":
-            case "left":
                 return this.direction[2][0];
+            case "left":
+                return this.direction[3][0];
             default:
                 return this.direction[0][0];
         }

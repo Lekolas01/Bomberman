@@ -5,6 +5,11 @@ class Enemy extends Character {
         this.moveSpeed = moveSpeed;
         this.flying = flying; // can this enemy type fly over walls?
     }
+
+    //returns boolean value whether enemy can move into that direction on its currents position
+    isValidMove(board, direction) {
+
+    }
 }
 
 // basic enemy. 1 life, rather slow, can not fly.
