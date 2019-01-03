@@ -18,7 +18,7 @@ class Character {
             col: col,
             pix_x: col * tileSize,
             pix_y: row * tileSize
-        }
+        } 
 
         this.direction = new Array(3); //up, down, right
 
@@ -41,7 +41,7 @@ class Character {
         this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
         this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
 
-        this.last_direction = "down"; //up per default
+        this.last_direction = "up"; //up per default
         this.tick = ticks.length;
         ticks.push(0);
         console.log("construktor row : " + this.position.row +  " col: " + this.position.col + " pos_x " + this.position.pix_x  + " pos_y " + this.position.pix_y);
