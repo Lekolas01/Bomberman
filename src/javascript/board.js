@@ -2,7 +2,7 @@
 //  unbreakable walls on the outside,
 //  regular grid structure of unbreakable walls inside,
 //  semi-randomly generated breakable walls (= boxes) on the rest (bomberman map))
-function gameboard(width, height, boxSpawnChance = 0.7) {
+function gameboard(width, height, boxSpawnChance = 0.3) {
     //creates a new matrix of any type
     function matrix(width, height) {
         var matr = new Array(height);
@@ -40,7 +40,7 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
         }
     }
 
-    function initBoxes() {
+    function initBreakableWalls() {
         for (var row = 1; row < height - 1; row++) {
             for (var col = 1; col < width - 1; col++) {
                 if (board[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
@@ -54,7 +54,7 @@ function gameboard(width, height, boxSpawnChance = 0.7) {
     initOuterWall();
     initGrass();
     initGridTiles();
-    initBoxes();
+    initBreakableWalls();
     return board;
 }
 
@@ -71,6 +71,7 @@ function drawGameboard(data, ctx) {
         }
     }
 }
+
 function drawCharacters(characterArr, ctx) {
     let animation;
     for (let i = 0; i < characterArr.length; i++) {
