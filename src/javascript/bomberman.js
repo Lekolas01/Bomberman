@@ -67,7 +67,7 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(8);
+    enemies = enemies(16);
     enemies[0].last_directions = "down";
     printAllEnemiesStats(enemies);
     
