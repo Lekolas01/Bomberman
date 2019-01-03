@@ -67,7 +67,7 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(8);
+    enemies = enemies(10);
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);

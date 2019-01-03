@@ -83,15 +83,19 @@ function enemies(numEnemies) {
     return allEnemies;
 }
 
+function printEnemyStats(enemy) {
+    console.log(`       Health: ${enemy.health}`);
+    console.log(`       Speed: ${enemy.moveSpeed}`);
+    console.log(`       Flying: ${enemy.flying}`);
+}
+
 // for debugging
 function printAllEnemiesStats(enemies) {
     console.log("---------------------------");
     console.log("Enemies:");
     for(var i = 0; i < enemies.length; i++) {
         console.log(`   Enemy ${i}`);
-        console.log(`       Health: ${this.health}`);
-        console.log(`       Speed: ${this.moveSpeed}`);
-        console.log(`       Flying: ${this.flying}`);
+        printEnemyStats(enemies[i]);
     }
     console.log("---------------------------");
 }
