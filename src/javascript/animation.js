@@ -19,7 +19,7 @@ class Character {
             col: col,
             pix_x: col * tileSize, //current position in pixel on canvas. later, this is used to calc the offset
             pix_y: row * tileSize
-        } 
+        }
 
         this.direction = new Array(4); //up, down, right
 
@@ -52,7 +52,7 @@ class Character {
         this.last_direction = "up"; //up per default
         this.tick = ticks.length; //whick position in the array is the tick beloning to this character
         ticks.push(0); //create new tick variable and add it to the array (used for e.g. calculation of current animation Frame)
-        console.log("construktor row : " + this.position.row +  " col: " + this.position.col + " pos_x " + this.position.pix_x  + " pos_y " + this.position.pix_y);
+        console.log("construktor row : " + this.position.row + " col: " + this.position.col + " pos_x " + this.position.pix_x + " pos_y " + this.position.pix_y);
     }
 
     /*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
@@ -110,7 +110,7 @@ class Character {
         }
         if (movement !== this.last_direction) { //direction changed
             ticks[this.tick] = 1; // 0 would be idle, 1 is first moving motion
-        } else if (ticks[this.tick] === 12) { 
+        } else if (ticks[this.tick] === 12) {
             ticks[this.tick] = 0;
         }
         this.last_direction = movement; //save the direction, the character is heading
