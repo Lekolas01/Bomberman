@@ -4,7 +4,7 @@ var fontSize = 18; //for matrix anim
 
 let frame_cnt = 0;
 var GAME_SPEED = 9; // 1 tick every 9 ms
-let MOVEMENT_SPEED = 120; //Every 120 frames, characters can move 1 Tile
+let MOVEMENT_SPEED = 60; //Every 120 frames, characters can move 1 Tile
 //game logic variables
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
@@ -67,7 +67,8 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = gameboard(boardWidth, boardHeight);
-    enemies = enemies(6);
+    enemies = enemies(8);
+    enemies[0].last_directions = "down";
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
@@ -75,18 +76,40 @@ function startGame() {
 
 // is called every 50 ms
 function loop() {
-    frame_cnt = (frame_cnt + 1) % 120;
+    frame_cnt = (frame_cnt + 1) % 60;
     //ToDo: Move to "moveCharacters()"
     if(frame_cnt === 0){
         for(let i = 0; i < enemies.length; i++){
-            enemies[i].refreshPos();
-            if(enemies[i].position.row >= boardHeight - 1){
-                enemies[i].position.row = 2;
+            if (enemies[i].last_direction === "down" && enemies[i].position.row >= boardHeight - 2) {
+                console.log("change to right");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                enemies[i].move("right");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
             }
+            if(enemies[i].last_direction === "right" &&  enemies[i].position.col >= boardWidth - 2) {
+                console.log("change to up");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                enemies[i].move("up");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+            }
+            if(enemies[i].last_direction === "up" && enemies[i].position.row <= 1){
+                console.log("change to left");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                enemies[i].move("left");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+            }
+            if(enemies[i].last_direction === "left" && enemies[i].position.col <= 1) {
+                console.log("change to down");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+                enemies[i].move("down");
+                console.log(" row : " + enemies[i].position.row +  " col: " + enemies[i].position.col);
+            }
+            enemies[i].refreshPos();
         }
     }
+    let tmp = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1));
     for(let i = 0; i < enemies.length; i++){
-        enemies[i].refreshPixelPos();
+        enemies[i].refreshPixelPos(tmp);
     }
     //TODO:
         //move enemies / moveCharacters()

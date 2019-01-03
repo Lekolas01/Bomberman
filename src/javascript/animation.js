@@ -48,38 +48,39 @@ class Character {
 
     refreshPos() {
         if (!this.idle) {
-                switch (this.last_direction) {
-                    case "down":
-                        this.position.row += 1;
-                        break;
-                    case "up":
-                        this.position.row -= 1;
-                        break;
-                    case "right":
-                        this.position.col += 1;
-                        break;
-                    case "left":
-                        this.position.col -= 1;
-                        break;
+            switch (this.last_direction) {
+                case "down":
+                    this.position.row += 1;
+                    break;
+                case "up":
+                    this.position.row -= 1;
+                    break;
+                case "right":
+                    this.position.col += 1;
+                    break;
+                case "left":
+                    this.position.col -= 1;
+                    break;
             }
         }
     }
 
-    refreshPixelPos() {
-        let tmp = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1));
-        switch (this.last_direction) {
-            case "down":
-                this.position.pix_y = (this.position.row * tileSize) - tmp;
-                return;
-            case "up":
-                this.position.pix_y = (this.position.row * tileSize) + tmp;
-                return;
-            case "right":
-                this.position.pix_x = (this.position.col * tileSize) + tmp;
-                return;
-            case "left":
-                this.position.pix_x = (this.position.col * tileSize) - tmp;
-                return;
+    refreshPixelPos(pix) {
+        if (!tileSize.idle) {
+            switch (this.last_direction) {
+                case "down":
+                    this.position.pix_y = (this.position.row * tileSize) - pix;
+                    return;
+                case "up":
+                    this.position.pix_y = (this.position.row * tileSize) + pix;
+                    return;
+                case "left":
+                    this.position.pix_x = (this.position.col * tileSize) + pix;
+                    return;
+                case "right":
+                    this.position.pix_x = (this.position.col * tileSize) - pix;
+                    return;
+            }
         }
     }
 
