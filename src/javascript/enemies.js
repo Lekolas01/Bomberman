@@ -12,17 +12,13 @@ class Enemy extends Character {
         //console.log(board === undefined);
         switch(direction) {
             case "up":
-                return board[this.position.row - 1][this.position.col].passable 
-                    ;
+                return board[this.position.row - 1][this.position.col].passable;
             case "down":  
-                return board[this.position.row + 1][this.position.col].passable
-                    ;
+                return board[this.position.row + 1][this.position.col].passable;
             case "right": 
                 return board[this.position.row][this.position.col + 1].passable;
-                    //&& this.position.pix_y == 0;
             case "left": 
-                return board[this.position.row][this.position.col - 1].passable
-                    ;
+                return board[this.position.row][this.position.col - 1].passable;
         }
     }
 

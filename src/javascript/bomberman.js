@@ -68,7 +68,6 @@ function startGame() {
     
     board = gameboard(boardWidth, boardHeight);
     enemies = enemies(8);
-    enemies[0].last_directions = "down";
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
