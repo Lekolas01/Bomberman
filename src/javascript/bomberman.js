@@ -32,7 +32,7 @@ class tile {
 // tileTypes: enum for all types of tile that can exist on the gameboard
 var tileTypes = Object.freeze({ 
     //parameter list: (breakable, passable, x, y)
-    "wall":         new tile(false, false, 160, 64),
+    "wall":         new tile(false, false, 96, 0),
     "empty":        new tile(false, true, 32, 0),
     "breakableWall":new tile(true, false, 144, 0),
     "bomb":         new tile(false, false, 64, 80)
