@@ -3,7 +3,7 @@
 //  regular grid structure of unbreakable walls inside,
 //  semi-randomly generated breakable walls (= boxes) on the rest (bomberman map))
 class gameboard {
-    constructor(width, height, boxSpawnChance = 1) {
+    constructor(width, height, boxSpawnChance = 0.3) {
         this.width = width;
         this.height = height;
         this.data = matrix(this.width, this.height);

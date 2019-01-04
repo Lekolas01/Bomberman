@@ -1,8 +1,7 @@
 class Enemy extends Character {
     constructor(row, pos_x, pos_y, health, moveSpeed, flying) {
-        super(row, pos_x, pos_y);
+        super(moveSpeed, row, pos_x, pos_y);
         this.health = health;
-        this.moveSpeed = moveSpeed;
         this.flying = flying; // can this enemy type fly over walls?
     }
 
@@ -31,13 +30,13 @@ class Enemy extends Character {
     //returns the number of valid directions this enemy can move to
     numValidDirections(board) {
         var count = 0;
-        
+
         //console.log("numValidDirections");
         //console.log(board === undefined);
-        if(this.isValidMove(board, "up")) count++;
-        if(this.isValidMove(board, "down")) count++;
-        if(this.isValidMove(board, "right")) count++;
-        if(this.isValidMove(board, "left")) count++;
+        if (this.isValidMove(board, "up")) count++;
+        if (this.isValidMove(board, "down")) count++;
+        if (this.isValidMove(board, "right")) count++;
+        if (this.isValidMove(board, "left")) count++;
         return count;
     }
 
@@ -45,7 +44,7 @@ class Enemy extends Character {
     // Wenn keine existiert, wird idle auf true gesetzt.
     chooseMovingDirection(board) {
         let numDirections = this.numValidDirections(board);
-        if(numDirections == 0) { // existiert keine valide Richtung -> idle = true
+        if (numDirections == 0) { // existiert keine valide Richtung -> idle = true
             this.idle = true;
         } else { // sonst wähle eine der validen Richtungen aus
             this.idle = false;
@@ -59,19 +58,19 @@ class Enemy extends Character {
 }
 
 // basic enemy. 1 life, rather slow, can not fly.
-class Creep extends Enemy{
+class Creep extends Enemy {
     constructor(pos_x, pos_y) {
-        super(1 * 16, pos_x, pos_y, 1, 5, false);
+        super(1 * 16, pos_x, pos_y, 1, 0.5, false);
     }
-    
+
 }
 
 function enemies(numEnemies) {
     // allEnemies is an array, which at each index saves the enemy object
     // as well as that enemy's current position on the gameboard
     var allEnemies = [];
-    for(var i = 0; i < numEnemies; i++) {
-        allEnemies.push(new Creep(i  + 1, i + 1));
+    for (var i = 0; i < numEnemies; i++) {
+        allEnemies.push(new Enemy(1 * 16, i, i + 1, 1, 0.1 * i + 0.3, false));
     }
     return allEnemies;
 }
@@ -86,7 +85,7 @@ function printEnemyStats(enemy) {
 function printAllEnemiesStats(enemies) {
     console.log("---------------------------");
     console.log("Enemies:");
-    for(var i = 0; i < enemies.length; i++) {
+    for (var i = 0; i < enemies.length; i++) {
         console.log(`   Enemy ${i}`);
         printEnemyStats(enemies[i]);
     }
