@@ -21,7 +21,8 @@ class Enemy extends Character {
         // check for out of bounds, for more robust code
         if(typeof board.data[this.position.row + diff_y] !== 'undefined' && 
            typeof board.data[this.position.row + diff_y][this.position.col + diff_x] !== 'undefined') {
-            return board.data[this.position.row + diff_y][this.position.col + diff_x].passable;
+            return board.data[this.position.row + diff_y][this.position.col + diff_x].passable
+                || this.flying;
         } else {
             return false;
         }
@@ -38,20 +39,6 @@ class Enemy extends Character {
         if(this.isValidMove(board, "right")) count++;
         if(this.isValidMove(board, "left")) count++;
         return count;
-    }
-
-    // helper function. Converts a number into a direction ("up", "right" etc.)
-    intToDir(number) {
-        /*if(number !== parseInt(number, 10)) {
-            alert("Error: Passed wrong parameter type");
-            return;
-        }*/
-        switch(number % 4) {
-            case 0: return "up";
-            case 1: return "right";
-            case 2: return "down";
-            case 3: return "left";
-        }
     }
 
     // wählt eine zufällig valide gültige Bewegungsrichtung aus.
