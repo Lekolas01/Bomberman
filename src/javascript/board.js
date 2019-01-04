@@ -73,7 +73,23 @@ class gameboard {
                 }
             }
         }
-    }   
+    }
+
+    // helper function. This returns an array of positions {row, col} on the gameboard where
+    // the tiles on those position all are passable set to true
+    getAllPassableTiles() {
+        let positions = [];
+        for(let row = 0; row < this.height; row++) {
+            for(let col = 0; col < this.width; col++) {
+                if(this.data[row][col].passable) {
+                    console.log("push");
+                    positions.push({row, col});
+                }
+            }
+        }
+        return positions;
+    }
+
 }
 
 function drawCharacters(characterArr, ctx) {

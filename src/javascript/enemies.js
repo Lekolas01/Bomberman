@@ -1,3 +1,9 @@
+
+// helper function returns a random integer between start and (end - 1)
+function RandNumInRange(start, end) {
+    return Math.floor((Math.random() * (end - start))) % (end - start);
+}
+
 class Enemy extends Character {
     constructor(row, pos_x, pos_y, health, moveSpeed, flying) {
         super(moveSpeed, row, pos_x, pos_y);
@@ -48,9 +54,9 @@ class Enemy extends Character {
             this.idle = true;
         } else { // sonst wähle eine der validen Richtungen aus
             this.idle = false;
-            let randDir = Math.floor((Math.random(4) * 4) % 4); //zufällige "Richtung"
+            let randDir = RandNumInRange(0, 4); //zufällige "Richtung"
             while(!this.isValidMove(board, this.intToDir(randDir))) { // solange Richtung invalid
-                randDir = Math.floor((Math.random(4) * 4) % 4); // suche neue zufällige Richtung aus
+                randDir = RandNumInRange(0, 4); // suche neue zufällige Richtung aus
             }
             this.move(this.intToDir(randDir));
         }
@@ -65,12 +71,18 @@ class Creep extends Enemy {
 
 }
 
-function enemies(numEnemies) {
+// this function generates num Enemies on the gameboard an saves all of them within an array
+// their starting position is randomly selected from all valid positions on the gameboard
+function enemies(board, num) {
     // allEnemies is an array, which at each index saves the enemy object
-    // as well as that enemy's current position on the gameboard
+    // as well as that enemy's current tile position on the gameboard
+    var startingPositions = board.getAllPassableTiles();
+    var numStartingPos = startingPositions.length;
     var allEnemies = [];
-    for (var i = 0; i < numEnemies; i++) {
-        allEnemies.push(new Enemy(1 * 16, i, i + 1, 1, 0.1 * i + 0.3, false));
+    for (var i = 0; i < num; i++) {
+        var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+        console.log(`randPos: ${randPos.row} ${randPos.col}`);
+        allEnemies.push(new Enemy(1 * 16, randPos.row, randPos.col, 1, 0.1 * i + 0.3, false));
     }
     return allEnemies;
 }
