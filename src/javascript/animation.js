@@ -1,4 +1,5 @@
 let ticks = []; //in this array the animation ticks for each character are stored
+let frame_cnts = [];
 
 class AnimationFrame {
     constructor(x, y, dim_x, dim_y) { //dim: how big is character on assets.png
@@ -11,8 +12,11 @@ class AnimationFrame {
 
 /*stores information about position on gameBoard-Matrix, Position on canvas and the animations*/
 class Character {
-    constructor(y, row, col, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
+    //speed: 1 = 100% (one row every 60 frames), 0.6 = 60 %, 1.2 = 120 % and so on
+    constructor(speed, y, row, col, dim_x = 16, dim_y = 16) { //which y position on asset png is player/monster
         this.idle = false; //is caracter currently moving?
+
+        this.speed = Math.round(6.66666666667 * GAME_SPEED / speed); 
 
         this.position = {
             row: row, //row on matrix (number of rows equals number of vertical tiles)
@@ -25,9 +29,9 @@ class Character {
 
         //up
         this.direction[0] = new Array(3);
-        this.direction[0][0] = new AnimationFrame(0, y, dim_x, dim_y); //idle
-        this.direction[0][1] = new AnimationFrame(8 * dim_x, y, dim_x, dim_y); //animation up #1
-        this.direction[0][2] = new AnimationFrame(9 * dim_x, y, dim_x, dim_y); //animation up #
+        this.direction[0][0] = new AnimationFrame(0, y + 1, dim_x, dim_y); //idle
+        this.direction[0][1] = new AnimationFrame(8 * dim_x, y + 1, dim_x, dim_y); //animation up #1
+        this.direction[0][2] = new AnimationFrame(9 * dim_x, y + 1, dim_x, dim_y); //animation up #
 
         //down
         this.direction[1] = new Array(3);
@@ -37,29 +41,35 @@ class Character {
 
         //right
         this.direction[2] = new Array(4);
-        this.direction[2][0] = new AnimationFrame(4 * dim_x, y, dim_x, dim_y); //idle
-        this.direction[2][1] = new AnimationFrame(5 * dim_x, y, dim_x, dim_y); //animation right #1
-        this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
-        this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
+        this.direction[2][0] = new AnimationFrame(4 * dim_x, y + 1, dim_x, dim_y); //idle
+        this.direction[2][1] = new AnimationFrame(5 * dim_x, y + 1, dim_x, dim_y); //animation right #1
+        this.direction[2][2] = new AnimationFrame(6 * dim_x, y + 1, dim_x, dim_y); //animation right #2
+        this.direction[2][3] = new AnimationFrame(7 * dim_x, y + 1, dim_x, dim_y); //animation right #3
 
         //left
         this.direction[3] = new Array(4);
-        this.direction[3][0] = new AnimationFrame(10 * dim_x, y, dim_x, dim_y); //idle
-        this.direction[3][1] = new AnimationFrame(11 * dim_x, y, dim_x, dim_y); //animation left #1
-        this.direction[3][2] = new AnimationFrame(12 * dim_x, y, dim_x, dim_y); //animation left #2
-        this.direction[3][3] = new AnimationFrame(13 * dim_x, y, dim_x, dim_y); //animation left #3
+        this.direction[3][0] = new AnimationFrame(10 * dim_x, y + 1, dim_x, dim_y); //idle
+        this.direction[3][1] = new AnimationFrame(11 * dim_x, y + 1, dim_x, dim_y); //animation left #1
+        this.direction[3][2] = new AnimationFrame(12 * dim_x, y + 1, dim_x, dim_y); //animation left #2
+        this.direction[3][3] = new AnimationFrame(13 * dim_x, y + 1, dim_x, dim_y); //animation left #3
 
         this.last_direction = "up"; //up per default
         this.tick = ticks.length; //whick position in the array is the tick beloning to this character
         ticks.push(0); //create new tick variable and add it to the array (used for e.g. calculation of current animation Frame)
-        console.log("construktor row : " + this.position.row + " col: " + this.position.col + " pos_x " + this.position.pix_x + " pos_y " + this.position.pix_y);
+        this.frame_cnt = frame_cnts.length;
+        frame_cnts.push(-1);
+        console.log("construktor speed: " + this.speed + " row : " + this.position.row + " col: " + this.position.col + " pos_x " + this.position.pix_x + " pos_y " + this.position.pix_y);
+    }
+
+    updateFrameCnt() {
+        frame_cnts[this.frame_cnt] = (frame_cnts[this.frame_cnt] + 1) % this.speed;
     }
 
     /*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
     refreshPos() {
-        if (!this.idle) { //position is only updated, if character is currently moving
+        if (!this.idle) {
             switch (this.last_direction) {
-                case "down": //based on  direction, the characters position in the matrix is updatet
+                case "down": //based on  direction, the characters position in the matrix is updated
                     this.position.row += 1;
                     break;
                 case "up":
@@ -75,8 +85,7 @@ class Character {
         }
     }
 
-    /*This Function calculates the offset on the canvas to simulate a smooth motion.
-    For Performance reasons, the offset is calculated outside*/
+    /*This Function calculates the offset on the canvas to simulate a smooth motion.*/
     refreshPixelPos(pix_offset) {
         if (!this.idle) {
             switch (this.last_direction) {
@@ -104,8 +113,12 @@ class Character {
         }
     }
 
+    getFrameCount() {
+        return frame_cnts[this.frame_cnt];
+    }
+
     move(movement) {
-        if (frame_cnt % 10 === 0) { //every 10th frame, a new animation image is shown
+        if (frame_cnts[this.frame_cnt] % 10 === 0) { //every 10th frame, a new animation image is shown
             ticks[this.tick] += 1; //counts next animation
         }
         if (movement !== this.last_direction) { //direction changed
@@ -153,7 +166,7 @@ class Bomb {
 }
 class Player extends Character { //ToDo: add bombs, add life etc.
     constructor(y, row, col) {
-        super(y, row, col);
+        super(1, y, row, col);
     }
 }
 

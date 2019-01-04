@@ -2,10 +2,8 @@
 var canvas, ctx;
 var fontSize = 18; //for matrix anim
 
-let frame_cnt = 0;
-var GAME_SPEED = 9; // 1 tick every 9 ms
-let MOVEMENT_SPEED = 60; //Every 60 frames, characters can move 1 Tile (indirect propotional: Higher Number = slower)
 //game logic variables
+var GAME_SPEED = 9; // 1 tick every 9 ms
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13 // how many tiles is the gameboard high?
 var tileSize = 40; // how big is one tile? (width and height)
@@ -75,25 +73,31 @@ function startGame() {
 
 // is called every 50 ms
 function loop() {
-    frame_cnt = (frame_cnt + 1) % MOVEMENT_SPEED; //frame_cnt will be between 0 and MOVEMENT_SPEED - 1
-    //ToDo: Move to "moveCharacters()"
-    if(frame_cnt === 0){ //If we Are in the 1st frame, Change Direction and/or Move Characters in Matrix
-        for(let i = 0; i < enemies.length; i++) {
-            enemies[i].chooseMovingDirection(board);
-            enemies[i].refreshPos(); // change position in Matrix (row, col)
-        }
-    }
-    let pix_offset = tileSize - ((tileSize / MOVEMENT_SPEED) * ((frame_cnt % MOVEMENT_SPEED) + 1)); //in MOVEMENT_SPEED frames (eg. 60 Frames) character moves 1 Tile. 
-                                                                                            //So Every Frame, we add 1/60 of a tile to the current moving direction
-                                                                                            //This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
-    for(let i = 0; i < enemies.length; i++){
-        enemies[i].refreshPixelPos(pix_offset); //based on direction, pix_offset is added to or subtracted from dim_x or dim_y
-    }
+
+
+    moveEnemies();
     //TODO:
         //move enemies / moveCharacters()
         //move bomberman
         //bombs tick
     drawScreen();
+}
+
+function moveEnemies(){
+    let pix_offset = 0;
+    let frame_cnt = 0;
+    for(let i = 0; i < enemies.length; i++){
+            enemies[i].updateFrameCnt()
+            frame_cnt = enemies[i].getFrameCount();
+           if(frame_cnt === 0){
+                enemies[i].chooseMovingDirection(board);
+                enemies[i].refreshPos(); // change position in Matrix (row, col)
+           }
+           pix_offset = tileSize - ((tileSize / enemies[i].speed) * (frame_cnt % enemies[i].speed) + 1); //in MOVEMENT_SPEED frames (eg. 60 Frames) character moves 1 Tile. 
+           //So Every Frame, we add 1/60 of a tile to the current moving direction
+           //This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
+           enemies[i].refreshPixelPos(pix_offset);
+    }
 }
 
 //--------------------------------------------------------------------------
