@@ -1,3 +1,35 @@
+class Player extends Character { //ToDo: resolve input lag
+    constructor(y, row, col, health, bombs) {
+        super(2, y * 16, row, col);
+        this.health = health;
+        this.bombs = bombs;
+        this.activeBombs = 0;
+        this.lastKeyInput = KEY.NONE;
+    }
+
+    updateDirection() {
+        this.idle = false;
+        switch (this.lastKeyInput) {
+            case KEY.UP:
+                this.last_direction = DIRECTION.UP;
+                break;
+            case KEY.DOWN:
+                this.last_direction = DIRECTION.DOWN;
+                break;
+            case KEY.RIGHT:
+                this.last_direction = DIRECTION.RIGHT;
+                break;
+            case KEY.LEFT:
+                this.last_direction = DIRECTION.LEFT;
+                break;
+            case KEY.NONE:
+            default:
+                this.idle = true;
+
+        }
+    }
+}
+
 class Bomb {
     constructor(row, col, timer) {
         this.row = row;
@@ -31,7 +63,7 @@ class Bomb {
                     self.setAnimationSize();
                 }
             })(this),
-            24
+            timer * 3
         );  //Zündschnur for animation effekt of bomb
 
         this.animaton_size = 1;
@@ -41,9 +73,9 @@ class Bomb {
     setAnimationSize() {
         this.tick++;
         if (this.tick % 100 < 50) {
-            this.animaton_size = 0.6 + 0.006 * (this.tick % 50);
+            this.animaton_size = 0.7 + 0.006 * (this.tick % 50);
         } else {
-            this.animaton_size = 0.9 - 0.006 * (this.tick % 50);
+            this.animaton_size = 1.0 - 0.006 * (this.tick % 50);
         }
     }
     updateBombState() {
@@ -67,9 +99,4 @@ class Bomb {
         return this.animation[this.state];
     }
 
-}
-class Player extends Character { //ToDo: add bombs, add life etc.
-    constructor(y, row, col) {
-        super(1, y, row, col);
-    }
 }

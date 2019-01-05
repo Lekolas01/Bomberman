@@ -50,8 +50,8 @@ class Character {
         this.direction[3][2] = new AnimationFrame(12 * dim_x, y + 1, dim_x, dim_y); //animation left #2
         this.direction[3][3] = new AnimationFrame(13 * dim_x, y + 1, dim_x, dim_y); //animation left #3
 
-        this.last_direction = "up"; //up per default
-        this.tick = 0; //used for calculating wich animatin is displayed
+        this.last_direction = DIRECTION.UP; //up per default
+        this.tick = 0; //used for calculating wich animation is displayed
         this.frame_cnt = -1; //used for calculation of pixel offset when moving
         console.log("construktor speed: " + this.speed + " row : " + this.position.row + " col: " + this.position.col + " pos_x " + this.position.pix_x + " pos_y " + this.position.pix_y);
     }
@@ -64,16 +64,16 @@ class Character {
     refreshPos() {
         if (!this.idle) {
             switch (this.last_direction) {
-                case "down": //based on  direction, the characters position in the matrix is updated
+                case DIRECTION.DOWN: //based on  direction, the characters position in the matrix is updated
                     this.position.row += 1;
                     break;
-                case "up":
+                case DIRECTION.UP:
                     this.position.row -= 1;
                     break;
-                case "right":
+                case DIRECTION.RIGHT:
                     this.position.col += 1;
                     break;
-                case "left":
+                case DIRECTION.LEFT:
                     this.position.col -= 1;
                     break;
             }
@@ -84,16 +84,16 @@ class Character {
     refreshPixelPos(pix_offset) {
         if (!this.idle) {
             switch (this.last_direction) {
-                case "down":
+                case DIRECTION.DOWN:
                     this.position.pix_y = (this.position.row * tileSize) - pix_offset;
                     return;
-                case "up":
+                case DIRECTION.UP:
                     this.position.pix_y = (this.position.row * tileSize) + pix_offset;
                     return;
-                case "left":
+                case DIRECTION.LEFT:
                     this.position.pix_x = (this.position.col * tileSize) + pix_offset;
                     return;
-                case "right":
+                case DIRECTION.RIGHT:
                     this.position.pix_x = (this.position.col * tileSize) - pix_offset;
                     return;
             }
@@ -120,27 +120,28 @@ class Character {
         this.last_direction = movement; //save the direction, the character is heading
 
         switch (movement) {
-            case "up":
+            case DIRECTION.UP:
                 return this.direction[0][this.tick % 3];
-            case "down":
+            case DIRECTION.DOWN:
                 return this.direction[1][this.tick % 3];
-            case "right":
+            case DIRECTION.RIGHT:
                 return this.direction[2][this.tick % 4];
-            case "left":
+            case DIRECTION.LEFT:
                 return this.direction[3][this.tick % 4];
             default:
+                this.idle = true;
                 return this.direction[0][0];
         }
     }
     getIdle() {
         switch (this.last_direction) {
-            case "up":
+            case DIRECTION.UP:
                 return this.direction[0][0];
-            case "down":
+            case DIRECTION.DOWN:
                 return this.direction[1][0];
-            case "right":
+            case DIRECTION.RIGHT:
                 return this.direction[2][0];
-            case "left":
+            case DIRECTION.LEFT:
                 return this.direction[3][0];
             default:
                 return this.direction[0][0];
@@ -155,10 +156,10 @@ class Character {
             return;
         }
         switch(number % 4) {
-            case 0: return "up";
-            case 1: return "right";
-            case 2: return "down";
-            case 3: return "left";
+            case 0: return DIRECTION.UP;
+            case 1: return DIRECTION.RIGHT;
+            case 2: return DIRECTION.DOWN;
+            case 3: return DIRECTION.LEFT;
         }
     }
 }

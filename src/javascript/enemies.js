@@ -17,10 +17,10 @@ class Enemy extends Character {
         //console.log(board === undefined);
         var diff_x, diff_y;
         switch(direction) {
-            case "up":      diff_y = -1; diff_x = 0; break;
-            case "down":    diff_y =  1; diff_x = 0; break;
-            case "right":   diff_y =  0; diff_x = 1; break;
-            case "left":    diff_y =  0; diff_x =-1; break;
+            case DIRECTION.UP:      diff_y = -1; diff_x = 0; break;
+            case DIRECTION.DOWN:    diff_y =  1; diff_x = 0; break;
+            case DIRECTION.RIGHT:   diff_y =  0; diff_x = 1; break;
+            case DIRECTION.LEFT:    diff_y =  0; diff_x =-1; break;
         }
 
         // check for out of bounds, for more robust code
@@ -39,10 +39,10 @@ class Enemy extends Character {
 
         //console.log("numValidDirections");
         //console.log(board === undefined);
-        if (this.isValidMove(board, "up")) count++;
-        if (this.isValidMove(board, "down")) count++;
-        if (this.isValidMove(board, "right")) count++;
-        if (this.isValidMove(board, "left")) count++;
+        if (this.isValidMove(board, DIRECTION.UP)) count++;
+        if (this.isValidMove(board, DIRECTION.DOWN)) count++;
+        if (this.isValidMove(board, DIRECTION.RIGHT)) count++;
+        if (this.isValidMove(board, DIRECTION.LEFT)) count++;
         return count;
     }
 
