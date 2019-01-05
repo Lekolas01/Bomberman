@@ -134,7 +134,9 @@ function movePlayer() {
     frame_cnt = player.frame_cnt;
     if (frame_cnt === 0) {
         if(player.holdsBomb) player.plantBomb();
+
         player.updateDirection();
+        player.tryMove(board);
         player.refreshPos();
     }
     pix_offset = tileSize - ((tileSize / player.speed) * (frame_cnt % player.speed) + 1);

@@ -66,8 +66,7 @@ class gameboard {
         //col = x coordinates, row = y
         for (var row = 0; row < this.data.length; row++) {
             for (var col = 0; col < this.data[0].length; col++) {
-                if (this.data[row][col] === undefined) {
-                } else {
+                if (this.data[row][col] !== undefined) {
                     ctx.drawImage(document.getElementById('art_assets'),
                         this.data[row][col].x, this.data[row][col].y, 16, 16, col * tileSize, row * tileSize, tileSize, tileSize);
                 }

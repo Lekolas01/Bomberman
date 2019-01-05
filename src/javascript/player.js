@@ -6,6 +6,7 @@ class Player extends Character { //ToDo: block invalid movements
         this.holdsBomb = false;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
+        this.canMove = true; // used for checking passable walls
     }
 
     updateDirection() {
@@ -29,11 +30,38 @@ class Player extends Character { //ToDo: block invalid movements
                 break;
         }
     }
+
+    tryMove(board) {
+        let row = this.position.row;
+        let col = this.position.col;
+
+        switch (this.last_direction) {
+            case DIRECTION.UP: row -= 1; break;
+            case DIRECTION.DOWN: row += 1; break;
+            case DIRECTION.RIGHT: col += 1; break;
+            case DIRECTION.LEFT: col -= 1; break;
+        }
+
+        this.canMove = board.data[row][col].passable;
+    }
+
+    refreshPos(){
+        if(this.canMove){
+            super.refreshPos();
+        }
+    }
+
+    refreshPixelPos(pix_offset){
+        if(this.canMove){
+            super.refreshPixelPos(pix_offset);
+        }
+    }
+
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
-                items.push(new Bomb(this.position.row, this.position.col, 4, this));
-                this.activeBombs++;
-                this.holdsBomb = false;
+            items.push(new Bomb(this.position.row, this.position.col, 4, this));
+            this.activeBombs++;
+            this.holdsBomb = false;
         }
     }
 }
