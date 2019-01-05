@@ -9,17 +9,17 @@ var boardHeight = 13 // how many tiles is the gameboard high?
 var tileSize = 40; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
-var KEY = { W: 87, A: 65, S: 83, D: 68, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
+var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
+var currently_pressed = []; //keeps track of all relevant keys that are currently pressed
 var DIRECTION = { UP: "UP", DOWN: "DOWN", LEFT: "LEFT", RIGHT: "RIGHT" };
 
 
 var board; // board: saves the information about the current gameboard
 var enemies; // enemies: saves the information about all currently living enemies
 var player;
+var items = [];
 
 var running = false; // game currently on?
-
-let bomb = new Bomb(4, 5, 6);
 
 // tile: equals one cell on a bomberman map(1 wall, 1 grass etc.)
 class tile {
@@ -89,6 +89,7 @@ function playerControlPressed(event) {
         case KEY.UP:
         case KEY.RIGHT:
         case KEY.LEFT:
+            currently_pressed[key] = true; //mark that key has been pressed
             player.lastKeyInput = key;
             break;
     }
@@ -102,7 +103,18 @@ function playerControlReleased(event) {
         case KEY.UP:
         case KEY.RIGHT:
         case KEY.LEFT:
-            player.lastKeyInput = KEY.NONE;
+            currently_pressed[key] = false; //mark that key is no longer pressed
+            if (player.lastKeyInput === key) { //if released key was the last pressed key
+                if (currently_pressed.filter(_key => _key).length === 0) { //we have to check, if there is any other (relevant) key pressed
+                    player.lastKeyInput = KEY.NONE; //if not, players input is set to none
+                } else {
+                    player.lastKeyInput = currently_pressed.indexOf(true); //else, we get (one of) the other pressed key(s)
+                }
+
+            }
+            break;
+        case KEY.B:
+            player.plantBomb();
             break;
     }
 }
@@ -118,12 +130,9 @@ function loop() {
 function movePlayer() {
     let pix_offset = 0;
     let frame_cnt = 0;
+    if (player.position.row === 1) console.log('Target reached');
 
-    if(player.idle){
-        frame_cnt = 0;
-    }else{
-        player.updateFrameCnt()
-    }
+    player.updateFrameCnt()
     frame_cnt = player.frame_cnt;
     if (frame_cnt === 0) {
         player.updateDirection();
@@ -153,7 +162,7 @@ function moveEnemies() {
 //--------------------------------------------------------------------------
 function drawScreen() {
     board.draw(ctx);
-    drawItems(bomb);
+    drawItems(items);
     drawCharacters(enemies, ctx);
     drawCharacters([player], ctx);
 }

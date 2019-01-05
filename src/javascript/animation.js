@@ -45,10 +45,10 @@ class Character {
 
         //left
         this.direction[3] = new Array(4);
-        this.direction[3][0] = new AnimationFrame(10 * dim_x, y + 1, dim_x, dim_y); //idle
-        this.direction[3][1] = new AnimationFrame(11 * dim_x, y + 1, dim_x, dim_y); //animation left #1
-        this.direction[3][2] = new AnimationFrame(12 * dim_x, y + 1, dim_x, dim_y); //animation left #2
-        this.direction[3][3] = new AnimationFrame(13 * dim_x, y + 1, dim_x, dim_y); //animation left #3
+        this.direction[3][0] = new AnimationFrame(10 * dim_x, y, dim_x, dim_y); //idle
+        this.direction[3][1] = new AnimationFrame(11 * dim_x, y, dim_x, dim_y); //animation left #1
+        this.direction[3][2] = new AnimationFrame(12 * dim_x, y, dim_x, dim_y); //animation left #2
+        this.direction[3][3] = new AnimationFrame(13 * dim_x, y, dim_x, dim_y); //animation left #3
 
         this.last_direction = DIRECTION.UP; //up per default
         this.tick = 0; //used for calculating wich animation is displayed

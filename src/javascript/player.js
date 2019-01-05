@@ -1,8 +1,8 @@
-class Player extends Character { //ToDo: resolve input lag
-    constructor(y, row, col, health, bombs) {
+class Player extends Character { //ToDo: block invalid movements
+    constructor(y, row, col, health, maxBombs) {
         super(2, y * 16, row, col);
         this.health = health;
-        this.bombs = bombs;
+        this.maxBombs = maxBombs;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
     }
@@ -23,19 +23,27 @@ class Player extends Character { //ToDo: resolve input lag
                 this.last_direction = DIRECTION.LEFT;
                 break;
             case KEY.NONE:
-            default:
                 this.idle = true;
-
+                this.frame_cnt = -1;
+                break;
+        }
+    }
+    plantBomb() {
+        if (this.activeBombs < this.maxBombs) {
+            items.push(new Bomb(this.position.row, this.position.col, 4, this));
+            this.activeBombs++;
         }
     }
 }
 
 class Bomb {
-    constructor(row, col, timer) {
+    constructor(row, col, timer, plantedBy) {
         this.row = row;
         this.col = col;
         this.pos_x = col * tileSize;
         this.pos_y = row * tileSize;
+
+        this.player = plantedBy;
 
         this.exploded = false;
 
@@ -83,10 +91,11 @@ class Bomb {
         if (this.state == 5) {
             this.explode();
             //setTimeout(null, 2000);
-        } else if (this.state > 7) {
+        } else if (this.state > 8) {
             clearInterval(this.fuse);
             clearInterval(this.animation_fuse);
-            delete this;
+            items = items.filter(item => item != this); //remove bomb from items
+            this.player.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
     }

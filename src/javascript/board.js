@@ -103,8 +103,11 @@ function drawCharacters(characterArr, ctx) {
     }
 }
 
-function drawItems(bomb){
-    let animation = bomb.getAnimation();
-    ctx.drawImage(document.getElementById('art_assets'),
-    animation.x, animation.y, 16, 16,bomb.pos_x, bomb.pos_y, animation.dim_x, animation.dim_y);
+function drawItems(items){
+    let animation;
+    items.forEach((item) => {
+        animation = item.getAnimation();
+        ctx.drawImage(document.getElementById('art_assets'),
+        animation.x, animation.y, 16, 16, item.pos_x, item.pos_y, animation.dim_x, animation.dim_y);
+    });
 }
