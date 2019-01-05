@@ -156,5 +156,19 @@ class Character {
         }
     }
 
+    // helper function. Converts a number into a direction ("up", "right" etc.)
+    // 0 -> up, 1 -> right, 2 -> down, 3 -> left
+    intToDir(number) {
+        if(number !== parseInt(number, 10)) {
+            alert("Error: Passed wrong parameter type");
+            return;
+        }
+        switch(number % 4) {
+            case 0: return "up";
+            case 1: return "right";
+            case 2: return "down";
+            case 3: return "left";
+        }
+    }
 }
 

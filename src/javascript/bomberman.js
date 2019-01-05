@@ -67,10 +67,11 @@ function startGame() {
     //TODO: init player, init monsters
     
     board = new gameboard(boardWidth, boardHeight);
-    enemies = enemies(20);
+    enemies = enemies(board, 20);
     printAllEnemiesStats(enemies);
     
     renderIntervalId = setInterval(loop, GAME_SPEED);
+    
 }
 
 // is called every 50 ms
