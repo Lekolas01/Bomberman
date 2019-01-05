@@ -1,6 +1,3 @@
-let ticks = []; //in this array the animation ticks for each character are stored
-let frame_cnts = [];
-
 class AnimationFrame {
     constructor(x, y, dim_x, dim_y) { //dim: how big is character on assets.png
         this.x = x;
@@ -54,15 +51,13 @@ class Character {
         this.direction[3][3] = new AnimationFrame(13 * dim_x, y + 1, dim_x, dim_y); //animation left #3
 
         this.last_direction = "up"; //up per default
-        this.tick = ticks.length; //whick position in the array is the tick beloning to this character
-        ticks.push(0); //create new tick variable and add it to the array (used for e.g. calculation of current animation Frame)
-        this.frame_cnt = frame_cnts.length;
-        frame_cnts.push(-1);
+        this.tick = 0; //used for calculating wich animatin is displayed
+        this.frame_cnt = -1; //used for calculation of pixel offset when moving
         console.log("construktor speed: " + this.speed + " row : " + this.position.row + " col: " + this.position.col + " pos_x " + this.position.pix_x + " pos_y " + this.position.pix_y);
     }
 
     updateFrameCnt() {
-        frame_cnts[this.frame_cnt] = (frame_cnts[this.frame_cnt] + 1) % this.speed;
+        this.frame_cnt = (this.frame_cnt + 1) % this.speed;
     }
 
     /*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
@@ -113,30 +108,26 @@ class Character {
         }
     }
 
-    getFrameCount() {
-        return frame_cnts[this.frame_cnt];
-    }
-
     move(movement) {
-        if (frame_cnts[this.frame_cnt] % 10 === 0) { //every 10th frame, a new animation image is shown
-            ticks[this.tick] += 1; //counts next animation
+        if (this.frame_cnt % 10 === 0) { //every 10th frame, a new animation image is shown
+           this.tick += 1; //counts next animation
         }
         if (movement !== this.last_direction) { //direction changed
-            ticks[this.tick] = 1; // 0 would be idle, 1 is first moving motion
-        } else if (ticks[this.tick] === 12) {
-            ticks[this.tick] = 0;
+            this.tick = 1; // 0 would be idle, 1 is first moving motion
+        } else if (this.tick === 12) {
+            this.tick = 0;
         }
         this.last_direction = movement; //save the direction, the character is heading
 
         switch (movement) {
             case "up":
-                return this.direction[0][ticks[this.tick] % 3];
+                return this.direction[0][this.tick % 3];
             case "down":
-                return this.direction[1][ticks[this.tick] % 3];
+                return this.direction[1][this.tick % 3];
             case "right":
-                return this.direction[2][ticks[this.tick] % 4];
+                return this.direction[2][this.tick % 4];
             case "left":
-                return this.direction[3][ticks[this.tick] % 4];
+                return this.direction[3][this.tick % 4];
             default:
                 return this.direction[0][0];
         }

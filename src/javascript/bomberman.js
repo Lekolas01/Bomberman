@@ -92,7 +92,7 @@ function moveEnemies(){
     let frame_cnt = 0;
     for(let i = 0; i < enemies.length; i++){
             enemies[i].updateFrameCnt()
-            frame_cnt = enemies[i].getFrameCount();
+            frame_cnt = enemies[i].frame_cnt;
            if(frame_cnt === 0){
                 enemies[i].chooseMovingDirection(board);
                 enemies[i].refreshPos(); // change position in Matrix (row, col)
