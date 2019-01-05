@@ -114,7 +114,7 @@ function playerControlReleased(event) {
             }
             break;
         case KEY.B:
-            player.plantBomb();
+            player.holdsBomb = true;
             break;
     }
 }
@@ -130,11 +130,10 @@ function loop() {
 function movePlayer() {
     let pix_offset = 0;
     let frame_cnt = 0;
-    if (player.position.row === 1) console.log('Target reached');
-
     player.updateFrameCnt()
     frame_cnt = player.frame_cnt;
     if (frame_cnt === 0) {
+        if(player.holdsBomb) player.plantBomb();
         player.updateDirection();
         player.refreshPos();
     }

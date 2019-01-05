@@ -3,6 +3,7 @@ class Player extends Character { //ToDo: block invalid movements
         super(2, y * 16, row, col);
         this.health = health;
         this.maxBombs = maxBombs;
+        this.holdsBomb = false;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
     }
@@ -30,8 +31,9 @@ class Player extends Character { //ToDo: block invalid movements
     }
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
-            items.push(new Bomb(this.position.row, this.position.col, 4, this));
-            this.activeBombs++;
+                items.push(new Bomb(this.position.row, this.position.col, 4, this));
+                this.activeBombs++;
+                this.holdsBomb = false;
         }
     }
 }
