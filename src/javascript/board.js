@@ -86,3 +86,9 @@ function drawCharacters(characterArr, ctx) {
             tileSize, tileSize); //how big shall the canvas draw the animation (always as big as one tile)
     }
 }
+
+function drawItems(bomb){
+    let animation = bomb.getAnimation();
+    ctx.drawImage(document.getElementById('art_assets'),
+    animation.x, animation.y, 16, 16,bomb.pos_x, bomb.pos_y, animation.dim_x, animation.dim_y);
+}

@@ -158,15 +158,3 @@ class Character {
 
 }
 
-class Bomb {
-    constructor() {
-
-    }
-
-}
-class Player extends Character { //ToDo: add bombs, add life etc.
-    constructor(y, row, col) {
-        super(1, y, row, col);
-    }
-}
-

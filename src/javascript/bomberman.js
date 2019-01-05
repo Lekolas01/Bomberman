@@ -16,6 +16,8 @@ var enemies; // enemies: saves the information about all currently living enemie
 
 var running = false; // game currently on?
 
+let bomb = new Bomb(4,5,6);
+
 // tile: equals one cell on a bomberman map(1 wall, 1 grass etc.)
 class tile {
     constructor(breakable, passable, x, y) {
@@ -81,6 +83,7 @@ function loop() {
         //move bomberman
         //bombs tick
     drawScreen();
+    drawItems(bomb);
 }
 
 function moveEnemies(){
