@@ -29,6 +29,7 @@ class Player extends Character { //ToDo: block invalid movements
                 this.frame_cnt = -1;
                 break;
         }
+        if(this.lastKeyInput != KEY.NONE);
     }
 
     tryMove(board) {
@@ -59,7 +60,7 @@ class Player extends Character { //ToDo: block invalid movements
 
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
-            items.push(new Bomb(this.position.row, this.position.col, 3, 4, this));
+            board.items.push(new Bomb(this.position.row, this.position.col, 3, 4, this));
             this.activeBombs++;
             this.holdsBomb = false;
         }
@@ -97,7 +98,7 @@ class Bomb {
 
         this.player = plantedBy;
 
-        this.explosionId = explosions.length + 1; // used to insert explosion array in gloabl explions
+        this.explosionId = board.explosions.length + 1; // used to insert explosion array in gloabl explions
 
         this.animation = [];
         for (let i = 4; i < 10; i++) {
@@ -149,15 +150,15 @@ class Bomb {
             this.animaton_size = 1.1;
             clearInterval(this.animation_fuse);
             this.explode();
-            this.calcDamage(explosions);
+            this.calcDamage(board.explosions);
         } else if (this.state > 6 && this.state < 9) {
             this.calcDamage();
         } else if (this.state === 9) {
             this.animaton_size = 0.9;
-            delete explosions[this.explosionId];
+            delete board.explosions[this.explosionId];
         } else if (this.state > 11) {
             clearInterval(this.fuse);
-            items = items.filter(item => item != this); //remove bomb from items
+            board.items = board.items.filter(item => item != this); //remove bomb from items
             this.player.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
@@ -199,14 +200,14 @@ class Bomb {
             }
         }
 
-        explosions[this.explosionId] = explosion; //push to global array.
+        board.explosions[this.explosionId] = explosion; //push to global array.
 
     }
 
     calcDamage(){
-        let explosion = explosions[this.explosionId];
+        let explosion = board.explosions[this.explosionId];
         explosion.forEach(exp_part => { //array containing one explosion (wich cover multible tiles)
-            enemies.forEach(enemy =>{
+            board.enemies.forEach(enemy =>{
                 if(enemy.position.row === exp_part.row && enemy.position.col === exp_part.col){
                     enemy.idle = true;
                     setTimeout(function(){enemy.position.row = -12;},2000);
