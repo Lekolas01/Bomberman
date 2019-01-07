@@ -164,3 +164,11 @@ class Character {
     }
 }
 
+class dying{
+    constructor(character){
+        this.position = character.position;
+        this.animation = character.getAnimation();
+        showNFrames = 2000/GAME_SPEED; //~2 sekunden
+    }
+}
+

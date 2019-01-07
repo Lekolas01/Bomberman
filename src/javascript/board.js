@@ -1,3 +1,24 @@
+// tile: equals one cell on a bomberman map(1 wall, 1 grass etc.)
+class tile {
+    constructor(breakable, passable, x, y) {
+        this.breakable = breakable;
+        this.passable = passable;
+        // x and y save the position of sprite on png-file (not pretty)
+        this.x = x;
+        this.y = y
+    }
+}
+
+// tileTypes: enum for all types of tile that can exist on the gameboard
+var tileTypes = Object.freeze({
+    //parameter list: (breakable, passable, x, y)
+    "wall": new tile(false, false, 96, 0),
+    "empty": new tile(false, true, 32, 0),
+    "breakableWall": new tile(true, false, 144, 0),
+    "bomb": new tile(false, false, 64, 80)
+});
+
+
 //generates a new map and saves it into board (
 //  unbreakable walls on the outside,
 //  regular grid structure of unbreakable walls inside,

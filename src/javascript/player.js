@@ -1,6 +1,6 @@
 class Player extends Character { //ToDo: block invalid movements
     constructor(y, row, col, health, maxBombs) {
-        super(2, y * 16, row, col);
+        super(1.5, y * 16, row, col);
         this.health = health;
         this.maxBombs = maxBombs;
         this.holdsBomb = false;
@@ -45,42 +45,69 @@ class Player extends Character { //ToDo: block invalid movements
         this.canMove = board.data[row][col].passable;
     }
 
-    refreshPos(){
-        if(this.canMove){
+    refreshPos() {
+        if (this.canMove) {
             super.refreshPos();
         }
     }
 
-    refreshPixelPos(pix_offset){
-        if(this.canMove){
+    refreshPixelPos(pix_offset) {
+        if (this.canMove) {
             super.refreshPixelPos(pix_offset);
         }
     }
 
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
-            items.push(new Bomb(this.position.row, this.position.col, 4, this));
+            items.push(new Bomb(this.position.row, this.position.col, 3, 4, this));
             this.activeBombs++;
             this.holdsBomb = false;
         }
     }
 }
 
-class Bomb {
-    constructor(row, col, timer, plantedBy) {
+class Explosion {
+    constructor(row, col, vertical, animation_pos) {
         this.row = row;
         this.col = col;
         this.pos_x = col * tileSize;
         this.pos_y = row * tileSize;
 
+        this.vertical = vertical;
+        if (vertical) {
+            this.animation = new AnimationFrame(14 * 16, animation_pos * 16, tileSize, tileSize)
+        } else {
+            this.animation = new AnimationFrame(animation_pos * 16, 5 * 16, tileSize, tileSize)
+        }
+    }
+
+    getAnimation() {
+        return this.animation;
+    }
+}
+
+class Bomb {
+    constructor(row, col, range, timer, plantedBy) {
+        this.row = row;
+        this.col = col;
+        this.pos_x = col * tileSize;
+        this.pos_y = row * tileSize;
+
+        this.range = range;
+
         this.player = plantedBy;
 
-        this.exploded = false;
+        this.explosionId = explosions.length + 1; // used to insert explosion array in gloabl explions
 
         this.animation = [];
         for (let i = 4; i < 10; i++) {
             this.animation.push(new AnimationFrame(i * 16, 5 * 16, 16, 16))
         }
+
+        for (let i = 0; i < 3; i++) {
+            this.animation.push(new AnimationFrame(2 * 16, 5 * 16, 16, 16));
+        }
+
 
         for (let i = 5; i >= 3; i--) {
             this.animation.push(new AnimationFrame(14 * 16, i * 16, 16, 16));
@@ -118,18 +145,77 @@ class Bomb {
     }
     updateBombState() {
         this.state++;
-        if (this.state == 5) {
-            this.explode();
-            //setTimeout(null, 2000);
-        } else if (this.state > 8) {
-            clearInterval(this.fuse);
+        if (this.state === 6) {
+            this.animaton_size = 1.1;
             clearInterval(this.animation_fuse);
+            this.explode();
+            this.calcDamage(explosions);
+        } else if (this.state > 6 && this.state < 9) {
+            this.calcDamage();
+        } else if (this.state === 9) {
+            this.animaton_size = 0.9;
+            delete explosions[this.explosionId];
+        } else if (this.state > 11) {
+            clearInterval(this.fuse);
             items = items.filter(item => item != this); //remove bomb from items
             this.player.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
     }
     explode() {
+        let explosion = [];
+        //up
+        for (let i = 1; i <= this.range; i++) {
+            if (board.data[this.row - i][this.col] === tileTypes.wall) break;
+            else {
+                explosion.push(new Explosion(this.row - i, this.col, true, 1));
+                if(board.data[this.row - i][this.col].breakable) break;
+            }
+        }
+        //down
+        for (let i = 1; i <= this.range; i++) {
+            if (board.data[this.row + i][this.col] === tileTypes.wall) break;
+            else {
+                explosion.push(new Explosion(this.row + i, this.col, true, 1));
+                if(board.data[this.row + i][this.col].breakable) break;
+            }
+        }
+
+        //left
+        for (let i = 1; i <= this.range; i++) {
+            if (board.data[this.row][this.col - i] === tileTypes.wall) break;
+            else {
+                explosion.push(new Explosion(this.row, this.col - i, false, 1));
+                if (board.data[this.row][this.col - i].breakable) break;
+            }
+        }
+
+        //right
+        for (let i = 1; i <= this.range; i++) {
+            if (board.data[this.row][this.col + i] === tileTypes.wall) break;
+            else {
+                explosion.push(new Explosion(this.row, this.col + i, false, 1));
+                if (board.data[this.row][this.col + i].breakable) break;
+            }
+        }
+
+        explosions[this.explosionId] = explosion; //push to global array.
+
+    }
+
+    calcDamage(){
+        let explosion = explosions[this.explosionId];
+        explosion.forEach(exp_part => { //array containing one explosion (wich cover multible tiles)
+            enemies.forEach(enemy =>{
+                if(enemy.position.row === exp_part.row && enemy.position.col === exp_part.col){
+                    enemy.idle = true;
+                    setTimeout(function(){enemy.position.row = -12;},2000);
+                }
+            })
+            if(board.data[exp_part.row][exp_part.col] !== undefined && board.data[exp_part.row][exp_part.col].breakable){
+                setTimeout(function(){board.data[exp_part.row][exp_part.col] = tileTypes.empty;}, 2000);
+            }
+        });
     }
 
     getAnimation() {
