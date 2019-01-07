@@ -169,7 +169,9 @@ class Bomb {
         for (let i = 1; i <= this.range; i++) {
             if (board.data[this.row - i][this.col] === tileTypes.wall) break;
             else {
-                explosion.push(new Explosion(this.row - i, this.col, true, 1));
+                if(i === this.range) explosion.push(new Explosion(this.row - i, this.col, true, 0));
+                else explosion.push(new Explosion(this.row - i, this.col, true, 1));
+
                 if(board.data[this.row - i][this.col].breakable) break;
             }
         }
@@ -177,7 +179,9 @@ class Bomb {
         for (let i = 1; i <= this.range; i++) {
             if (board.data[this.row + i][this.col] === tileTypes.wall) break;
             else {
-                explosion.push(new Explosion(this.row + i, this.col, true, 1));
+                if(i === this.range) explosion.push(new Explosion(this.row + i, this.col, true, 2));
+                else explosion.push(new Explosion(this.row + i, this.col, true, 1));
+
                 if(board.data[this.row + i][this.col].breakable) break;
             }
         }
@@ -186,7 +190,9 @@ class Bomb {
         for (let i = 1; i <= this.range; i++) {
             if (board.data[this.row][this.col - i] === tileTypes.wall) break;
             else {
-                explosion.push(new Explosion(this.row, this.col - i, false, 1));
+                if(i === this.range) explosion.push(new Explosion(this.row, this.col - i, false, 0));
+                else explosion.push(new Explosion(this.row, this.col - i, false, 1));
+
                 if (board.data[this.row][this.col - i].breakable) break;
             }
         }
@@ -195,7 +201,10 @@ class Bomb {
         for (let i = 1; i <= this.range; i++) {
             if (board.data[this.row][this.col + i] === tileTypes.wall) break;
             else {
-                explosion.push(new Explosion(this.row, this.col + i, false, 1));
+                if(i === this.range) explosion.push(new Explosion(this.row, this.col + i, false, 3));
+                else explosion.push(new Explosion(this.row, this.col + i, false, 1));
+
+
                 if (board.data[this.row][this.col + i].breakable) break;
             }
         }

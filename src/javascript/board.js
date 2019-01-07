@@ -158,10 +158,10 @@ class gameboard {
 	draw(ctx) {
         //col = x coordinates, row = y
         this.drawGround();
-        this.explosions.forEach(explosion => this.drawItems(explosion, ctx));
         this.drawCharacters(this.enemies, ctx);
         this.drawCharacters([this.player], ctx);
         this.drawItems(this.items, ctx);
+        this.explosions.forEach(explosion => this.drawItems(explosion, ctx));
 		
 	}
 
