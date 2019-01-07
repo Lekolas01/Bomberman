@@ -95,7 +95,6 @@ function enemies(board, num) {
 	var allEnemies = [];
 	for (var i = 0; i < num; i++) {
 		var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
-		console.log(`randPos: ${randPos.row} ${randPos.col}`);
 		allEnemies.push(new Enemy(1 * 16, randPos.row, randPos.col, 1, 0.1 * i + 0.3, false));
 	}
 	return allEnemies;

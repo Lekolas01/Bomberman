@@ -68,8 +68,8 @@ function startGame() {
 
 	board = new gameboard(boardWidth, boardHeight);
 	player = new Player(4, 1, 1, 3, 3);
-	enemies = enemies(board, 20);
-	printAllEnemiesStats(enemies);
+
+    printAllEnemiesStats(board.enemies);
 
 	//add key listeners for player controls
 	window.onkeydown = playerControlPressed;
@@ -143,24 +143,23 @@ function movePlayer() {
 function moveEnemies() {
 	let pix_offset = 0;
 	let frame_cnt = 0;
-	for (let i = 0; i < enemies.length; i++) {
-		enemies[i].updateFrameCnt();
-		frame_cnt = enemies[i].frame_cnt;
+	for (let i = 0; i < board.enemies.length; i++) {
+		board.enemies[i].updateFrameCnt();
+		frame_cnt = board.enemies[i].frame_cnt;
 		if (frame_cnt === 0) {
-			enemies[i].chooseMovingDirection(board);
-			enemies[i].refreshPos(); // change position in Matrix (row, col)
+			board.enemies[i].chooseMovingDirection(board);
+			board.enemies[i].refreshPos(); // change position in Matrix (row, col)
 		}
-		pix_offset = tileSize - ((tileSize / enemies[i].speed) * (frame_cnt % enemies[i].speed) + 1); //in MOVEMENT_SPEED frames (eg. 60 Frames) character moves 1 Tile.
+		pix_offset = tileSize - ((tileSize / board.enemies[i].speed) * (frame_cnt % board.enemies[i].speed) + 1); //in MOVEMENT_SPEED frames (eg. 60 Frames) character moves 1 Tile.
 		//So Every Frame, we add 1/60 of a tile to the current moving direction
 		//This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
-		enemies[i].refreshPixelPos(pix_offset);
+		board.enemies[i].refreshPixelPos(pix_offset);
 	}
 }
 
 //--------------------------------------------------------------------------
 function drawScreen() {
-	board.draw(ctx);
-	drawItems(items);
-	drawCharacters(enemies, ctx);
-	drawCharacters([player], ctx);
+    board.draw(ctx);
+    //TODO: 
+    //scoreBoard.draw(ctx);
 }

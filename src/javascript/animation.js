@@ -55,18 +55,18 @@ class Character {
 		this.last_direction = DIRECTION.UP; //up per default
 		this.tick = 0; //used for calculating wich animation is displayed
 		this.frame_cnt = -1; //used for calculation of pixel offset when moving
-		console.log(
-			'construktor speed: ' +
-				this.speed +
-				' row : ' +
-				this.position.row +
-				' col: ' +
-				this.position.col +
-				' pos_x ' +
-				this.position.pix_x +
-				' pos_y ' +
-				this.position.pix_y
-		);
+		// console.log(
+		// 	'construktor speed: ' +
+		// 		this.speed +
+		// 		' row : ' +
+		// 		this.position.row +
+		// 		' col: ' +
+		// 		this.position.col +
+		// 		' pos_x ' +
+		// 		this.position.pix_x +
+		// 		' pos_y ' +
+		// 		this.position.pix_y
+		// );
 	}
 
 	updateFrameCnt() {
