@@ -115,7 +115,7 @@ class gameboard {
 		}
     }
 
-    drawCharacters(characterArr, ctx) {
+    drawObject(characterArr, ctx) {
         let animation;
 
        // if(characterArr.length === 1) console.log(characterArr[0].position.pix_y);
@@ -135,32 +135,15 @@ class gameboard {
         });
     }
 
-    drawItems(items, ctx) {
-        let animation;
-        items.forEach(item => {
-            animation = item.getAnimation();
-            ctx.drawImage(
-                document.getElementById('art_assets'),
-                animation.x,
-                animation.y,
-                animation.dim_x,
-                animation.dim_y,
-                item.pos_x,
-                item.pos_y,
-                animation.animation_size,
-                animation.animation_size
-            );
-        });
-    }
 
 	//draws the gameboard part within the canvas
 	draw(ctx) {
         //col = x coordinates, row = y
         this.drawGround();
-        this.drawCharacters(this.enemies, ctx);
-        this.drawCharacters([this.player], ctx);
-        this.drawItems(this.items, ctx);
-        this.explosions.forEach(explosion => this.drawItems(explosion, ctx));
+        this.drawObject(this.enemies, ctx);
+        this.drawObject([this.player], ctx);
+        this.drawObject(this.items, ctx);
+        this.explosions.forEach(explosion => this.drawObject(explosion, ctx));
 		
 	}
 

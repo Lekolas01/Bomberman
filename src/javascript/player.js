@@ -28,7 +28,7 @@ class Player extends Character { //ToDo: block invalid movements
                 this.frame_cnt = -1;
                 break;
         }
-        if(this.lastKeyInput != KEY.NONE);
+        if (this.lastKeyInput != KEY.NONE);
     }
 
     tryMove(board) {
@@ -67,10 +67,12 @@ class Player extends Character { //ToDo: block invalid movements
 
 class Explosion {
     constructor(row, col, vertical, animation_pos) {
-        this.row = row;
-        this.col = col;
-        this.pos_x = col * tileSize;
-        this.pos_y = row * tileSize;
+        this.position = {
+            row: row,
+            col: col,
+            pix_x: col * tileSize,
+            pix_y: row * tileSize
+        };
 
         this.vertical = vertical;
         if (vertical) {
@@ -87,10 +89,12 @@ class Explosion {
 
 class Bomb {
     constructor(row, col, range, timer, plantedBy) {
-        this.row = row;
-        this.col = col;
-        this.pos_x = col * tileSize;
-        this.pos_y = row * tileSize;
+        this.position = {
+            row: row,
+            col: col,
+            pix_x: col * tileSize,
+            pix_y: row * tileSize
+        };
 
         this.range = range;
 
@@ -153,47 +157,49 @@ class Bomb {
     }
     explode() {
         let explosion = [];
+        let row = this.position.row;
+        let col = this.position.col;
         //up
         for (let i = 1; i <= this.range; i++) {
-            if (board.data[this.row - i][this.col] === tileTypes.wall) break;
+            if (board.data[row - i][col] === tileTypes.wall) break;
             else {
-                if(i === this.range) explosion.push(new Explosion(this.row - i, this.col, true, 0));
-                else explosion.push(new Explosion(this.row - i, this.col, true, 1));
+                if (i === this.range) explosion.push(new Explosion(row - i, col, true, 0));
+                else explosion.push(new Explosion(row - i, col, true, 1));
 
-                if(board.data[this.row - i][this.col].breakable) break;
+                if (board.data[row - i][col].breakable) break;
             }
         }
         //down
         for (let i = 1; i <= this.range; i++) {
-            if (board.data[this.row + i][this.col] === tileTypes.wall) break;
+            if (board.data[row + i][col] === tileTypes.wall) break;
             else {
-                if(i === this.range) explosion.push(new Explosion(this.row + i, this.col, true, 2));
-                else explosion.push(new Explosion(this.row + i, this.col, true, 1));
+                if (i === this.range) explosion.push(new Explosion(row + i, col, true, 2));
+                else explosion.push(new Explosion(row + i, col, true, 1));
 
-                if(board.data[this.row + i][this.col].breakable) break;
+                if (board.data[row + i][col].breakable) break;
             }
         }
 
         //left
         for (let i = 1; i <= this.range; i++) {
-            if (board.data[this.row][this.col - i] === tileTypes.wall) break;
+            if (board.data[row][col - i] === tileTypes.wall) break;
             else {
-                if(i === this.range) explosion.push(new Explosion(this.row, this.col - i, false, 0));
-                else explosion.push(new Explosion(this.row, this.col - i, false, 1));
+                if (i === this.range) explosion.push(new Explosion(row, col - i, false, 0));
+                else explosion.push(new Explosion(row, col - i, false, 1));
 
-                if (board.data[this.row][this.col - i].breakable) break;
+                if (board.data[row][col - i].breakable) break;
             }
         }
 
         //right
         for (let i = 1; i <= this.range; i++) {
-            if (board.data[this.row][this.col + i] === tileTypes.wall) break;
+            if (board.data[row][col + i] === tileTypes.wall) break;
             else {
-                if(i === this.range) explosion.push(new Explosion(this.row, this.col + i, false, 3)); //last animation is different
-                else explosion.push(new Explosion(this.row, this.col + i, false, 1));
+                if (i === this.range) explosion.push(new Explosion(row, col + i, false, 3)); //last animation is different
+                else explosion.push(new Explosion(row, col + i, false, 1));
 
 
-                if (board.data[this.row][this.col + i].breakable) break;
+                if (board.data[row][col + i].breakable) break;
             }
         }
 
@@ -201,25 +207,25 @@ class Bomb {
 
     }
 
-    calcDamage(){
+    calcDamage() {
         let explosion = board.explosions[this.explosionId];
         explosion.forEach(exp_part => { //array containing one explosion (wich cover multible tiles)
-            board.enemies.forEach(enemy =>{
-                if(enemy.position.row === exp_part.row && enemy.position.col === exp_part.col){
+            board.enemies.forEach(enemy => {
+                if (enemy.position.row === exp_part.position.row && enemy.position.col === exp_part.position.col) {
                     enemy.idle = true;
-                    setTimeout(function(){enemy.position.row = -12;},2000);
+                    setTimeout(function () { enemy.position.row = -12; }, 2000);
                 }
             })
-            if(board.data[exp_part.row][exp_part.col] !== undefined && board.data[exp_part.row][exp_part.col].breakable){
-                setTimeout(function(){board.data[exp_part.row][exp_part.col] = tileTypes.empty;}, 2000);
+            if (board.data[exp_part.position.row][exp_part.position.col] !== undefined && board.data[exp_part.position.row][exp_part.position.col].breakable) {
+                setTimeout(function () { board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; }, 2000);
             }
         });
     }
 
     getAnimation() {
-        if(this.state <= 5) this.setAnimationSize();
-        else if(this.state === 6) this.animation_size_factor = 1.1;
-        this.animation[this.state].animation_size =  tileSize * this.animation_size_factor;
+        if (this.state <= 5) this.setAnimationSize();
+        else if (this.state === 6) this.animation_size_factor = 1.1;
+        this.animation[this.state].animation_size = tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
 
