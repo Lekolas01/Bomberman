@@ -23,13 +23,14 @@ var tileTypes = Object.freeze({
 //  regular grid structure of unbreakable walls inside,
 //  semi-randomly generated breakable walls (= boxes) on the rest (bomberman map))
 class gameboard {
-	constructor(width, height, numEnemies = 5, boxSpawnChance = 0.3) {
+	constructor(width, height, numPlayers = 1, numEnemies = 5, boxSpawnChance = 0.3) {
 		this.width = width;
 		this.height = height;
         this.data = matrix(this.width, this.height);
         this.enemies = [];
         this.items = [];
-        this.explosions = [];
+		this.explosions = [];
+		this.players = [];
         this.player = new Player(4, 1, 1, 3);
 
 		//creates a new matrix of any type
@@ -69,6 +70,42 @@ class gameboard {
 			}
 		}
 
+		function initPlayers(board) {
+			function createPlayer(row, col) {
+				delete board.data[row][col];
+				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
+				board.players.push(new Player(4, row, col, 1, 2));
+
+				const pos = [
+					{diff_y: -1, diff_x:  0},
+					{diff_y:  0, diff_x: -1},
+					{diff_y:  1, diff_x:  0},
+					{diff_y:  0, diff_x:  1}
+				];
+
+				for(var i = 0; i < pos.length; i++) {
+					var position = {y: row + pos[i].diff_y, x: col + pos[i].diff_x};
+					if(board.data[position.y][position.x] === tileTypes.breakableWall) {
+						//TODO : delete this tile
+					}
+				}
+			}
+
+			numPlayers = Math.min(4, numPlayers);
+			numPlayers = Math.max(1, numPlayers);
+
+			const pos = [
+				{row: 1, col: 1},					// defines the default starting position of player 1
+				{row: height - 2, col: width - 2}, // same for player 2, 3 and 4
+				{row: height - 2, col: 1},
+				{row: 1, col: width - 2},
+			];
+
+			for(var i = 0; i < numPlayers; i++) {
+				createPlayer(pos[i].row, pos[i].col);
+			}
+		}
+
 		function initBreakableWalls(board) {
 			for (var row = 1; row < board.height - 1; row++) {
 				for (var col = 1; col < board.width - 1; col++) {
@@ -91,7 +128,8 @@ class gameboard {
 		initOuterWall(this);
 		initGrass(this);
 		initGridTiles(this);
-        initBreakableWalls(this);
+		initBreakableWalls(this);
+		initPlayers(this);
         initEnemies(this);
     }
     
