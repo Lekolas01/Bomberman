@@ -74,6 +74,8 @@ class gameboard {
 			numPlayers = Math.min(4, numPlayers);
 			numPlayers = Math.max(1, numPlayers);
 
+			//helper function for initPlayers
+			//don't look at it, it's really ugly (works tho)
 			function createPlayer(row, col) {
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
 				board.players.push(new Player(4, row, col, 1, 2));
@@ -89,6 +91,10 @@ class gameboard {
 					var position = {y: row + pos[i].diff_y, x: col + pos[i].diff_x};
 					if(board.data[position.y][position.x] === tileTypes.breakableWall) {
 						board.data[position.y][position.x] = tileTypes.empty;
+					}
+					var position2 = {y: position.y + pos[i].diff_y, x: position.x + pos[i].diff_x};
+					if(board.positionExists(position2.y, position2.x)) {
+						board.data[position2.y][position2.x] = tileTypes.breakableWall;
 					}
 				}
 			}
@@ -117,11 +123,11 @@ class gameboard {
 		}
 
 		function initEnemies(board) {
-			var startingPositions = board.getAllPassableTiles();
+			var startingPositions = board.getAllSpawnableTiles();
             var numStartingPos = startingPositions.length;
 			for (var i = 0; i < numEnemies; i++) {
 				var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
-				board.enemies.push(new Enemy(1 * 16, randPos.row, randPos.col, 1, 0.1 * i + 0.3, false));
+				board.enemies.push(new Creep(randPos.row, randPos.col));
             }
 		}
 
@@ -131,7 +137,7 @@ class gameboard {
 		initBreakableWalls(this);
 		initPlayers(this);
         initEnemies(this);
-    }
+    } // end constructor
     
     drawGround() {
         for (var row = 0; row < this.data.length; row++) {
@@ -151,7 +157,7 @@ class gameboard {
 				}
 			}
 		}
-    }
+	}
 
     drawObjects(objects) {
         let animation;
@@ -173,7 +179,6 @@ class gameboard {
         });
     }
 
-
 	//draws the gameboard part within the canvas
 	draw() {
         //col = x coordinates, row = y
@@ -183,6 +188,24 @@ class gameboard {
 		this.drawObjects(this.items);
         this.explosions.forEach(explosion => this.drawObjects(explosion));
 		
+	}
+
+	getAllSpawnableTiles() {
+		let positions = [];
+		positions = this.getAllPassableTiles();
+		//console.log(this.players[0]);
+		for(var i = 0; i < this.players.length; i++) {
+			for(var j = 0; j < positions.length; j++) {
+				// console.log(`position: ${positions[j].row} ${positions[j].col}`);
+				// console.log(`player: ${this.players[i].position.row} ${this.players[i].position.col}`);
+				if (Math.abs(this.players[i].position.row - positions[j].row) <= 1 &&
+					Math.abs(this.players[i].position.col - positions[j].col) <= 1) {
+						positions.splice(j, 1);
+						j--;
+					}
+			}
+		}
+		return positions;
 	}
 
 	// helper function. This returns an array of positions {row, col} on the gameboard where
@@ -197,5 +220,11 @@ class gameboard {
 			}
 		}
 		return positions;
+	}
+
+	//does this position exist on the gameboard?
+	positionExists(row, col) {
+		return row >= 0 && this.height > row &&
+			   col >= 0 && this.width > col;
 	}
 }
