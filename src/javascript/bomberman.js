@@ -48,9 +48,10 @@ function startGame() {
 
     //printAllEnemiesStats(board.enemies);
 
-	//add key listeners for player controls
-	window.onkeydown = playerControlPressed;
-	window.onkeyup = playerControlReleased;
+	//add key listeners for player Controls
+	window.onkeydown = playerKeyDown;
+	window.onkeypress = playerKeyPress;
+	window.onkeyup = playerKeyUp;
 
 	renderIntervalId = setInterval(loop, GAME_SPEED);
 }

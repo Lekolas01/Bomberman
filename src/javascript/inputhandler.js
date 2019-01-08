@@ -7,7 +7,7 @@ playerControls = [
     {up: 1, down: 17, left: 18, right: 19, bomb: 20}
 ];
 
-function playerControlPressed(event) {
+function playerKeyDown(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
 
 	switch (key) {
@@ -26,7 +26,7 @@ function playerControlPressed(event) {
 	}
 }
 
-function playerControlReleased(event) {
+function playerKeyUp(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
 	var player = board.players[0];
 

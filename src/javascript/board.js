@@ -77,7 +77,7 @@ class gameboard {
 			//don't look at it, it's really ugly (works tho)
 			function createPlayer(row, col) {
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
-				board.players.push(new Player(4, row, col, 1, 2));
+				board.players.push(new Player(3, row, col, 1, 2));
 
 				const pos = [
 					{diff_y: -1, diff_x:  0},
