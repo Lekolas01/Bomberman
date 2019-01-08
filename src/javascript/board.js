@@ -70,6 +70,10 @@ class gameboard {
 		}
 
 		function initPlayers(board) {
+
+			numPlayers = Math.min(4, numPlayers);
+			numPlayers = Math.max(1, numPlayers);
+
 			function createPlayer(row, col) {
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
 				board.players.push(new Player(4, row, col, 1, 2));
@@ -89,9 +93,6 @@ class gameboard {
 				}
 			}
 
-			numPlayers = Math.min(4, numPlayers);
-			numPlayers = Math.max(1, numPlayers);
-
 			const pos = [
 				{row: 1, col: 1},					// defines the default starting position of player 1
 				{row: height - 2, col: width - 2}, // same for player 2, 3 and 4
@@ -102,6 +103,7 @@ class gameboard {
 			for(var i = 0; i < numPlayers; i++) {
 				createPlayer(pos[i].row, pos[i].col);
 			}
+
 		}
 
 		function initBreakableWalls(board) {
@@ -151,11 +153,11 @@ class gameboard {
 		}
     }
 
-    drawObject(characterArr, ctx) {
+    drawObjects(objects) {
         let animation;
 
        // if(characterArr.length === 1) console.log(characterArr[0].position.pix_y);
-        characterArr.forEach(character => {
+        objects.forEach(character => {
             animation = character.getAnimation(); //The current image of the character, the canvas shall draw
             ctx.drawImage(
                 document.getElementById('art_assets'),
@@ -173,13 +175,13 @@ class gameboard {
 
 
 	//draws the gameboard part within the canvas
-	draw(ctx) {
+	draw() {
         //col = x coordinates, row = y
         this.drawGround();
-        this.drawObject(this.enemies, ctx);
-        this.drawObject([this.player], ctx);
-        this.drawObject(this.items, ctx);
-        this.explosions.forEach(explosion => this.drawObject(explosion, ctx));
+        this.drawObjects(this.enemies);
+        this.drawObjects(this.players);
+		this.drawObjects(this.items);
+        this.explosions.forEach(explosion => this.drawObjects(explosion));
 		
 	}
 

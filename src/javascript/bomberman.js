@@ -5,7 +5,7 @@ var fontSize = 18; //for matrix anim
 var GAME_SPEED = 9; // 1 tick every 9 ms
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13; // how many tiles is the gameboard high?
-var tileSize = 40; // how big is one tile? (width and height)
+var tileSize = 32; // how big is one tile? (width and height)
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
@@ -44,9 +44,9 @@ function startGame() {
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
-	board = new gameboard(boardWidth, boardHeight);
+	board = new gameboard(boardWidth, boardHeight, 2, 30, 0.8);
 
-    printAllEnemiesStats(board.enemies);
+    //printAllEnemiesStats(board.enemies);
 
 	//add key listeners for player controls
 	window.onkeydown = playerControlPressed;
@@ -64,11 +64,11 @@ function playerControlPressed(event) {
 		case KEY.RIGHT:
         case KEY.LEFT:
 			currently_pressed[key] = true; //mark that key has been pressed
-			board.player.lastKeyInput = key;
+			board.players[0].lastKeyInput = key;
             break;
         case KEY.B:
             if(!bombKeyPressed){
-                board.player.plantBomb();
+                board.players[0].plantBomb();
             }
             break;
 	}
@@ -76,6 +76,7 @@ function playerControlPressed(event) {
 
 function playerControlReleased(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
+	var player = board.players[0];
 
 	switch (key) {
 		case KEY.DOWN:
@@ -87,9 +88,9 @@ function playerControlReleased(event) {
 				//if released key was the last pressed key
 				if (currently_pressed.filter(_key => _key).length === 0) {
 					//we have to check, if there is any other (relevant) key pressed
-					board.player.lastKeyInput = KEY.NONE; //if not, players input is set to none
+					board.players[0].lastKeyInput = KEY.NONE; //if not, players input is set to none
 				} else {
-					board.player.lastKeyInput = currently_pressed.indexOf(true); //else, we get (one of) the other pressed key(s)
+					board.players[0].lastKeyInput = currently_pressed.indexOf(true); //else, we get (one of) the other pressed key(s)
 				}
 			}
 			break;
@@ -107,7 +108,7 @@ function loop() {
 }
 
 function movePlayer() {
-    player = board.player;
+    player = board.players[0];
 	let pix_offset = 0;
 	let frame_cnt = 0;
 	player.updateFrameCnt();
@@ -141,7 +142,7 @@ function moveEnemies() {
 }
 //--------------------------------------------------------------------------
 function drawScreen() {
-    board.draw(ctx);
+    board.draw();
     //TODO: 
     //scoreBoard.draw(ctx);
 }
