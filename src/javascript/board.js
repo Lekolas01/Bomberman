@@ -31,7 +31,6 @@ class gameboard {
         this.items = [];
 		this.explosions = [];
 		this.players = [];
-        this.player = new Player(4, 1, 1, 3);
 
 		//creates a new matrix of any type
 		function matrix(width, height) {

@@ -34,7 +34,7 @@ window.onload = function() {
 	// because the background music loads asynchronously
 	audioBackground = new Audio('../sound/background.mp3');
 	audioBackground.loop = true;
-	//audioBackground.play();
+	// audioBackground.play();
 
 	startGame();
 };
@@ -44,7 +44,7 @@ function startGame() {
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
-	board = new gameboard(boardWidth, boardHeight, 2, 10, 0.8);
+	board = new gameboard(boardWidth, boardHeight, 4, 10, 0.8);
 
     //printAllEnemiesStats(board.enemies);
 
@@ -53,51 +53,6 @@ function startGame() {
 	window.onkeyup = playerControlReleased;
 
 	renderIntervalId = setInterval(loop, GAME_SPEED);
-}
-
-function playerControlPressed(event) {
-	var key = event.keyCode ? event.keyCode : event.which;
-
-	switch (key) {
-		case KEY.DOWN:
-		case KEY.UP:
-		case KEY.RIGHT:
-        case KEY.LEFT:
-			currently_pressed[key] = true; //mark that key has been pressed
-			board.players[0].lastKeyInput = key;
-            break;
-        case KEY.B:
-            if(!bombKeyPressed){
-                board.players[0].plantBomb();
-            }
-            break;
-	}
-}
-
-function playerControlReleased(event) {
-	var key = event.keyCode ? event.keyCode : event.which;
-	var player = board.players[0];
-
-	switch (key) {
-		case KEY.DOWN:
-		case KEY.UP:
-		case KEY.RIGHT:
-		case KEY.LEFT:
-			currently_pressed[key] = false; //mark that key is no longer pressed
-			if (player.lastKeyInput === key) {
-				//if released key was the last pressed key
-				if (currently_pressed.filter(_key => _key).length === 0) {
-					//we have to check, if there is any other (relevant) key pressed
-					board.players[0].lastKeyInput = KEY.NONE; //if not, players input is set to none
-				} else {
-					board.players[0].lastKeyInput = currently_pressed.indexOf(true); //else, we get (one of) the other pressed key(s)
-				}
-			}
-			break;
-		case KEY.B:
-			bombKeyPressed = false;
-			break;
-	}
 }
 
 // is called every 9 ms
