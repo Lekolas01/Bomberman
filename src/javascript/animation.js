@@ -29,9 +29,9 @@ class Character {
 
 		//up
 		this.direction[0] = new Array(3);
-		this.direction[0][0] = new AnimationFrame(0, y + 1, dim_x, dim_y); //idle
-		this.direction[0][1] = new AnimationFrame(8 * dim_x, y + 1, dim_x, dim_y); //animation up #1
-		this.direction[0][2] = new AnimationFrame(9 * dim_x, y + 1, dim_x, dim_y); //animation up #
+		this.direction[0][0] = new AnimationFrame(0, y, dim_x, dim_y); //idle
+		this.direction[0][1] = new AnimationFrame(8 * dim_x, y, dim_x, dim_y); //animation up #1
+		this.direction[0][2] = new AnimationFrame(9 * dim_x, y, dim_x, dim_y); //animation up #
 
 		//down
 		this.direction[1] = new Array(3);
@@ -41,10 +41,10 @@ class Character {
 
 		//right
 		this.direction[2] = new Array(4);
-		this.direction[2][0] = new AnimationFrame(4 * dim_x, y + 1, dim_x, dim_y); //idle
-		this.direction[2][1] = new AnimationFrame(5 * dim_x, y + 1, dim_x, dim_y); //animation right #1
-		this.direction[2][2] = new AnimationFrame(6 * dim_x, y + 1, dim_x, dim_y); //animation right #2
-		this.direction[2][3] = new AnimationFrame(7 * dim_x, y + 1, dim_x, dim_y); //animation right #3
+		this.direction[2][0] = new AnimationFrame(4 * dim_x, y, dim_x, dim_y); //idle
+		this.direction[2][1] = new AnimationFrame(5 * dim_x, y, dim_x, dim_y); //animation right #1
+		this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
+		this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
 
 		//left
 		this.direction[3] = new Array(4);

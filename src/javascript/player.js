@@ -104,7 +104,7 @@ class Bomb {
 
         this.animation = [];
         for (let i = 4; i < 10; i++) {
-            this.animation.push(new AnimationFrame(i * 16, 5 * 16, 16, 16))
+            this.animation.push(new AnimationFrame(i * 16, 6 * 16, 16, 16))
         }
 
         for (let i = 0; i < 3; i++) {
