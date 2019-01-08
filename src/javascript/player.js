@@ -228,8 +228,7 @@ class Bomb {
             }
 
             board.players.forEach(player => {
-                if (player.position.row === exp_part.position.row && player.position.col === exp_part.col) {
-                    console.log("player row: " + player.position.row + " player col " + player.position.col + " exp row " + exp_part.position.row + " exp col " + exp_part.col);
+                if (player.position.row === exp_part.position.row && player.position.col === exp_part.position.col) {
                     player.die();
                 }
             });
