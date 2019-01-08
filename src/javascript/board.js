@@ -14,8 +14,7 @@ var tileTypes = Object.freeze({
     //parameter list: (breakable, passable, x, y)
     "wall": new tile(false, false, 96, 0),
     "empty": new tile(false, true, 32, 0),
-    "breakableWall": new tile(true, false, 144, 0),
-    "bomb": new tile(false, false, 64, 80)
+    "breakableWall": new tile(true, false, 144, 0)
 });
 
 
@@ -31,7 +30,7 @@ class gameboard {
         this.enemies = [];
         this.items = [];
         this.explosions = [];
-        this.player = new Player(4, 1, 1, 3, 3);
+        this.player = new Player(4, 1, 1, 3);
 
 		//creates a new matrix of any type
 		function matrix(width, height) {
@@ -120,20 +119,20 @@ class gameboard {
         let animation;
 
        // if(characterArr.length === 1) console.log(characterArr[0].position.pix_y);
-        for (let i = 0; i < characterArr.length; i++) {
-            animation = characterArr[i].getAnimation(); //The current image of the character, the canvas shall draw
+        characterArr.forEach(character => {
+            animation = character.getAnimation(); //The current image of the character, the canvas shall draw
             ctx.drawImage(
                 document.getElementById('art_assets'),
                 animation.x, // x pos of art asset (bomb_partyv4.png)
                 animation.y, // y pos
                 animation.dim_x, // how wide is art asset on png?
                 animation.dim_y, // how high is art asset on png?
-                characterArr[i].position.pix_x, // current x axis position of the character in pixels
-                characterArr[i].position.pix_y, // same in y
-                tileSize, // how big an enemy should be drawn(every characters has size = 1 tile)
-                tileSize
+                character.position.pix_x, // current x axis position of the character in pixels
+                character.position.pix_y, // same in y
+                animation.animation_size, // how big an enemy should be drawn(every characters has size = 1 tile)
+                animation.animation_size
             );
-        }
+        });
     }
 
     drawItems(items, ctx) {
@@ -144,12 +143,12 @@ class gameboard {
                 document.getElementById('art_assets'),
                 animation.x,
                 animation.y,
-                16,
-                16,
+                animation.dim_x,
+                animation.dim_y,
                 item.pos_x,
                 item.pos_y,
-                animation.dim_x,
-                animation.dim_y
+                animation.animation_size,
+                animation.animation_size
             );
         });
     }

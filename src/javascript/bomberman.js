@@ -10,6 +10,7 @@ var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
 var currently_pressed = []; //keeps track of all relevant keys that are currently pressed
+var bombKeyPressed = false;
 var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 var board; // board: saves the information about the current gameboard
@@ -64,7 +65,12 @@ function playerControlPressed(event) {
         case KEY.LEFT:
 			currently_pressed[key] = true; //mark that key has been pressed
 			board.player.lastKeyInput = key;
-			break;
+            break;
+        case KEY.B:
+            if(!bombKeyPressed){
+                board.player.plantBomb();
+            }
+            break;
 	}
 }
 
@@ -88,12 +94,12 @@ function playerControlReleased(event) {
 			}
 			break;
 		case KEY.B:
-			board.player.holdsBomb = true;
+			bombKeyPressed = false;
 			break;
 	}
 }
 
-// is called every 50 ms
+// is called every 9 ms
 function loop() {
     movePlayer();
 	moveEnemies();

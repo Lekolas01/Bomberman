@@ -1,9 +1,8 @@
 class Player extends Character { //ToDo: block invalid movements
-    constructor(y, row, col, health, maxBombs) {
+    constructor(y, row, col, health) {
         super(1.5, y * 16, row, col);
         this.health = health;
-        this.maxBombs = maxBombs;
-        this.holdsBomb = false;
+        this.maxBombs = 3;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
@@ -60,9 +59,8 @@ class Player extends Character { //ToDo: block invalid movements
 
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
-            board.items.push(new Bomb(this.position.row, this.position.col, 3, 4, this));
+            board.items.push(new Bomb(this.position.row, this.position.col, 2, 4, this));
             this.activeBombs++;
-            this.holdsBomb = false;
         }
     }
 }
@@ -76,9 +74,9 @@ class Explosion {
 
         this.vertical = vertical;
         if (vertical) {
-            this.animation = new AnimationFrame(14 * 16, animation_pos * 16, tileSize, tileSize)
+            this.animation = new AnimationFrame(14 * 16, animation_pos * 16, 16, 16, tileSize)
         } else {
-            this.animation = new AnimationFrame(animation_pos * 16, 5 * 16, tileSize, tileSize)
+            this.animation = new AnimationFrame(animation_pos * 16, 5 * 16, 16, 16, tileSize)
         }
     }
 
@@ -123,38 +121,28 @@ class Bomb {
             timer * 100
         );  //Zündschnur
 
-        this.animation_fuse = setInterval(
-            (function (self) {         //wrapping necessary to preserve "this"-context
-                return function () {   //otherwise, interval function would become global, where "this" does not exist
-                    self.setAnimationSize();
-                }
-            })(this),
-            timer * 3
-        );  //Zündschnur for animation effekt of bomb
-
-        this.animaton_size = 1;
+        this.animaton_size_factor = 1;
         this.tick = -1;
     }
 
     setAnimationSize() {
         this.tick++;
-        if (this.tick % 100 < 50) {
-            this.animaton_size = 0.7 + 0.006 * (this.tick % 50);
+        if (this.tick % 200 < 100) { //bomb animation effekt (grows bigger and smaller)
+            this.animation_size_factor = 0.7 + 0.003 * (this.tick % 100);
         } else {
-            this.animaton_size = 1.0 - 0.006 * (this.tick % 50);
+            this.animation_size_factor = 1.0 - 0.003 * (this.tick % 100);
         }
     }
     updateBombState() {
         this.state++;
         if (this.state === 6) {
-            this.animaton_size = 1.1;
             clearInterval(this.animation_fuse);
             this.explode();
             this.calcDamage(board.explosions);
         } else if (this.state > 6 && this.state < 9) {
             this.calcDamage();
         } else if (this.state === 9) {
-            this.animaton_size = 0.9;
+            this.animation_size_factor = 0.9;
             delete board.explosions[this.explosionId];
         } else if (this.state > 11) {
             clearInterval(this.fuse);
@@ -201,7 +189,7 @@ class Bomb {
         for (let i = 1; i <= this.range; i++) {
             if (board.data[this.row][this.col + i] === tileTypes.wall) break;
             else {
-                if(i === this.range) explosion.push(new Explosion(this.row, this.col + i, false, 3));
+                if(i === this.range) explosion.push(new Explosion(this.row, this.col + i, false, 3)); //last animation is different
                 else explosion.push(new Explosion(this.row, this.col + i, false, 1));
 
 
@@ -229,8 +217,9 @@ class Bomb {
     }
 
     getAnimation() {
-        this.animation[this.state].dim_x = tileSize * this.animaton_size;
-        this.animation[this.state].dim_y = tileSize * this.animaton_size;
+        if(this.state <= 5) this.setAnimationSize();
+        else if(this.state === 6) this.animation_size_factor = 1.1;
+        this.animation[this.state].animation_size =  tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
 

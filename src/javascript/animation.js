@@ -1,10 +1,11 @@
 class AnimationFrame {
-	constructor(x, y, dim_x, dim_y) {
+	constructor(x, y, dim_x, dim_y, animation_size = tileSize) {
 		//dim: how big is character on assets.png
 		this.x = x;
 		this.y = y;
 		this.dim_x = dim_x;
-		this.dim_y = dim_y;
+        this.dim_y = dim_y;
+        this.animation_size = animation_size;
 	}
 }
 
@@ -51,7 +52,7 @@ class Character {
 		this.direction[3][1] = new AnimationFrame(11 * dim_x, y, dim_x, dim_y); //animation left #1
 		this.direction[3][2] = new AnimationFrame(12 * dim_x, y, dim_x, dim_y); //animation left #2
 		this.direction[3][3] = new AnimationFrame(13 * dim_x, y, dim_x, dim_y); //animation left #3
-
+        
 		this.last_direction = DIRECTION.UP; //up per default
 		this.tick = 0; //used for calculating wich animation is displayed
 		this.frame_cnt = -1; //used for calculation of pixel offset when moving
@@ -187,7 +188,28 @@ class dying{
     constructor(character){
         this.position = character.position;
         this.animation = character.getAnimation();
-        showNFrames = 2000/GAME_SPEED; //~2 sekunden
+        showNFrames = Math.floor(2000/GAME_SPEED); //~2 sekunden
+
+        this.frame_cnt = -1;
+    }
+
+    updateFrameCnt(){
+        if(showNFrames <= 0) {
+            board.dyingChars = board.dyingChars.filter(character => character != this); 
+            return;
+        }
+        this.frame_cnt = (this.frame_cnt + 1) % 10;
+        showNFrames--;
+    }
+
+    setVisability(){
+        if(frame_cnt > 6){
+            this.animation.dim_x = 0
+        }
+    }
+
+    getAnimation(){
+        return this.getAnimation;
     }
 }
 
