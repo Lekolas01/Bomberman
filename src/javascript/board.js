@@ -28,9 +28,11 @@ class gameboard {
 		this.height = height;
         this.data = matrix(this.width, this.height);
         this.enemies = [];
+        this.players = [];
+        this.morituri = []; //Ave Caesar, morituri te salutant
         this.items = [];
 		this.explosions = [];
-		this.players = [];
+		
 
 		//creates a new matrix of any type
 		function matrix(width, height) {
@@ -182,6 +184,7 @@ class gameboard {
 	draw() {
         //col = x coordinates, row = y
         this.drawGround();
+        this.drawObjects(this.morituri);
         this.drawObjects(this.enemies);
         this.drawObjects(this.players);
 		this.drawObjects(this.items);

@@ -55,19 +55,8 @@ class Character {
         
 		this.last_direction = DIRECTION.UP; //up per default
 		this.tick = 0; //used for calculating wich animation is displayed
-		this.frame_cnt = -1; //used for calculation of pixel offset when moving
-		// console.log(
-		// 	'construktor speed: ' +
-		// 		this.speed +
-		// 		' row : ' +
-		// 		this.position.row +
-		// 		' col: ' +
-		// 		this.position.col +
-		// 		' pos_x ' +
-		// 		this.position.pix_x +
-		// 		' pos_y ' +
-		// 		this.position.pix_y
-		// );
+        this.frame_cnt = -1; //used for calculation of pixel offset when moving
+
 	}
 
 	updateFrameCnt() {
@@ -181,7 +170,37 @@ class Character {
 			case 3:
 				return DIRECTION.LEFT;
 		}
-	}
+    }
+    
+
+    //is called by base function.
+    die(){
+        board.morituri.push(this);
+        this.dead = true;
+        this.idle = true;
+
+        this.tick = -1;
+        this.bleed = setInterval(
+            (function (self) {         //wrapping necessary to preserve "this"-context
+                return function () {   
+                    self.animateDying();
+                }
+            })(this),
+            1500/GAME_SPEED); //~6 times per second
+    }
+
+
+    animateDying(){
+        this.tick++;
+        if(this.tick >= 16){
+            this.bleed = null;
+            board.morituri = board.morituri.filter(moribunda => moribunda != this);
+            return;
+        }
+
+        if(this.tick % 4 < 2) this.getAnimation().animation_size = 0;
+        else this.getAnimation().animation_size = tileSize;     
+    }
 }
 
 class dying{

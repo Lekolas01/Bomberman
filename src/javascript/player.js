@@ -57,6 +57,13 @@ class Player extends Character { //ToDo: block invalid movements
         }
     }
 
+    die() {
+        if (board.players.filter(player => player === this).length > 0) {
+            board.players = board.players.filter(player => player != this);
+            super.die();
+        }
+    }
+
     plantBomb() {
         if (this.activeBombs < this.maxBombs) {
             board.items.push(new Bomb(this.position.row, this.position.col, 2, 4, this));
@@ -212,13 +219,21 @@ class Bomb {
         explosion.forEach(exp_part => { //array containing one explosion (wich cover multible tiles)
             board.enemies.forEach(enemy => {
                 if (enemy.position.row === exp_part.position.row && enemy.position.col === exp_part.position.col) {
-                    enemy.idle = true;
-                    setTimeout(function () { enemy.position.row = -12; }, 2000);
+                    enemy.die();
                 }
             })
+
             if (board.data[exp_part.position.row][exp_part.position.col] !== undefined && board.data[exp_part.position.row][exp_part.position.col].breakable) {
-                setTimeout(function () { board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; }, 2000);
+                setTimeout(function () { board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; }, 2000 * 9 / GAME_SPEED);
             }
+
+            board.players.forEach(player => {
+                if (player.position.row === exp_part.position.row && player.position.col === exp_part.col) {
+                    console.log("player row: " + player.position.row + " player col " + player.position.col + " exp row " + exp_part.position.row + " exp col " + exp_part.col);
+                    player.die();
+                }
+            });
+
         });
     }
 
