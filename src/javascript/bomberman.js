@@ -10,7 +10,6 @@ var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
 var currently_pressed = []; //keeps track of all relevant keys that are currently pressed
-var bombKeyPressed = false;
 var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 var board; // board: saves the information about the current gameboard
@@ -69,8 +68,6 @@ function movePlayer() {
 	player.updateFrameCnt();
     frame_cnt = player.frame_cnt;
 	if (frame_cnt === 0) {
-		if (player.holdsBomb) player.plantBomb();
-
         player.updateDirection();
 		player.tryMove(board);
         player.refreshPos();

@@ -4,8 +4,8 @@ function RandNumInRange(start, end) {
 }
 
 class Enemy extends Character {
-    constructor(row, pos_x, pos_y, health, moveSpeed, flying) {
-        super(moveSpeed, row, pos_x, pos_y);
+    constructor(rowOnAsset, pos_x, pos_y, health, moveSpeed, flying) {
+        super(moveSpeed, rowOnAsset, pos_x, pos_y);
         this.health = health;
         this.flying = flying; // can this enemy type fly over walls?
     }
