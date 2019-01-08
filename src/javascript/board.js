@@ -64,7 +64,6 @@ class gameboard {
 		function initGridTiles(board) {
 			for (var row = 2; row < height - 2; row += 2) {
 				for (var col = 2; col < width - 2; col += 2) {
-					delete board.data[row][col];
 					board.data[row][col] = tileTypes.wall;
 				}
 			}
@@ -72,7 +71,6 @@ class gameboard {
 
 		function initPlayers(board) {
 			function createPlayer(row, col) {
-				delete board.data[row][col];
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
 				board.players.push(new Player(4, row, col, 1, 2));
 
@@ -86,7 +84,7 @@ class gameboard {
 				for(var i = 0; i < pos.length; i++) {
 					var position = {y: row + pos[i].diff_y, x: col + pos[i].diff_x};
 					if(board.data[position.y][position.x] === tileTypes.breakableWall) {
-						//TODO : delete this tile
+						board.data[position.y][position.x] = tileTypes.empty;
 					}
 				}
 			}
