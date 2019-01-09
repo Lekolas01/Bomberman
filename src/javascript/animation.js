@@ -202,33 +202,3 @@ class Character {
         else this.getAnimation().animation_size = tileSize;     
     }
 }
-
-class dying{
-    constructor(character){
-        this.position = character.position;
-        this.animation = character.getAnimation();
-        showNFrames = Math.floor(2000/GAME_SPEED); //~2 sekunden
-
-        this.frame_cnt = -1;
-    }
-
-    updateFrameCnt(){
-        if(showNFrames <= 0) {
-            board.dyingChars = board.dyingChars.filter(character => character != this); 
-            return;
-        }
-        this.frame_cnt = (this.frame_cnt + 1) % 10;
-        showNFrames--;
-    }
-
-    setVisability(){
-        if(frame_cnt > 6){
-            this.animation.dim_x = 0
-        }
-    }
-
-    getAnimation(){
-        return this.getAnimation;
-    }
-}
-
