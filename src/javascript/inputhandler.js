@@ -68,8 +68,7 @@ class gamepadController {
     }
 
     disconnect() {
-        //maybe stop game here
-        alert("error, gamepad disconnected");
+        gamepads = gamepads.filter(pad => pad != this);
     }
     checkGamepad() {
         let horizontal = this.gamepad.axes[0];
