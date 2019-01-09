@@ -23,14 +23,16 @@ var tileTypes = Object.freeze({
 //  regular grid structure of unbreakable walls inside,
 //  semi-randomly generated breakable walls (= boxes) on the rest (bomberman map))
 class gameboard {
-	constructor(width, height, numPlayers = 1, numEnemies = 5, boxSpawnChance = 0.3) {
+	constructor(width, height, numPlayers = 1, numEnemies = 5, boxSpawnChance = 0.3, itemSpawnChance = 1) {
 		this.width = width;
 		this.height = height;
+		this.itemSpawnChance = itemSpawnChance;
         this.data = matrix(this.width, this.height);
         this.enemies = [];
         this.players = [];
         this.morituri = []; //Ave Caesar, morituri te salutant
-        this.items = [];
+		this.items = [];
+		this.bombs = [];
 		this.explosions = [];
 		
 
@@ -125,7 +127,12 @@ class gameboard {
 
 		function initEnemies(board) {
 			var startingPositions = board.getAllSpawnableTiles();
-            var numStartingPos = startingPositions.length;
+			var numStartingPos = startingPositions.length;
+			if(numStartingPos == 0) {
+				board.data[Math.floor(height / 2)][Math.floor(width / 2)] = tileTypes.empty;
+				startingPositions = [{row: Math.floor(height / 2), col: Math.floor(width / 2)}];
+				numStartingPos = 1;
+			}
 			for (var i = 0; i < numEnemies; i++) {
 				var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
@@ -164,17 +171,17 @@ class gameboard {
         let animation;
 
        // if(characterArr.length === 1) console.log(characterArr[0].position.pix_y);
-        objects.forEach(character => {
-            animation = character.getAnimation(); //The current image of the character, the canvas shall draw
+        objects.forEach(object => {
+            animation = object.getAnimation(); //The current image of the object the canvas shall draw
             ctx.drawImage(
                 document.getElementById('art_assets'),
                 animation.x, // x pos of art asset (bomb_partyv4.png)
                 animation.y, // y pos
                 animation.dim_x, // how wide is art asset on png?
                 animation.dim_y, // how high is art asset on png?
-                character.position.pix_x, // current x axis position of the character in pixels
-                character.position.pix_y, // same in y
-                animation.animation_size, // how big an enemy should be drawn(every characters has size = 1 tile)
+                object.position.pix_x, // current x axis position of the object in pixels
+                object.position.pix_y, // same in y
+                animation.animation_size, // how big an object should be drawn(every object has size = 1 tile)
                 animation.animation_size
             );
         });
@@ -185,24 +192,25 @@ class gameboard {
         //col = x coordinates, row = y
         this.drawGround();
         this.drawObjects(this.morituri);
+		this.drawObjects(this.items);
+		this.drawObjects(this.bombs);
         this.drawObjects(this.enemies);
         this.drawObjects(this.players);
-		this.drawObjects(this.items);
         this.explosions.forEach(explosion => this.drawObjects(explosion));
 		
 	}
 
+	// spawnable means: 
+	// no walls or on that tile
+	// and no player near it
 	getAllSpawnableTiles() {
 		let positions = [];
-		positions = this.getAllPassableTiles();
-		//console.log(this.players[0]);
+		positions = this.getAllPassableTiles(); // filter out all tiles with walls
 		for(var i = 0; i < this.players.length; i++) {
 			for(var j = 0; j < positions.length; j++) {
-				// console.log(`position: ${positions[j].row} ${positions[j].col}`);
-				// console.log(`player: ${this.players[i].position.row} ${this.players[i].position.col}`);
 				if (Math.abs(this.players[i].position.row - positions[j].row) <= 1 &&
 					Math.abs(this.players[i].position.col - positions[j].col) <= 1) {
-						positions.splice(j, 1);
+						positions.splice(j, 1); // filter all tiles with players near it
 						j--;
 					}
 			}
@@ -228,5 +236,10 @@ class gameboard {
 	positionExists(row, col) {
 		return row >= 0 && this.height > row &&
 			   col >= 0 && this.width > col;
+	}
+
+	addRandomItem(row, col) {
+		var itemId = RandNumInRange(0, numDifferentItems);
+		this.items.push(new Item(row, col, itemId));
 	}
 }

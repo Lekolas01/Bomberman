@@ -41,7 +41,7 @@ function startGame() {
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
-	board = new gameboard(boardWidth, boardHeight, 4, 10, 0);
+	board = new gameboard(boardWidth, boardHeight, 4, 10, 0.7);
 
     //printAllEnemiesStats(board.enemies);
 

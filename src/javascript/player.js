@@ -72,14 +72,14 @@ class Player extends Character {
         if (this.activeBombs < this.maxBombs) {
             let activeBombAtPos = false;
 
-            board.items.forEach(bomb => {
+            board.bombs.forEach(bomb => {
                 if (!activeBombAtPos) {//when no active bomb has been found at this position yet
                     activeBombAtPos = typeof Bomb && (bomb.position.row === this.position.row && bomb.position.col === player.position.col);
                 }
             });
 
             if (!activeBombAtPos) { //only when no active bomb is at the position a new one can be planted
-                board.items.push(new Bomb(this.position.row, this.position.col, 2, 4, this)); //drop bomb at current position
+                board.bombs.push(new Bomb(this.position.row, this.position.col, 2, 4, this)); //drop bomb at current position
                 this.activeBombs++;
             }
         }
@@ -158,6 +158,7 @@ class Bomb {
             this.animation_size_factor = 0.9 - 0.003 * (this.tick % 100);
         }
     }
+
     updateBombState() {
         this.state++;
         if (this.state === 6) { //bomb will now explode
@@ -165,13 +166,13 @@ class Bomb {
             this.explode();
             this.calcDamage(board.explosions);
         } else if (this.state > 6 && this.state < 9) { //explosion is happening
-            this.calcDamage();
+            //this.calcDamage(); // es sollte nur der erste frame schaden machen, finde ich (tell me what you think)
         } else if (this.state === 9) { // Explosion fades out
             this.animation_size_factor = 0.9;
             delete board.explosions[this.explosionId];
         } else if (this.state > 11) { //Explosion fadet out completely
             clearInterval(this.fuse);
-            board.items = board.items.filter(item => item != this); //remove bomb from items
+            board.bombs = board.bombs.filter(bomb => bomb != this); //remove bomb from board.bombs
             this.player.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
@@ -244,7 +245,13 @@ class Bomb {
             })
 
             if (board.data[exp_part.position.row][exp_part.position.col] !== undefined && board.data[exp_part.position.row][exp_part.position.col].breakable) {
-                setTimeout(function () { board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; }, 2000 * 9 / GAME_SPEED);
+                { 
+                    board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; 
+                    if (Math.random() <= board.itemSpawnChance) {
+                        board.addRandomItem(exp_part.position.row, exp_part.position.col);
+                    }
+                }
+                
             }
 
             board.players.forEach(player => {
