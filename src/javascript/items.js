@@ -1,19 +1,5 @@
-const numDifferentItems = 10;
+const numDifferentItems = 3;
 
-const items = [
-    {
-        id: 0, 
-        effect: function() {
-            console.log("add bomb power");
-        }
-    },
-    {
-        id: 1,
-        effect: function() {
-            console.log("increase number of bombs.");
-        }
-    }
-]
 
 class Item {
     constructor(row, col, itemId = 0) {
@@ -27,8 +13,17 @@ class Item {
 
         // this only works as long as position of art assets doesn't move
         // it saves the position of where to find the picture in the art assets file
-        this.pngRowPos = 11 + Math.floor(itemId / 5) * 3; 
+        this.pngRowPos = 11 + Math.floor(itemId / 5) * 3;
         this.pngColPos = (itemId % 5) * 3;
+    }
+
+    updatePlayer(player, item) {
+        switch(item.itemId) {
+            case 0: player.maxBombs++; break;
+            case 1: player.bombStrength++; break;
+            case 2: player.runningSpeed++; break;
+            default: console.log(" error: item not yet implemented.");
+        }
     }
 
     getAnimation() {

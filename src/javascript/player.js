@@ -2,8 +2,10 @@ class Player extends Character {
     constructor(rowOnAsset, row, col, health) {
         super(1.5, rowOnAsset * 16, row, col);
         this.health = health;
-        this.maxBombs = 3;
+        this.maxBombs = 2;
+        this.bombStrength = 1;
         this.activeBombs = 0;
+        this.runningSpeed = 5; // not yet used
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
     }
@@ -79,11 +81,20 @@ class Player extends Character {
             });
 
             if (!activeBombAtPos) { //only when no active bomb is at the position a new one can be planted
-                board.bombs.push(new Bomb(this.position.row, this.position.col, 2, 4, this)); //drop bomb at current position
+                board.bombs.push(new Bomb(this.position.row, this.position.col, this.bombStrength, 4, this)); //drop bomb at current position
                 this.activeBombs++;
             }
         }
     }
+
+    // this function gets triggered whenever a player walks over an item
+    // depending on the itemId, it triggers a different effect on the player obj.
+    // items.js for more info on the effect
+    pickupItem(item) {
+        console.log(`pick up item with id = ${item.itemId}`);
+        item.updatePlayer(this, item);
+    }
+
 }
 
 class Explosion {
@@ -288,5 +299,4 @@ class Bomb {
         this.animation[this.state].animation_size = tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
-
 }
