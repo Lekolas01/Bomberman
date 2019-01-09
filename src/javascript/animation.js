@@ -65,6 +65,7 @@ class Character {
 
 	/*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
 	refreshPos() {
+		var player = this;
 		if (!this.idle) {
 			switch (this.last_direction) {
 				case DIRECTION.DOWN: //based on  direction, the characters position in the matrix is updated
@@ -80,6 +81,15 @@ class Character {
 					this.position.col -= 1;
 					break;
 			}
+
+			board.items.forEach(function(item, index, object) {
+				if (item.position.row == player.position.row &&
+					item.position.col == player.position.col) {
+						item.updatePlayer(player, item); // trigger the effect on the player
+						object.splice(index, 1); // destroy the item
+
+					}
+			})
 		}
 	}
 
