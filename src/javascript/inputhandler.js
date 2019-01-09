@@ -29,6 +29,7 @@ function playerKeyDown(event) {
 			currently_pressed[key] = true; //mark that key has been pressed
 			board.players[0].lastKeyInput = key;
 			break;
+		case KEY.SPACE:
 		case KEY.B:
 			board.players[0].plantBomb();
 			break;

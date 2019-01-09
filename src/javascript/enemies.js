@@ -77,6 +77,37 @@ class Enemy extends Character {
         }
     }
 
+    //checks if a player and an enemy have collided. player loses life in that scenario
+    kill(){
+        //calc size of hitbox (- a treshold)
+        let mx_left = this.position.pix_x + 2;
+        let mx_right = mx_left + tileSize - 2;
+        let my_up = this.position.pix_y + 2;
+        let my_down = my_up + tileSize - 2;
+
+        //same for players
+        let px_left;
+        let px_right;
+        let py_up;
+        let py_down;
+        board.players.forEach(player => {
+            px_left = player.position.pix_x;
+            px_right = px_left + tileSize;
+            py_up = player.position.pix_y;
+            py_down = py_up + tileSize;
+
+            //check if hitboxes overlap
+            //When monsters left edge is to the left of players right side
+            //and at the same time the monsters right side is not totaly left of players left side
+            //When at the same time the montsters upper bond is below the player's lower bound
+            //but the monsters lower bound is higher than the players upper bound, than they overlap
+            if (mx_left < px_right && mx_right > px_left &&
+                my_up < py_down && my_down > py_up){
+                    player.die();
+                }            
+        });
+    }
+
     die() {
         if (board.enemies.filter(enemy => enemy === this).length > 0) {
             board.enemies = board.enemies.filter(enemy => enemy != this);

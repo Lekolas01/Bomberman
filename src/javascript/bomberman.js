@@ -111,6 +111,7 @@ function moveEnemies() {
 		//So Every Frame, we add 1/60 of a tile to the current moving direction
 		//This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
 		board.enemies[i].refreshPixelPos(pix_offset);
+		board.enemies[i].kill();
 	}
 }
 //--------------------------------------------------------------------------
