@@ -77,7 +77,7 @@ function startGame() {
 
 // is called every 9 ms
 function loop() {
-	gamepads[0].checkGamepad();
+	gamepads.forEach(gamepad => gamepad.checkGamepad());
 	board.players.forEach(player => movePlayer(player));
 	moveEnemies();
 	drawScreen();
