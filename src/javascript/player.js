@@ -74,7 +74,7 @@ class Player extends Character {
 
             board.bombs.forEach(bomb => {
                 if (!activeBombAtPos) {//when no active bomb has been found at this position yet
-                    activeBombAtPos = typeof Bomb && (bomb.position.row === this.position.row && bomb.position.col === player.position.col);
+                    activeBombAtPos = typeof Bomb && (bomb.position.row === this.position.row && bomb.position.col === this.position.col);
                 }
             });
 
