@@ -1,11 +1,21 @@
 /* this file contains all the logic for the user controls */
 
+
+var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
+var currently_pressed = []; //keeps track of all relevant keys that are currently pressed
+var bombKeyPressed = false; 
+
+
 playerControls = [
     {up: 1, down: 2, left: 3, right: 4, bomb: 5},
     {up: 6, down: 7, left: 8, right: 9, bomb: 10},
     {up: 1, down: 12, left: 13, right: 14, bomb: 15},
     {up: 1, down: 17, left: 18, right: 19, bomb: 20}
 ];
+
+function playerKeyPress(event) {
+
+}
 
 function playerKeyDown(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
