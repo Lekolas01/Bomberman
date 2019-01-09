@@ -1,96 +1,85 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <title>Contact</title>
-</head>
-
-<body>
-    <div class="contact-popup" id="contact_form">
-        <!--submit without reloading-->
-        <form action="" method="get" onsubmit="submitForm(); return false;">
-            <header>
-                <h2>Contact us</h2>
-                <div>If there is anything you want to tell us, please leave your message and contact data and click on
-                    "submit".
-                    <br />We will be in contact with you shortly.
-                </div>
-            </header>
-
-            <div>
-                <label id="label_name" for="input_name">Your Name</label>
-                <div>
-                    <input id="input_name" name="input_name" type="text" value="a" size="8" tabindex="1" required></div>
+<div class="contact-popup" id="contact_form">
+    <!--submit without reloading-->
+    <form action="" method="get" onsubmit="submitForm(); return false;">
+        <header>
+            <h2>Contact us</h2>
+            <div>If there is anything you want to tell us, please leave your message and contact data and click on
+                "submit".
+                <br />We will be in contact with you shortly.
             </div>
+        </header>
 
+        <div>
+            <label id="label_name" for="input_name">Your Name</label>
             <div>
-                <label id="label_mail" for="input_mail">
-                    Email
-                </label>
-                <div>
-                    <input id="input_mail" name="input_mail" type="email" spellcheck="false" value="" maxlength="255"
-                        tabindex="2" required>
-                </div>
+                <input id="input_name" name="input_name" type="text" value="a" size="8" tabindex="1" required></div>
+        </div>
+
+        <div>
+            <label id="label_mail" for="input_mail">
+                Email
+            </label>
+            <div>
+                <input id="input_mail" name="input_mail" type="email" spellcheck="false" value="" maxlength="255"
+                    tabindex="2" required>
             </div>
+        </div>
 
-            <div>
-                <fieldset>
-                    <legend id="radio_buttons">
-                        Reason for Contact
-                    </legend>
+        <div>
+            <fieldset>
+                <legend id="radio_buttons">
+                    Reason for Contact
+                </legend>
 
-                    <div id="contact_reason">
-                        <input id="input_radio" name="input_radio" type="hidden" value="">
-                        <div>
-                            <input id="input_radio_0" name="radio" type="radio" value="complaint" tabindex="4" checked="checked">
-                            <label for="input_radio_0">Complaint</label>
-                        </div>
-                        <div>
-                            <input id="input_radio_1" name="radio" type="radio" value="compliment" tabindex="5">
-                            <label for="input_radio_1">Compliment</label>
-                        </div>
-                        <div>
-                            <input id="input_radio_2" name="radio" type="radio" value="other" tabindex="6">
-                            <label for="input_radio_2">Other</label>
-                        </div>
+                <div id="contact_reason">
+                    <input id="input_radio" name="input_radio" type="hidden" value="">
+                    <div>
+                        <input id="input_radio_0" name="radio" type="radio" value="complaint" tabindex="4" checked="checked">
+                        <label for="input_radio_0">Complaint</label>
                     </div>
-                </fieldset>
-            </div>
+                    <div>
+                        <input id="input_radio_1" name="radio" type="radio" value="compliment" tabindex="5">
+                        <label for="input_radio_1">Compliment</label>
+                    </div>
+                    <div>
+                        <input id="input_radio_2" name="radio" type="radio" value="other" tabindex="6">
+                        <label for="input_radio_2">Other</label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div>
+            <label id="label_message" for="area_message">
+                Message
+            </label>
 
             <div>
-                <label id="label_message" for="area_message">
-                    Message
-                </label>
-
-                <div>
-                    <textarea id="area_message" name="area_message" spellcheck="true" rows="10" cols="50" tabindex="7"
-                        required></textarea>
-                </div>
+                <textarea id="area_message" name="area_message" spellcheck="true" rows="10" cols="50" tabindex="7"
+                    required></textarea>
             </div>
+        </div>
 
+        <div>
+            <label id="label_rating" for="drop_rating">
+                How do you like our Website?
+            </label>
             <div>
-                <label id="label_rating" for="drop_rating">
-                    How do you like our Website?
-                </label>
-                <div>
-                    <select id="drop_rating" name="drop_rating" tabindex="8">
-                        <option value="1">I love it</option>
-                        <option value="2">It's cool</option>
-                        <option value="3">It's OK I guess?</option>
-                        <option value="4">I don't like it very much</option>
-                        <option value="5">Complete Garbage</option>
-                    </select>
-                </div>
+                <select id="drop_rating" name="drop_rating" tabindex="8">
+                    <option value="1">I love it</option>
+                    <option value="2">It's cool</option>
+                    <option value="3">It's OK I guess?</option>
+                    <option value="4">I don't like it very much</option>
+                    <option value="5">Complete Garbage</option>
+                </select>
             </div>
+        </div>
 
+        <div>
             <div>
-                <div>
-                    <input id="saveForm" name="saveForm" type="submit" value="submit">
-                    <input id="cancelContact" name="cancel" type="button" value="cancel" onclick="closeForm()">
-                </div>
+                <input id="saveForm" name="saveForm" type="submit" value="submit">
+                <input id="cancelContact" name="cancel" type="button" value="cancel" onclick="closeForm()">
             </div>
-
-        </form>
-    </div>
-</body>
+        </div>
+    </form>
+</div>

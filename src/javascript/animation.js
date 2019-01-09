@@ -12,7 +12,7 @@ class AnimationFrame {
 /*stores information about position on gameBoard-Matrix, Position on canvas and the animations*/
 class Character {
 	//speed: 1 = 100% (one row every 60 frames), 0.6 = 60 %, 1.2 = 120 % and so on
-	constructor(speed, y, row, col, dim_x = 16, dim_y = 16) {
+	constructor(speed, rowOnAsset, row, col, dim_x = 16, dim_y = 16) {
 		//which y position on asset png is player/monster
 		this.idle = false; //is caracter currently moving?
 
@@ -29,45 +29,34 @@ class Character {
 
 		//up
 		this.direction[0] = new Array(3);
-		this.direction[0][0] = new AnimationFrame(0, y, dim_x, dim_y); //idle
-		this.direction[0][1] = new AnimationFrame(8 * dim_x, y, dim_x, dim_y); //animation up #1
-		this.direction[0][2] = new AnimationFrame(9 * dim_x, y, dim_x, dim_y); //animation up #
+		this.direction[0][0] = new AnimationFrame(0, rowOnAsset, dim_x, dim_y); //idle
+		this.direction[0][1] = new AnimationFrame(8 * dim_x, rowOnAsset, dim_x, dim_y); //animation up #1
+		this.direction[0][2] = new AnimationFrame(9 * dim_x, rowOnAsset, dim_x, dim_y); //animation up #
 
 		//down
 		this.direction[1] = new Array(3);
-		this.direction[1][0] = new AnimationFrame(1 * dim_x, y, dim_x, dim_y); //idle
-		this.direction[1][1] = new AnimationFrame(2 * dim_x, y, dim_x, dim_y); //animation down #1
-		this.direction[1][2] = new AnimationFrame(3 * dim_x, y, dim_x, dim_y); //animation down #2
+		this.direction[1][0] = new AnimationFrame(1 * dim_x, rowOnAsset, dim_x, dim_y); //idle
+		this.direction[1][1] = new AnimationFrame(2 * dim_x, rowOnAsset, dim_x, dim_y); //animation down #1
+		this.direction[1][2] = new AnimationFrame(3 * dim_x, rowOnAsset, dim_x, dim_y); //animation down #2
 
 		//right
 		this.direction[2] = new Array(4);
-		this.direction[2][0] = new AnimationFrame(4 * dim_x, y, dim_x, dim_y); //idle
-		this.direction[2][1] = new AnimationFrame(5 * dim_x, y, dim_x, dim_y); //animation right #1
-		this.direction[2][2] = new AnimationFrame(6 * dim_x, y, dim_x, dim_y); //animation right #2
-		this.direction[2][3] = new AnimationFrame(7 * dim_x, y, dim_x, dim_y); //animation right #3
+		this.direction[2][0] = new AnimationFrame(4 * dim_x, rowOnAsset, dim_x, dim_y); //idle
+		this.direction[2][1] = new AnimationFrame(5 * dim_x, rowOnAsset, dim_x, dim_y); //animation right #1
+		this.direction[2][2] = new AnimationFrame(6 * dim_x, rowOnAsset, dim_x, dim_y); //animation right #2
+		this.direction[2][3] = new AnimationFrame(7 * dim_x, rowOnAsset, dim_x, dim_y); //animation right #3
 
 		//left
 		this.direction[3] = new Array(4);
-		this.direction[3][0] = new AnimationFrame(10 * dim_x, y, dim_x, dim_y); //idle
-		this.direction[3][1] = new AnimationFrame(11 * dim_x, y, dim_x, dim_y); //animation left #1
-		this.direction[3][2] = new AnimationFrame(12 * dim_x, y, dim_x, dim_y); //animation left #2
-		this.direction[3][3] = new AnimationFrame(13 * dim_x, y, dim_x, dim_y); //animation left #3
+		this.direction[3][0] = new AnimationFrame(10 * dim_x, rowOnAsset, dim_x, dim_y); //idle
+		this.direction[3][1] = new AnimationFrame(11 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #1
+		this.direction[3][2] = new AnimationFrame(12 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #2
+		this.direction[3][3] = new AnimationFrame(13 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #3
         
 		this.last_direction = DIRECTION.UP; //up per default
 		this.tick = 0; //used for calculating wich animation is displayed
-		this.frame_cnt = -1; //used for calculation of pixel offset when moving
-		// console.log(
-		// 	'construktor speed: ' +
-		// 		this.speed +
-		// 		' row : ' +
-		// 		this.position.row +
-		// 		' col: ' +
-		// 		this.position.col +
-		// 		' pos_x ' +
-		// 		this.position.pix_x +
-		// 		' pos_y ' +
-		// 		this.position.pix_y
-		// );
+        this.frame_cnt = -1; //used for calculation of pixel offset when moving
+
 	}
 
 	updateFrameCnt() {
@@ -181,7 +170,37 @@ class Character {
 			case 3:
 				return DIRECTION.LEFT;
 		}
-	}
+    }
+    
+
+    //is called by base function.
+    die(){
+        board.morituri.push(this);
+        this.dead = true;
+        this.idle = true;
+
+        this.tick = -1;
+        this.bleed = setInterval(
+            (function (self) {         //wrapping necessary to preserve "this"-context
+                return function () {   
+                    self.animateDying();
+                }
+            })(this),
+            1500/GAME_SPEED); //~6 times per second
+    }
+
+
+    animateDying(){
+        this.tick++;
+        if(this.tick >= 16){
+            this.bleed = null;
+            board.morituri = board.morituri.filter(moribunda => moribunda != this);
+            return;
+        }
+
+        if(this.tick % 4 < 2) this.getAnimation().animation_size = 0;
+        else this.getAnimation().animation_size = tileSize;     
+    }
 }
 
 class dying{

@@ -67,8 +67,6 @@ function movePlayer() {
 	player.updateFrameCnt();
     frame_cnt = player.frame_cnt;
 	if (frame_cnt === 0) {
-		if (player.holdsBomb) player.plantBomb();
-
         player.updateDirection();
 		player.tryMove(board);
         player.refreshPos();
