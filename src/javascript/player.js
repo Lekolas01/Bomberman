@@ -108,6 +108,7 @@ class Explosion {
     }
 }
 
+let explosionIdCnt = -1;
 class Bomb {
     constructor(row, col, range, timer, plantedBy) {
         this.position = {
@@ -121,7 +122,8 @@ class Bomb {
 
         this.player = plantedBy;
 
-        this.explosionId = board.explosions.length + 1; // used to insert explosion array in gloabl explions
+        explosionIdCnt = (explosionIdCnt + 1) % 30;
+        this.explosionId =  explosionIdCnt// used to insert explosion array in gloabl explosions
 
         this.animation = [];
         for (let i = 4; i < 10; i++) {
@@ -253,7 +255,24 @@ class Bomb {
                 }
             });
 
+            //calc, if this explosion causes another bomb to explode sooner
+            let otherBombs = board.items.filter(item => item instanceof Bomb && item != this);
+            for (let i = 0; i < otherBombs.length; i++) {
+                if (otherBombs[i].position.row === exp_part.position.row && otherBombs[i].position.row === exp_part.position.row) {
+                    otherBombs[i].earlyfuze();
+                }
+            }
         });
+    }
+
+    //when bomb is near another explosion, bomb will go off sooner
+    earlyfuze() {
+        if (this.state < 6) {
+            this.state = 6;
+            clearInterval(this.animation_fuse);
+            this.explode();
+            this.calcDamage(board.explosions);
+        }
     }
 
     getAnimation() {
