@@ -80,10 +80,10 @@ class Enemy extends Character {
     //checks if a player and an enemy have collided. player loses life in that scenario
     kill(){
         //calc size of hitbox (- a treshold)
-        let mx_left = this.position.pix_x + 2;
-        let mx_right = mx_left + tileSize - 2;
-        let my_up = this.position.pix_y + 2;
-        let my_down = my_up + tileSize - 2;
+        let mx_left = this.position.pix_x + 0.2 * tileSize;
+        let mx_right = mx_left + tileSize - 0.2 * tileSize;
+        let my_up = this.position.pix_y + 0.2 * tileSize;
+        let my_down = my_up + tileSize - 0.2 * tileSize;
 
         //same for players
         let px_left;
@@ -91,10 +91,10 @@ class Enemy extends Character {
         let py_up;
         let py_down;
         board.players.forEach(player => {
-            px_left = player.position.pix_x;
-            px_right = px_left + tileSize;
-            py_up = player.position.pix_y;
-            py_down = py_up + tileSize;
+            px_left = player.position.pix_x + 0.2 * tileSize;
+            px_right = px_left + tileSize - 0.2 * tileSize;
+            py_up = player.position.pix_y + 0.2 * tileSize;
+            py_down = py_up + tileSize - 0.2 * tileSize;
 
             //check if hitboxes overlap
             //When monsters left edge is to the left of players right side
