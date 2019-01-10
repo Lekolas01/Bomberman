@@ -1,6 +1,6 @@
 class Player extends Character {
     constructor(rowOnAsset, row, col, health) {
-        super(1.5, rowOnAsset * 16, row, col);
+        super(1.5, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
         this.maxBombs = 2;
         this.bombStrength = 1;
@@ -8,6 +8,8 @@ class Player extends Character {
         this.runningSpeed = 5; // not yet used
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
+
+        this.score = 0;
     }
 
     //based on user input, the last pressed key is updated. 
@@ -69,6 +71,7 @@ class Player extends Character {
             delete board.players[playerIndex];
             if(playerIndex > 0) gamepads[playerIndex - 1].disconnect();
             super.die();
+            alert("Final Score for player " + (playerIndex + 1) + " is: " + this.score);
         }
     }
 
@@ -97,6 +100,9 @@ class Player extends Character {
         item.updatePlayer(this, item);
     }
 
+    updateScore(points){
+        this.score += points;
+    }
 }
 
 class Explosion {
@@ -133,7 +139,7 @@ class Bomb {
 
         this.range = range;
 
-        this.player = plantedBy;
+        this.plantedBy = plantedBy;
 
         explosionIdCnt = (explosionIdCnt + 1) % 30;
         this.explosionId =  explosionIdCnt// used to insert explosion array in gloabl explosions
@@ -188,7 +194,7 @@ class Bomb {
         } else if (this.state > 11) { //Explosion fadet out completely
             clearInterval(this.fuse);
             board.bombs = board.bombs.filter(bomb => bomb != this); //remove bomb from board.bombs
-            this.player.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
+            this.plantedBy.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
     }
@@ -256,12 +262,15 @@ class Bomb {
             board.enemies.forEach(enemy => {
                 if (enemy.position.row === exp_part.position.row && enemy.position.col === exp_part.position.col) {
                     enemy.die();
+                    this.plantedBy.updateScore(enemy.pointsWhenKilled);
                 }
             })
 
             if (board.data[exp_part.position.row][exp_part.position.col] !== undefined && board.data[exp_part.position.row][exp_part.position.col].breakable) {
                 { 
                     board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; 
+                    this.plantedBy.updateScore(5); //5 point for destroying walls
+
                     if (Math.random() <= board.itemSpawnChance) {
                         board.addRandomItem(exp_part.position.row, exp_part.position.col);
                     }
@@ -272,6 +281,7 @@ class Bomb {
             board.players.forEach(player => {
                 if (player.position.row === exp_part.position.row && player.position.col === exp_part.position.col) {
                     player.die();
+                    if(player != this.plantedBy) this.updateScore(player.pointsWhenKilled);
                 }
             });
 

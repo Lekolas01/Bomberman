@@ -12,11 +12,13 @@ class AnimationFrame {
 /*stores information about position on gameBoard-Matrix, Position on canvas and the animations*/
 class Character {
 	//speed: 1 = 100% (one row every 60 frames), 0.6 = 60 %, 1.2 = 120 % and so on
-	constructor(speed, rowOnAsset, row, col, dim_x = 16, dim_y = 16) {
+	constructor(speed, rowOnAsset, row, col, pointsWhenKilled = 15, dim_x = 16, dim_y = 16) {
 		//which y position on asset png is player/monster
 		this.idle = false; //is caracter currently moving?
 
 		this.speed = Math.round((6.66666666667 * GAME_SPEED) / speed);
+
+		this.pointsWhenKilled = pointsWhenKilled; //how many points does a player get when he kills this character
 
 		this.position = {
 			row: row, //row on matrix (number of rows equals number of vertical tiles)
