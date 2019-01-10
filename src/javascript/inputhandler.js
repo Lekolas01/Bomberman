@@ -4,6 +4,7 @@
 var KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
 var currently_pressed = []; //keeps track of all relevant keys that are currently pressed
 var bombKeyPressed = false; 
+var gamepads = [];
 
 
 playerControls = [
@@ -28,6 +29,7 @@ function playerKeyDown(event) {
 			currently_pressed[key] = true; //mark that key has been pressed
 			board.players[0].lastKeyInput = key;
 			break;
+		case KEY.SPACE:
 		case KEY.B:
 			board.players[0].plantBomb();
 			break;
@@ -55,4 +57,43 @@ function playerKeyUp(event) {
 			}
 			break;
 	}
+}
+
+//gamepad in inputcontroler.js
+class gamepadController {
+    constructor(gamepad, btnA = 0, btnB = 1) {
+        this.gamepad = gamepad;
+        this.playerId = gamepad.index + 1;
+        this.btnA = btnA;
+        this.btnB = btnB;
+    }
+
+    disconnect() {
+        gamepads = gamepads.filter(pad => pad != this);
+    }
+    checkGamepad() {
+        let horizontal = this.gamepad.axes[0];
+        let vertical = this.gamepad.axes[1];
+
+        board.players[this.playerId].lastKeyInput = KEY.NONE; //default if none applies
+        if (Math.abs(horizontal) > Math.abs(vertical)) { //is vertical or horizontal axe more strongly pressed
+            if (horizontal < -0.5) { //cannot check for ones or zeros, because controller might not be that exact
+				board.players[this.playerId].lastKeyInput = KEY.LEFT;
+            } else if (horizontal > 0.5) {
+                board.players[this.playerId].lastKeyInput = KEY.RIGHT;
+            }
+        } else {
+            if (vertical < -0.5) {
+                board.players[this.playerId].lastKeyInput = KEY.UP;
+            } else if (vertical > 0.5) {
+                board.players[this.playerId].lastKeyInput = KEY.DOWN;
+            }
+		}
+
+		//console.log("player id: " + this.playerId + " horizontal: " + this.gamepad.axes[0] + " vertical: " + this.gamepad.axes[1]);
+
+        if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
+            board.players[this.playerId].plantBomb();
+        }
+    }
 }

@@ -163,6 +163,10 @@ class Character {
 		}
 	}
 
+	setSpeed(speed){
+		this.speed = Math.round((6.66666666667 * GAME_SPEED) / speed);
+	}
+
 	// helper function. Converts a number into a direction ("up", "right" etc.)
 	// 0 -> up, 1 -> right, 2 -> down, 3 -> left
 	intToDir(number) {

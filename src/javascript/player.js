@@ -64,8 +64,10 @@ class Player extends Character {
 
     //if not already happend, die() removes player from player array, then calls super function
     die() {
-        if (board.players.filter(player => player === this).length > 0) {
-            board.players = board.players.filter(player => player != this);
+        let playerIndex = board.players.indexOf(this);
+        if (playerIndex >= 0) {
+            delete board.players[playerIndex];
+            if(playerIndex > 0) gamepads[playerIndex - 1].disconnect();
             super.die();
         }
     }
@@ -76,7 +78,7 @@ class Player extends Character {
 
             board.bombs.forEach(bomb => {
                 if (!activeBombAtPos) {//when no active bomb has been found at this position yet
-                    activeBombAtPos = typeof Bomb && (bomb.position.row === this.position.row && bomb.position.col === player.position.col);
+                    activeBombAtPos = typeof Bomb && (bomb.position.row === this.position.row && bomb.position.col === this.position.col);
                 }
             });
 
@@ -274,10 +276,10 @@ class Bomb {
             });
 
             //calc, if this explosion causes another bomb to explode sooner
-            let otherBombs = board.items.filter(item => item instanceof Bomb && item != this);
-            for (let i = 0; i < otherBombs.length; i++) {
-                if (otherBombs[i].position.row === exp_part.position.row && otherBombs[i].position.row === exp_part.position.row) {
-                    otherBombs[i].earlyfuze();
+            let otherPies = board.bombs.filter(pie => pie != this); //these pies aren't homemade, they were made in a factory...a bomb factory...they're bombs
+            for (let i = 0; i < otherPies.length; i++) {
+                if (otherPies[i].position.row === exp_part.position.row && otherPies[i].position.row === exp_part.position.row) {
+                    otherPies[i].earlyfuze();
                 }
             }
         });

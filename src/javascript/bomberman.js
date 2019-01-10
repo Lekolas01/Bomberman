@@ -15,7 +15,7 @@ var board; // board: saves the information about the current gameboard
 var running = false; // game currently on?
 
 //--------------------------------------------------------------------------
-window.onload = function() {
+window.onload = function () {
 	canvas = document.getElementById('game_canvas');
 	ctx = canvas.getContext('2d');
 
@@ -41,37 +41,59 @@ function startGame() {
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
-	board = new gameboard(boardWidth, boardHeight, 4, 10, 0.7);
-
-    //printAllEnemiesStats(board.enemies);
+	//printAllEnemiesStats(board.enemies);
 
 	//add key listeners for player Controls
-	window.onkeydown = playerKeyDown;
-	window.onkeypress = playerKeyPress;
-	window.onkeyup = playerKeyUp;
+	window.addEventListener("gamepadconnected", function (e) {
+		console.log("Gamepad with index " + e.gamepad.index + " connected");
+		gamepads.push(new gamepadController(e.gamepad));
+	});
+	//setup an interval for Chrome
+	var checkChrome = window.setInterval(function () {
+		if (navigator.getGamepads()[0]) {
+			$(window).trigger("gamepadconnected");
+			window.clearInterval(checkChrome);
+		}
+	}, 500);
+	window.addEventListener("gamepaddisconnected", function (e) {
+		console.log("hm...that's unfortunate");
+		//gamepadAPI.disconnect(e.gamepad);
+	});
 
-	renderIntervalId = setInterval(loop, GAME_SPEED);
+	window.onkeypress = function () {
+		nrOfPlayers = 1;
+		
+		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7);
+
+		//add key listeners for player Controls
+		window.onkeydown = playerKeyDown;
+		window.onkeyup = playerKeyUp;
+
+		renderIntervalId = setInterval(loop, GAME_SPEED);
+		window.onkeypress = null;
+	};
 }
 
 // is called every 9 ms
 function loop() {
-    movePlayer();
+	gamepads.forEach(gamepad => gamepad.checkGamepad());
+	board.players.forEach(player => movePlayer(player));
 	moveEnemies();
 	drawScreen();
 }
 
-function movePlayer() {
-    player = board.players[0];
+function movePlayer(player) {
 	let pix_offset = 0;
 	let frame_cnt = 0;
 	player.updateFrameCnt();
-    frame_cnt = player.frame_cnt;
+	frame_cnt = player.frame_cnt;
 	if (frame_cnt === 0) {
-        player.updateDirection();
+		player.updateDirection();
 		player.tryMove(board);
-        player.refreshPos();
-    }
-    pix_offset = tileSize - ((tileSize / player.speed) * (frame_cnt % player.speed) + 1);
+		player.refreshPos();
+	}
+	pix_offset = tileSize - ((tileSize / player.speed) * (frame_cnt % player.speed) + 1);
 	player.refreshPixelPos(pix_offset);
 }
 
@@ -89,11 +111,12 @@ function moveEnemies() {
 		//So Every Frame, we add 1/60 of a tile to the current moving direction
 		//This way, the characters position changes 60/60  (= whole tile) of a tile in the whole 60 frames
 		board.enemies[i].refreshPixelPos(pix_offset);
+		board.enemies[i].kill();
 	}
 }
 //--------------------------------------------------------------------------
 function drawScreen() {
-    board.draw();
-    //TODO: 
-    //scoreBoard.draw(ctx);
+	board.draw();
+	//TODO: 
+	//scoreBoard.draw(ctx);
 }
