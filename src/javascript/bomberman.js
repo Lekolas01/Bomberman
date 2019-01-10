@@ -36,7 +36,7 @@ function resizeCanvas(){
 		tileSize = Math.floor(0.06 * document.body.offsetWidth - 7);
 	}
 	if(document.body.offsetHeight < 1000){
-		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);  //calculated with linear regression
+		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);
 		tileSize = Math.min(tileSize, tmp);
 	}
 
@@ -50,7 +50,6 @@ function resizeCanvas(){
 	ctx.canvas.height = height;
 	canvas.width = width;
 	canvas.height = height;
-	alert(tileSize);
 }
 
 function startGame() {
