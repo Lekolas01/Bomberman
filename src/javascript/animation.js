@@ -163,6 +163,7 @@ class Character {
 		}
 	}
 
+
 	setSpeed(speed){
 		this.speed = Math.round((6.66666666667 * GAME_SPEED) / speed);
 	}

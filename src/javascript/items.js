@@ -21,7 +21,7 @@ class Item {
         switch(item.itemId) {
             case 0: player.maxBombs++; break;
             case 1: player.bombStrength++; break;
-            case 2: player.runningSpeed++; break;
+            case 2: player.speed -= 5; break;
             default: console.log(" error: item not yet implemented.");
         }
     }
