@@ -234,6 +234,16 @@ textarea:focus {
 	textarea {
 		width: 100%;
 	}
+	#game_canvas{
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+	h1{
+		text-align: left;
+		margin-left: 6%;
+		font-size: 40px;
+	}
 }
 
 .success-popup  {

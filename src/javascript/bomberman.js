@@ -6,6 +6,7 @@ var GAME_SPEED = 9; // 1 tick every 9 ms
 var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 13; // how many tiles is the gameboard high?
 var tileSize = 32; // how big is one tile? (width and height)
+var baseTileSize = 32; //used for resizing
 var score = 0;
 var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
 var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
@@ -18,13 +19,7 @@ var running = false; // game currently on?
 window.onload = function () {
 	canvas = document.getElementById('game_canvas');
 	ctx = canvas.getContext('2d');
-
-	let width = boardWidth * tileSize;
-	let height = boardHeight * tileSize;
-	ctx.canvas.width = width;
-	ctx.canvas.height = height;
-	canvas.width = width;
-	canvas.height = height;
+	resizeCanvas();
 
 	//background music
 	// note: sometimes background music doesn't play,
@@ -35,6 +30,27 @@ window.onload = function () {
 
 	startGame();
 };
+
+function resizeCanvas(){
+	if(document.body.offsetWidth < 1000){
+		tileSize = Math.floor(0.06 * document.body.offsetWidth - 7);
+	}
+	if(document.body.offsetHeight < 1000){
+		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);
+		tileSize = Math.min(tileSize, tmp);
+	}
+
+	tileSize = Math.max(tileSize, 16); //lower than 16 pixel is not allowed
+	tileSize = Math.min(tileSize, baseTileSize); //higher than baseTileSize not allowed
+
+	//resize canvas
+	let width = boardWidth * tileSize;
+	let height = boardHeight * tileSize;
+	ctx.canvas.width = width;
+	ctx.canvas.height = height;
+	canvas.width = width;
+	canvas.height = height;
+}
 
 function startGame() {
 	running = true;
@@ -57,8 +73,10 @@ function startGame() {
 	}, 500);
 	window.addEventListener("gamepaddisconnected", function (e) {
 		console.log("hm...that's unfortunate");
-		//gamepadAPI.disconnect(e.gamepad);
 	});
+
+	board = new gameboard(boardWidth, boardHeight, 4, 0, 0);
+	board.draw();
 
 	window.onkeypress = function () {
 		nrOfPlayers = 1;
