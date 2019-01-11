@@ -1,6 +1,13 @@
+const playerMaxStats = {
+    bombStrength: 10,
+    maxBombs: 10,
+    moveSpeed: 6
+}
+
+
 class Player extends Character {
     constructor(rowOnAsset, row, col, health) {
-        super(1.5, rowOnAsset * 16, row, col, 100); //100 points another player kills this
+        super(2, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
         this.maxBombs = 2;
         this.bombStrength = 1;
@@ -288,7 +295,8 @@ class Bomb {
             //calc, if this explosion causes another bomb to explode sooner
             let otherPies = board.bombs.filter(pie => pie != this); //these pies aren't homemade, they were made in a factory...a bomb factory...they're bombs
             for (let i = 0; i < otherPies.length; i++) {
-                if (otherPies[i].position.row === exp_part.position.row && otherPies[i].position.row === exp_part.position.row) {
+                if (otherPies[i].position.row === exp_part.position.row &&
+                    otherPies[i].position.col === exp_part.position.col) {
                     otherPies[i].earlyfuze();
                 }
             }

@@ -19,9 +19,9 @@ class Item {
 
     updatePlayer(player, item) {
         switch(item.itemId) {
-            case 0: player.maxBombs++; break;
-            case 1: player.bombStrength++; break;
-            case 2: player.speed -= 5; break;
+            case 0: this.increaseBombCount(player, 1); break;
+            case 1: this.increaseBombStrength(player, 1); break;
+            case 2: this.increaseMoveSpeed(player, 0.5); break;
             default: console.log(" error: item not yet implemented.");
         }
     }
@@ -29,4 +29,21 @@ class Item {
     getAnimation() {
         return new AnimationFrame(16 * this.pngColPos, 16 * this.pngRowPos, 32, 32);
     }
+
+    increaseMoveSpeed(player, value) {
+        var newSpeed = Math.min(player.moveSpeed + value, playerMaxStats.moveSpeed);
+        player.setSpeed(newSpeed);
+    }
+
+    increaseBombCount(player, value) {
+        var newBombCount = Math.min(player.maxBombs + value, playerMaxStats.maxBombs);
+        player.maxBombs = newBombCount;
+    }
+
+    increaseBombStrength(player, value) {
+        var newBombStrength = Math.min(player.bombStrength + value, playerMaxStats.bombStrength);
+        player.bombStrength = newBombStrength;
+    }
+
+    
 }

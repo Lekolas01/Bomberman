@@ -14,9 +14,11 @@ class Character {
 	//speed: 1 = 100% (one row every 60 frames), 0.6 = 60 %, 1.2 = 120 % and so on
 	constructor(speed, rowOnAsset, row, col, pointsWhenKilled = 15, dim_x = 16, dim_y = 16) {
 		//which y position on asset png is player/monster
-		this.idle = false; //is caracter currently moving?
+		this.idle = false; //is character currently moving?
 
-		this.speed = Math.round((6.66666666667 * GAME_SPEED) / speed);
+		this.moveSpeed = speed; // movespeed is the value to modify
+		// speed is the calculated value from movespeed to make character move in the correct speed
+		this.speed = Math.round((6.66666666667 * GAME_SPEED) / this.moveSpeed);
 
 		this.pointsWhenKilled = pointsWhenKilled; //how many points does a player get when he kills this character
 
@@ -165,9 +167,10 @@ class Character {
 		}
 	}
 
-
-	setSpeed(speed){
-		this.speed = Math.round((6.66666666667 * GAME_SPEED) / speed);
+	//changes the movement speed of this characeter
+	setSpeed(value){
+		this.moveSpeed = value;
+		this.speed = Math.round((6.66666666667 * GAME_SPEED) / this.moveSpeed);
 	}
 
 	// helper function. Converts a number into a direction ("up", "right" etc.)

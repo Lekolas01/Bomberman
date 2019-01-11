@@ -82,7 +82,7 @@ function startGame() {
 		nrOfPlayers = 1;
 		
 		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
-		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7);
+		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 0, 1, 1);
 
 		//add key listeners for player Controls
 		window.onkeydown = playerKeyDown;

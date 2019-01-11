@@ -60,6 +60,10 @@ h1 {
     display: block;
 }
 
+#scoreboard {
+	background-color: #eee;
+}
+
 #art_assets{
 	display: none;
 }
