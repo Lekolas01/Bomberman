@@ -12,6 +12,15 @@ class Player extends Character {
         this.score = 0;
     }
 
+    updateKey(input) {
+        this.lastKeyInput = input;
+        var l_dir = this.last_direction;
+        if (!this.idle && !this.canMove) {
+            this.updateDirection();
+            if (l_dir !== this.last_direction) this.frame_cnt = -1;
+        }
+    }
+
     //based on user input, the last pressed key is updated. 
     //(which will be used for determining the next tile, the character is moving towards)
     updateDirection() {
@@ -34,7 +43,6 @@ class Player extends Character {
                 this.frame_cnt = -1;
                 break;
         }
-        if (this.lastKeyInput != KEY.NONE);
     }
 
     //checks if position, where player would be moving to, is passable at sets this property
@@ -69,7 +77,7 @@ class Player extends Character {
         let playerIndex = board.players.indexOf(this);
         if (playerIndex >= 0) {
             delete board.players[playerIndex];
-            if(playerIndex > 0) gamepads[playerIndex - 1].disconnect();
+            if (playerIndex > 0) gamepads[playerIndex - 1].disconnect();
             super.die();
             alert("Final Score for player " + (playerIndex + 1) + " is: " + this.score);
         }
@@ -100,7 +108,7 @@ class Player extends Character {
         item.updatePlayer(this, item);
     }
 
-    updateScore(points){
+    updateScore(points) {
         this.score += points;
     }
 }
@@ -142,7 +150,7 @@ class Bomb {
         this.plantedBy = plantedBy;
 
         explosionIdCnt = (explosionIdCnt + 1) % 30;
-        this.explosionId =  explosionIdCnt// used to insert explosion array in gloabl explosions
+        this.explosionId = explosionIdCnt// used to insert explosion array in gloabl explosions
 
         this.animation = [];
         for (let i = 4; i < 10; i++) {
@@ -253,7 +261,7 @@ class Bomb {
         explosion.push(center);
 
         board.explosions[this.explosionId] = explosion; //push explosion to global explosions array. (multible explosions can happen at the same time)
-
+        //audioBombExplode.play();
     }
 
     calcDamage() {
@@ -267,28 +275,29 @@ class Bomb {
             })
 
             if (board.data[exp_part.position.row][exp_part.position.col] !== undefined && board.data[exp_part.position.row][exp_part.position.col].breakable) {
-                { 
-                    board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty; 
+                {
+                    board.data[exp_part.position.row][exp_part.position.col] = tileTypes.empty;
                     this.plantedBy.updateScore(5); //5 point for destroying walls
 
                     if (Math.random() <= board.itemSpawnChance) {
                         board.addRandomItem(exp_part.position.row, exp_part.position.col);
                     }
                 }
-                
+
             }
 
             board.players.forEach(player => {
                 if (player.position.row === exp_part.position.row && player.position.col === exp_part.position.col) {
                     player.die();
-                    if(player != this.plantedBy) this.updateScore(player.pointsWhenKilled);
+                    //audioDeath.play();
+                    if (player != this.plantedBy) this.updateScore(player.pointsWhenKilled);
                 }
             });
 
             //calc, if this explosion causes another bomb to explode sooner
             let otherPies = board.bombs.filter(pie => pie != this); //these pies aren't homemade, they were made in a factory...a bomb factory...they're bombs
             for (let i = 0; i < otherPies.length; i++) {
-                if (otherPies[i].position.row === exp_part.position.row && otherPies[i].position.row === exp_part.position.row) {
+                if (otherPies[i].position.row === exp_part.position.row && otherPies[i].position.col === exp_part.position.col) {
                     otherPies[i].earlyfuze();
                 }
             }

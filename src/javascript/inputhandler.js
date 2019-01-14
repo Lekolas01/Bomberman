@@ -27,7 +27,7 @@ function playerKeyDown(event) {
 		case KEY.RIGHT:
 		case KEY.LEFT:
 			currently_pressed[key] = true; //mark that key has been pressed
-			board.players[0].lastKeyInput = key;
+			board.players[0].updateKey(key);
 			break;
 		case KEY.SPACE:
 		case KEY.B:
@@ -50,9 +50,9 @@ function playerKeyUp(event) {
 				//if released key was the last pressed key
 				if (currently_pressed.filter(_key => _key).length === 0) {
 					//we have to check, if there is any other (relevant) key pressed
-					board.players[0].lastKeyInput = KEY.NONE; //if not, players input is set to none
+					board.players[0].updateKey(KEY.NONE); //if not, players input is set to none
 				} else {
-					board.players[0].lastKeyInput = currently_pressed.indexOf(true); //else, we get (one of) the other pressed key(s)
+					board.players[0].lastKeyInput = board.players[0].updateKey(currently_pressed.indexOf(true)); //else, we get (one of) the other pressed key(s)
 				}
 			}
 			break;
@@ -73,20 +73,22 @@ class gamepadController {
     }
     checkGamepad() {
         let horizontal = this.gamepad.axes[0];
-        let vertical = this.gamepad.axes[1];
+		let vertical = this.gamepad.axes[1];
+		let player = board.players[this.playerId];
 
-        board.players[this.playerId].lastKeyInput = KEY.NONE; //default if none applies
+        player.lastKeyInput = KEY.NONE; //default if none applies
         if (Math.abs(horizontal) > Math.abs(vertical)) { //is vertical or horizontal axe more strongly pressed
             if (horizontal < -0.5) { //cannot check for ones or zeros, because controller might not be that exact
-				board.players[this.playerId].lastKeyInput = KEY.LEFT;
+				player.lastKeyInput = player.updateKey(KEY.LEFT);
+
             } else if (horizontal > 0.5) {
-                board.players[this.playerId].lastKeyInput = KEY.RIGHT;
+                player.lastKeyInput = player.updateKey(KEY.RIGHT);
             }
         } else {
             if (vertical < -0.5) {
-                board.players[this.playerId].lastKeyInput = KEY.UP;
+                player.lastKeyInput = player.updateKey(KEY.UP);
             } else if (vertical > 0.5) {
-                board.players[this.playerId].lastKeyInput = KEY.DOWN;
+                player.lastKeyInput = KEY.DOWN;
             }
 		}
 
