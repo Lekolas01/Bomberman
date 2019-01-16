@@ -1,14 +1,14 @@
-var canvas, ctx;
+var gamecanvas, game_ctx;
 var fontSize = 18; //for matrix anim
 
 //game logic variables
 var GAME_SPEED = 9; // 1 tick every 9 ms
-var boardWidth = 17; // how many tiles is the gameboard wide?
+var boardWidth = 21; // how many tiles is the gameboard wide?
 var boardHeight = 13; // how many tiles is the gameboard high?
 var tileSize = 32; // how big is one tile? (width and height)
 var baseTileSize = 32; //used for resizing
 var score = 0;
-var audioLayBomb, audioBombExplode, audioBackground, audioDeath, audioGameOver;
+var audioPickupItem, audioBombExplode, audioBackground;
 var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 var board; // board: saves the information about the current gameboard
@@ -17,28 +17,32 @@ var running = false; // game currently on?
 
 //--------------------------------------------------------------------------
 window.onload = function () {
-	canvas = document.getElementById('game_canvas');
-	ctx = canvas.getContext('2d');
+	gamecanvas = document.getElementById('game_canvas');
+	game_ctx = gamecanvas.getContext('2d');
 	resizeCanvas();
 
 	//background music
 	// note: sometimes background music doesn't play,
 	// because the background music loads asynchronously
 	audioBackground = new Audio('../sound/background.mp3');
+	audioBombExplode = new Audio('../sound/bombExplode.wav');
+	audioPickupItem = new Audio('../sound/itemPickup.wav');
+	audioPickupItem.volume = 0.6;
+	audioBackground.volume = 0.3;
 	audioBackground.loop = true;
-	// audioBackground.play();
 
 	startGame();
 };
 
 function resizeCanvas(){
 	if(document.body.offsetWidth < 1000){
-		tileSize = Math.floor(0.06 * document.body.offsetWidth - 7);
+		tileSize = Math.floor(0.07 * document.body.offsetWidth - 7);
 	}
 	if(document.body.offsetHeight < 1000){
 		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);
 		tileSize = Math.min(tileSize, tmp);
 	}
+
 
 	tileSize = Math.max(tileSize, 16); //lower than 16 pixel is not allowed
 	tileSize = Math.min(tileSize, baseTileSize); //higher than baseTileSize not allowed
@@ -46,10 +50,19 @@ function resizeCanvas(){
 	//resize canvas
 	let width = boardWidth * tileSize;
 	let height = boardHeight * tileSize;
-	ctx.canvas.width = width;
-	ctx.canvas.height = height;
-	canvas.width = width;
-	canvas.height = height;
+	game_ctx.canvas.width = width;
+	game_ctx.canvas.height = height;
+	gamecanvas.width = width;
+	gamecanvas.height = height;
+	console.log(`document.body.offsetWidth = ${document.body.offsetWidth}`);
+	console.log(`document.body.offsetHeight = ${document.body.offsetHeight}`);
+	console.log(`width = ${width}`);
+	console.log(`height = ${height}`);
+	console.log(`ctx.canvas.width = ${game_ctx.canvas.width}`);
+	console.log(`ctx.canvas.height = ${game_ctx.canvas.height}`);
+	console.log(`canvas.width = ${gamecanvas.width}`);
+	console.log(`canvas.height = ${gamecanvas.height}`);
+	console.log(`tilesize: ${tileSize}`);
 }
 
 function startGame() {
@@ -75,14 +88,16 @@ function startGame() {
 		console.log("hm...that's unfortunate");
 	});
 
-	board = new gameboard(boardWidth, boardHeight, 4, 0, 0);
+	board = new gameboard(boardWidth, boardHeight, 4, 10, 0.7);
 	board.draw();
 
 	window.onkeypress = function () {
 		nrOfPlayers = 1;
-		
+
 		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
-		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 0, 1, 1);
+		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 1, 1);
+		// audioBackground.play();
+
 
 		//add key listeners for player Controls
 		window.onkeydown = playerKeyDown;
@@ -135,6 +150,6 @@ function moveEnemies() {
 //--------------------------------------------------------------------------
 function drawScreen() {
 	board.draw();
-	//TODO: 
+	//TODO:
 	//scoreBoard.draw(ctx);
 }

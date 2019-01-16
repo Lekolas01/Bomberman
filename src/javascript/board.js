@@ -151,7 +151,7 @@ class gameboard {
         for (var row = 0; row < this.data.length; row++) {
 			for (var col = 0; col < this.data[0].length; col++) {
 				if (this.data[row][col] !== undefined) {
-					ctx.drawImage(
+					game_ctx.drawImage(
 						document.getElementById('art_assets'),
 						this.data[row][col].x,
 						this.data[row][col].y,
@@ -173,7 +173,7 @@ class gameboard {
        // if(characterArr.length === 1) console.log(characterArr[0].position.pix_y);
         objects.forEach(object => {
             animation = object.getAnimation(); //The current image of the object the canvas shall draw
-            ctx.drawImage(
+            game_ctx.drawImage(
                 document.getElementById('art_assets'),
                 animation.x, // x pos of art asset (bomb_partyv4.png)
                 animation.y, // y pos

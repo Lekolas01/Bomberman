@@ -10,7 +10,7 @@ class Player extends Character {
         super(2, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
         this.maxBombs = 2;
-        this.bombStrength = 1;
+        this.bombStrength = 2;
         this.activeBombs = 0;
         this.runningSpeed = 5; // not yet used
         this.lastKeyInput = KEY.NONE;
@@ -97,14 +97,6 @@ class Player extends Character {
                 this.activeBombs++;
             }
         }
-    }
-
-    // this function gets triggered whenever a player walks over an item
-    // depending on the itemId, it triggers a different effect on the player obj.
-    // items.js for more info on the effect
-    pickupItem(item) {
-        console.log(`pick up item with id = ${item.itemId}`);
-        item.updatePlayer(this, item);
     }
 
     updateScore(points){
@@ -201,7 +193,6 @@ class Bomb {
         } else if (this.state > 11) { //Explosion fadet out completely
             clearInterval(this.fuse);
             board.bombs = board.bombs.filter(bomb => bomb != this); //remove bomb from board.bombs
-            this.plantedBy.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
             return;
         }
     }
@@ -209,6 +200,9 @@ class Bomb {
         let explosion = [];
         let row = this.position.row;
         let col = this.position.col;
+
+        this.plantedBy.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
+        audioBombExplode.play();
         //up
         for (let i = 1; i <= this.range; i++) {
             if (board.data[row - i][col] === tileTypes.wall) break; //if its a wall, explosion cannot expand further

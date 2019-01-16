@@ -90,6 +90,7 @@ class Character {
 				if (item.position.row == player.position.row &&
 					item.position.col == player.position.col) {
 						item.updatePlayer(player, item); // trigger the effect on the player
+						audioPickupItem.play();
 						object.splice(index, 1); // destroy the item
 
 					}
