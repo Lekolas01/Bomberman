@@ -136,9 +136,14 @@ class gameboard {
 				startingPositions = [{row: Math.floor(height / 2), col: Math.floor(width / 2)}];
 				numStartingPos = 1;
 			}
-			for (let  i = 0; i < numEnemies; i++) {
+			let nrCreeps = Math.floor(numEnemies * 2 / 3);
+			for (let  i = 0; i < nrCreeps; i++) {
 				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
+			}
+			for (let  i = nrCreeps; i < numEnemies; i++) {
+				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+				board.enemies.push(new Ghost(randPos.row, randPos.col));
             }
 		}
 
@@ -260,13 +265,32 @@ class scoreboard {
 	draw(ctx, players) {
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = ctx.font.replace(/\d+px/, "40px");
+		ctx.font = ctx.font = "30px 'Press Start 2P'";
 		ctx.fillStyle ='white';
 		ctx.fillText("SCORES", 60, 55);
-		ctx.font = ctx.font.replace(/\d+px/, "24px");
+		ctx.font = ctx.font = "22px 'Roboto'";
 		for(let  i = 0; i < players.length; i++) {
 			if(players[i] !== undefined) this.playerScores[i] = players[i].score; //update score if player is not dead yet
-			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
+			ctx.fillText("Player ", 30, 100 + i * 50);
+			ctx.fillStyle = this.getFillStyle(i);
+			ctx.font = ctx.font = "bold 22px 'Roboto'";
+			ctx.fillText(i + 1,  95, 100 + i * 50);
+			ctx.font = ctx.font = "22px 'Roboto'";
+			ctx.fillStyle ='white';
+			ctx.fillText(`-      ${this.playerScores[i]}`, 130, 100 + i * 50);
+		}
+	}
+
+	getFillStyle(index){
+		switch(index){
+			case 0:
+				return 'blue'
+			case 1:
+				return 'green'
+			case 2: 
+				return 'red'
+			case 3:
+				return '#e542f4'
 		}
 	}
 
@@ -320,15 +344,15 @@ class playerinfoboard {
 		
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = ctx.font.replace(/\d+px/, "40px");
+		ctx.font = ctx.font = "30px 'Press Start 2P'";
 		ctx.fillStyle ='white';
-		ctx.fillText("UPGRADES", 60, 55);
-		ctx.font = ctx.font.replace(/\d+px/, "20px");
+		ctx.fillText("UPGRADES", 30, 55);
+		ctx.font = ctx.font = "22px 'Roboto'";
 		for(var i = 0; i < players.length; i++) {
 			ctx.fillStyle="white";
 			ctx.fillText(`P${i + 1} `, 10, 130 + i * 90);
 			if(players[i] !== undefined){
-				drawPlayerInfo(ctx, players[i], 40, 95 + i * 90);
+				drawPlayerInfo(ctx, players[i], 35, 95 + i * 90);
 			}
 		}
 	}
