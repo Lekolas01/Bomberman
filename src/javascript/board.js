@@ -78,7 +78,7 @@ class gameboard {
 		function initPlayers(board) {
 
 			numPlayers = Math.min(4, numPlayers);
-			numPlayers = Math.max(1, numPlayers);
+			numPlayers = Math.max(0, numPlayers);
 
 			//helper function for initPlayers
 			//don't look at it, it's really ugly (works tho)

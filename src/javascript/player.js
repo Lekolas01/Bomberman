@@ -84,12 +84,8 @@ class Player extends Character {
         let playerIndex = board.players.indexOf(this);
         if (playerIndex >= 0) {
             delete board.players[playerIndex];
-            let playersLeft = board.players.filter(player => player !== undefined).length;
             if (playerIndex > 0) gamepads[playerIndex - 1].disconnect();
             super.die();
-            if (playersLeft === 0 || (board.enemies.length === 0 && playersLeft !== 0)) {
-                setTimeout(gameOver, 3000);
-            }
         }
     }
 
