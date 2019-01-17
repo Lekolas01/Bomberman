@@ -117,7 +117,7 @@ class Ghost extends Enemy {
     constructor(board_col, board_row) {
         super(16, board_col, board_row, 1, 0.35, true);
 
-        this.direction = new Array(8);
+        this.direction = new Array(12);
 
         this.direction[0] = new AnimationFrame(0, 25 * 16, 48, 48);
         this.direction[1] = new AnimationFrame(64, 25 * 16, 48, 48);
@@ -134,16 +134,16 @@ class Ghost extends Enemy {
             //every 10th frame, a new animation image is shown
             this.tick += 1; //counts next animation
         }
+
+        if(this.tick === 13) this.tick = 0;
+
         if (movement !== this.last_direction) {
             //direction changed
             this.tick = 1; // 0 would be idle, 1 is first moving motion
         }
 
         this.last_direction = movement; //save the direction, the character is heading
-
-        let animation = this.direction[this.tick % 8];
-        console.log("frame: " + this.tick % 8 + "x: " +  animation.x + " y: " + animation.y);
-        return this.direction[this.tick % 4];
+        return this.direction[this.tick % 8];
     }
 
     getIdle() {
