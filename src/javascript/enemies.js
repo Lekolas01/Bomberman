@@ -4,8 +4,8 @@ function RandNumInRange(start, end) {
 }
 
 class Enemy extends Character {
-    constructor(rowOnAsset, pos_x, pos_y, health, moveSpeed, flying, pointsWhenKilled = 15) {
-        super(moveSpeed, rowOnAsset, pos_x, pos_y, pointsWhenKilled);
+    constructor(rowOnAsset, board_col, board_row, health, moveSpeed, flying, pointsWhenKilled = 15) {
+        super(moveSpeed, rowOnAsset, board_col, board_row, pointsWhenKilled);
         this.health = health;
         this.flying = flying; // can this enemy type fly over walls?
     }
@@ -14,32 +14,28 @@ class Enemy extends Character {
     isValidMove(board, direction) {
         //console.log("isValidMove:");
         //console.log(board === undefined);
-        let  diff_x, diff_y;
+        let row = this.position.row;
+        let col = this.position.col;
         switch (direction) {
             case DIRECTION.UP:
-                diff_y = -1;
-                diff_x = 0;
+                row -= 1;
                 break;
             case DIRECTION.DOWN:
-                diff_y = 1;
-                diff_x = 0;
+                row += 1;
                 break;
             case DIRECTION.RIGHT:
-                diff_y = 0;
-                diff_x = 1;
+                col += 1;
                 break;
             case DIRECTION.LEFT:
-                diff_y = 0;
-                diff_x = -1;
+                col -= 1;
                 break;
         }
 
         // check for out of bounds, for more robust code
-        if (
-            typeof board.data[this.position.row + diff_y] !== 'undefined' &&
-            typeof board.data[this.position.row + diff_y][this.position.col + diff_x] !== 'undefined'
-        ) {
-            return board.data[this.position.row + diff_y][this.position.col + diff_x].passable || this.flying;
+        if (typeof board.data[row] !== 'undefined' &&
+            typeof board.data[row][col] !== 'undefined') 
+        {
+            return board.data[row][col].passable || (this.flying && board.data[row][col] !== tileTypes.wall);
         } else {
             return false;
         }
@@ -47,7 +43,7 @@ class Enemy extends Character {
 
     //returns the number of valid directions this enemy can move to
     numValidDirections(board) {
-        let  count = 0;
+        let count = 0;
 
         //console.log("numValidDirections");
         //console.log(board === undefined);
@@ -68,7 +64,7 @@ class Enemy extends Character {
         } else {
             // sonst wähle eine der validen Richtungen aus
             this.idle = false;
-            let randDir = RandNumInRange(0, 4); //zufällige "Richtung"
+            let randDir = RandNumInRange(0, 5); //zufällige "Richtung"
             while (!this.isValidMove(board, this.intToDir(randDir))) {
                 // solange Richtung invalid
                 randDir = RandNumInRange(0, 4); // suche neue zufällige Richtung aus
@@ -78,7 +74,7 @@ class Enemy extends Character {
     }
 
     //checks if a player and an enemy have collided. player loses life in that scenario
-    kill(){
+    kill() {
         //calc size of hitbox (- a treshold)
         let mx_left = this.position.pix_x + 0.2 * tileSize;
         let mx_right = mx_left + tileSize - 0.2 * tileSize;
@@ -100,11 +96,11 @@ class Enemy extends Character {
             //When monsters left edge is to the left of players right side
             //and at the same time the monsters right side is not totaly left of players left side
             //When at the same time the montsters upper bond is below the player's lower bound
-            //but the monsters lower bound is higher than the players upper bound, than they overlap
+            //but the monsters lower bound is higher than the players upper bound, then they overlap
             if (mx_left < px_right && mx_right > px_left &&
-                my_up < py_down && my_down > py_up){
-                    player.die();
-                }            
+                my_up < py_down && my_down > py_up) {
+                player.die();
+            }
         });
     }
 
@@ -116,10 +112,49 @@ class Enemy extends Character {
     }
 }
 
+//flying, but slow
+class Ghost extends Enemy {
+    constructor(board_col, board_row) {
+        super(16, board_col, board_row, 1, 0.35, true);
+
+        this.direction = new Array(8);
+
+        this.direction[0] = new AnimationFrame(0, 25 * 16, 48, 48);
+        this.direction[1] = new AnimationFrame(64, 25 * 16, 48, 48);
+        this.direction[2] = new AnimationFrame(129, 25 * 16, 48, 48);
+        this.direction[3] = new AnimationFrame(194, 25 * 16, 48, 48);
+        this.direction[4] = new AnimationFrame(0, 29 * 16, 48, 48);
+        this.direction[5] = new AnimationFrame(66, 29 * 16, 48, 48);
+        this.direction[6] = new AnimationFrame(130, 29 * 16, 48, 48);
+        this.direction[7] = new AnimationFrame(195, 29 * 16, 48, 48);
+    }
+
+    move(movement) {
+        if (this.frame_cnt % 5 === 0) {
+            //every 10th frame, a new animation image is shown
+            this.tick += 1; //counts next animation
+        }
+        if (movement !== this.last_direction) {
+            //direction changed
+            this.tick = 1; // 0 would be idle, 1 is first moving motion
+        }
+
+        this.last_direction = movement; //save the direction, the character is heading
+
+        let animation = this.direction[this.tick % 8];
+        console.log("frame: " + this.tick % 8 + "x: " +  animation.x + " y: " + animation.y);
+        return this.direction[this.tick % 4];
+    }
+
+    getIdle() {
+        return this.direction[0];
+    }
+}
+
 // basic enemy. 1 life, rather slow, can not fly.
 class Creep extends Enemy {
-    constructor(pos_x, pos_y) {
-        super(1 * 16, pos_x, pos_y, 1, 0.5, false);
+    constructor(board_col, board_row) {
+        super(1 * 16, board_col, board_row, 1, 0.5, false);
     }
 }
 
@@ -128,11 +163,11 @@ class Creep extends Enemy {
 function enemies(board, num) {
     // allEnemies is an array, which at each index saves the enemy object
     // as well as that enemy's current tile position on the gameboard
-    let  startingPositions = board.getAllPassableTiles();
-    let  numStartingPos = startingPositions.length;
-    let  allEnemies = [];
-    for (let  i = 0; i < num; i++) {
-        let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+    let startingPositions = board.getAllPassableTiles();
+    let numStartingPos = startingPositions.length;
+    let allEnemies = [];
+    for (let i = 0; i < num; i++) {
+        let randPos = startingPositions[RandNumInRange(0, numStartingPos)];
         allEnemies.push(new Enemy(1 * 16, randPos.row, randPos.col, 1, 0.1 * i + 0.3, false));
     }
     return allEnemies;
@@ -148,7 +183,7 @@ function printEnemyStats(enemy) {
 function printAllEnemiesStats(enemies) {
     console.log('---------------------------');
     console.log('Enemies:');
-    for (let  i = 0; i < enemies.length; i++) {
+    for (let i = 0; i < enemies.length; i++) {
         console.log(`   Enemy ${i}`);
         printEnemyStats(enemies[i]);
     }

@@ -136,9 +136,14 @@ class gameboard {
 				startingPositions = [{row: Math.floor(height / 2), col: Math.floor(width / 2)}];
 				numStartingPos = 1;
 			}
-			for (let  i = 0; i < numEnemies; i++) {
+			let nrCreeps = Math.floor(numEnemies * 2 / 3);
+			for (let  i = 0; i < nrCreeps; i++) {
 				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
+			}
+			for (let  i = nrCreeps; i < numEnemies; i++) {
+				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+				board.enemies.push(new Ghost(randPos.row, randPos.col));
             }
 		}
 

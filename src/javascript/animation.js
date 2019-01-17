@@ -194,7 +194,7 @@ class Character {
 			alert('Error: Passed wrong parameter type');
 			return;
 		}
-		switch (number % 4) {
+		switch (number % 5) {
 			case 0:
 				return DIRECTION.UP;
 			case 1:
@@ -203,6 +203,8 @@ class Character {
 				return DIRECTION.DOWN;
 			case 3:
 				return DIRECTION.LEFT;
+			case 4:
+				return this.last_direction; //make it more likley that monster keeps moving in the same direction (looks more natural)
 		}
     }
     
