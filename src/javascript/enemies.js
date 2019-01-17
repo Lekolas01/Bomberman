@@ -119,6 +119,8 @@ class Ghost extends Enemy {
 
         this.directions = new Array(2);
 
+        this.pointsWhenKilled = 30;
+
         //up and right
         this.direction[0] = new Array(8);
         this.direction[0][0] = new AnimationFrame(0, 25 * 16, 48, 48);
