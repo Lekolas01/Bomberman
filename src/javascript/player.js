@@ -16,6 +16,7 @@ class Player extends Character {
         this.canMove = true; // used for checking passable walls
         this.score = 0;
         this.pointsWhenKilled = 200;
+        this.last_direction = DIRECTION.DOWN;
     }
 
     updateKey(input) {
