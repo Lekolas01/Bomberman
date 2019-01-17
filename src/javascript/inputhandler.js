@@ -71,26 +71,27 @@ class gamepadController {
 		let vertical = this.gamepad.axes[1];
 		let player = board.players[this.playerId];
 
-        player.lastKeyInput = KEY.NONE; //default if none applies
+		if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
+            board.players[this.playerId].plantBomb();
+		}
+		
         if (Math.abs(horizontal) > Math.abs(vertical)) { //is vertical or horizontal axe more strongly pressed
             if (horizontal < -0.5) { //cannot check for ones or zeros, because controller might not be that exact
-				player.lastKeyInput = player.updateKey(KEY.LEFT);
-
+				player.updateKey(KEY.LEFT);
+				return;
             } else if (horizontal > 0.5) {
-                player.lastKeyInput = player.updateKey(KEY.RIGHT);
+				player.updateKey(KEY.RIGHT);
+				return;
             }
         } else {
             if (vertical < -0.5) {
-                player.lastKeyInput = player.updateKey(KEY.UP);
+				player.updateKey(KEY.UP);
+				return;
             } else if (vertical > 0.5) {
-                player.lastKeyInput = KEY.DOWN;
+				player.updateKey(KEY.DOWN);
+				return;
             }
 		}
-
-		//console.log("player id: " + this.playerId + " horizontal: " + this.gamepad.axes[0] + " vertical: " + this.gamepad.axes[1]);
-
-        if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
-            board.players[this.playerId].plantBomb();
-        }
+		player.updateKey(KEY.NONE); //if no other Key applied
     }
 }
