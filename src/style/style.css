@@ -276,10 +276,11 @@ svg{
 	font-size: 15px;
 }
 
-#startView{
+#startView, #loadingView{
 	width: 300px; 
 	height: 110px;
 }
+
 #p1{
 	color: blue;
 }

@@ -1,5 +1,6 @@
 let  game_canvas, game_ctx;
 let  scoreboard_canvas, scoreboard_ctx;
+let loading_canvas, loading_canvas_ctx;
 let  fontSize = 18; //for matrix anim
 
 //game logic let iables
@@ -36,13 +37,14 @@ window.onload = function () {
 	audioGameOver = new Audio('../sound/gameOver.wav');
 	audioGameWon = new Audio('../sound/gameWon.mp3');
 	audioTitleScreen = new Audio('../sound/titleScreen.mp3');
-	audioBackground.volume = 0.3;
+	audioBackground.volume = 0.25;
 	audioPickupItem.volume = 0.4;
 	audioTitleScreen.volume = 0.8;
 	audioBackground.loop = true;
 	audioTitleScreen.loop = true;
 	audioTitleScreen.play();
 
+	$("#loadingView").css("display", "none");
 	startGame();
 };
 
@@ -111,26 +113,31 @@ function startGame() {
 	board.draw();
 
 	window.onkeypress = function () {
+		window.onkeypress = null;
 		audioTitleScreen.pause();
-		audioBackground.play();
+		$("#loadingView").css("display", "inline");
+		$("#startView").css("display", "none");
+		
+		
+		setTimeout(function () {
+			audioBackground.play();
 			nrOfPlayers = 1;
-	
-			if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+			
+			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
 			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
 			
-	
+			
 			//add key listeners for player Controls
 			window.onkeydown = playerKeyDown;
 			window.onkeyup = playerKeyUp;
-	
+			
 			renderIntervalId = setInterval(loop, GAME_SPEED);
-			window.onkeypress = null;
 			running = true;
-			$("#startView").css("display", "none");
-			$("#registeredPlayers").css("display", "none");
-
-	};
+			$("#loadingView").css("display", "none");
+		  	$("#registeredPlayers").css("display", "none");
+		}, 3000);
+	  };
 }
 
 // is called every 9 ms
