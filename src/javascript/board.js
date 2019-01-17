@@ -82,9 +82,9 @@ class gameboard {
 
 			//helper function for initPlayers
 			//don't look at it, it's really ugly (works tho)
-			function createPlayer(row, col) {
+			function createPlayer(row, col, number) {
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
-				board.players.push(new Player(3, row, col, 1));
+				board.players.push(new Player(17 + number * 2, row, col, 1));
 
 				const pos = [
 					{diff_y: -1, diff_x:  0},
@@ -113,7 +113,7 @@ class gameboard {
 			];
 
 			for(let  i = 0; i < numPlayers; i++) {
-				createPlayer(pos[i].row, pos[i].col);
+				createPlayer(pos[i].row, pos[i].col, i);
 			}
 
 		}
@@ -260,10 +260,10 @@ class scoreboard {
 	draw(ctx, players) {
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = '40px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "40px");
 		ctx.fillStyle ='white';
 		ctx.fillText("SCORES", 60, 55);
-		ctx.font = '24px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "24px");
 		for(let  i = 0; i < players.length; i++) {
 			if(players[i] !== undefined) this.playerScores[i] = players[i].score; //update score if player is not dead yet
 			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
@@ -304,12 +304,13 @@ class playerinfoboard {
 		
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = '40px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "40px");
 		ctx.fillStyle ='white';
 		ctx.fillText("UPGRADES", 60, 55);
-		ctx.font = '20px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "20px");
 		for(var i = 0; i < players.length; i++) {
-			ctx.fillText(`P${i + 1} `, 10, 130 + i * 50);
+			ctx.fillStyle="white";
+			ctx.fillText(`P${i + 1} `, 10, 130 + i * 80);
 			drawPlayerInfo(ctx, players[i], 40, 95 + i * 80);
 		}
 	}
