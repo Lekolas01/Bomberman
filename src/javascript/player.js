@@ -15,7 +15,6 @@ class Player extends Character {
         this.runningSpeed = 5; // not yet used
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
-
         this.score = 0;
     }
 

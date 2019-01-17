@@ -70,7 +70,6 @@ function resizeCanvas(){
 }
 
 function startGame() {
-	running = true;
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
@@ -78,8 +77,10 @@ function startGame() {
 
 	//add key listeners for player Controls
 	window.addEventListener("gamepadconnected", function (e) {
-		console.log("Gamepad with index " + e.gamepad.index + " connected");
-		gamepads.push(new gamepadController(e.gamepad));
+		if(!running){
+			console.log("Gamepad with index " + e.gamepad.index + " connected");
+			gamepads.push(new gamepadController(e.gamepad));
+		}
 	});
 	//setup an interval for Chrome
 	var checkChrome = window.setInterval(function () {
@@ -101,7 +102,7 @@ function startGame() {
 		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
 		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.35);
 		score_board = new scoreboard(nrOfPlayers);
-		//audioBackground.play();
+		audioBackground.play();
 
 
 		//add key listeners for player Controls
@@ -110,6 +111,7 @@ function startGame() {
 
 		renderIntervalId = setInterval(loop, GAME_SPEED);
 		window.onkeypress = null;
+		running = true;
 	};
 }
 

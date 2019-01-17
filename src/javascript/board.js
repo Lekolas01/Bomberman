@@ -265,8 +265,8 @@ class scoreboard {
 		ctx.fillText("SCORES", 60, 55);
 		ctx.font = '24px Verdana';
 		for(var i = 0; i < players.length; i++) {
-			
-			ctx.fillText(`Player ${i + 1}      -      ${players[i].score}`, 15, 100 + i * 50);
+			if(players[i] !== undefined) this.playerScores[i] = players[i].score; //update score if player is not dead yet
+			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
 		}
 	}
 }
