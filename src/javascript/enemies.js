@@ -64,10 +64,10 @@ class Enemy extends Character {
         } else {
             // sonst wähle eine der validen Richtungen aus
             this.idle = false;
-            let randDir = RandNumInRange(0, 5); //zufällige "Richtung"
+            let randDir = RandNumInRange(0, 6); //zufällige "Richtung"
             while (!this.isValidMove(board, this.intToDir(randDir))) {
                 // solange Richtung invalid
-                randDir = RandNumInRange(0, 4); // suche neue zufällige Richtung aus
+                randDir = RandNumInRange(0, 5); // suche neue zufällige Richtung aus
             }
             this.move(this.intToDir(randDir));
         }

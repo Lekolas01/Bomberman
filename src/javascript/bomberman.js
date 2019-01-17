@@ -1,21 +1,21 @@
-let  game_canvas, game_ctx;
-let  scoreboard_canvas, scoreboard_ctx;
-let  fontSize = 18; //for matrix anim
+let game_canvas, game_ctx;
+let scoreboard_canvas, scoreboard_ctx;
+let fontSize = 18; //for matrix anim
 
 //game logic let iables
-let  GAME_SPEED = 9; // 1 tick every 9 ms
-let  boardWidth = 17; // how many tiles is the gameboard wide?
-let  boardHeight = 15; // how many tiles is the gameboard high?
-let  tileSize = 32; // how big is one tile? (width and height)
-let  baseTileSize = 32; //used for resizing
-let  audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon, audioTitleScreen;
-let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
+let GAME_SPEED = 9; // 1 tick every 9 ms
+let boardWidth = 17; // how many tiles is the gameboard wide?
+let boardHeight = 15; // how many tiles is the gameboard high?
+let tileSize = 32; // how big is one tile? (width and height)
+let baseTileSize = 32; //used for resizing
+let audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon, audioTitleScreen;
+let DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
-let  board; // board: saves the information about the current gameboard
-let  score_board;
-let  player_info;
+let board; // board: saves the information about the current gameboard
+let score_board;
+let player_info;
 
-let  running = false; // game currently on?
+let running = false; // game currently on?
 let renderIntervalId = null;
 
 //--------------------------------------------------------------------------
@@ -46,12 +46,12 @@ window.onload = function () {
 	startGame();
 };
 
-function resizeCanvas(){
-	if(document.body.offsetWidth < 1000){
+function resizeCanvas() {
+	if (document.body.offsetWidth < 1000) {
 		tileSize = Math.floor(0.07 * document.body.offsetWidth - 7);
 	}
-	if(document.body.offsetHeight < 1000){
-		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);
+	if (document.body.offsetHeight < 1000) {
+		let tmp = Math.floor(0.07 * document.body.offsetHeight - 9.6);
 		tileSize = Math.min(tileSize, tmp);
 	}
 
@@ -78,7 +78,7 @@ function resizeCanvas(){
 
 window.onresize = placeRegisteredPlayerDiv;
 
-function placeRegisteredPlayerDiv(){
+function placeRegisteredPlayerDiv() {
 	let div = $("#registeredPlayers");
 	let pos = $("#scoreboard").position();
 	div.css("left", pos.left + 30);
@@ -87,9 +87,9 @@ function placeRegisteredPlayerDiv(){
 
 function startGame() {
 	window.addEventListener("gamepadconnected", function (e) {
-		if(!running){
+		if (!running) {
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
-			if(e.gamepad.index < 4){
+			if (e.gamepad.index < 4) {
 				let htmlId = "player" + (e.gamepad.index + 2);
 				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
 				gamepads.push(new gamepadController(e.gamepad));
@@ -97,7 +97,7 @@ function startGame() {
 		}
 	});
 	//setup an interval for Chrome
-	let  checkChrome = window.setInterval(function () {
+	let checkChrome = window.setInterval(function () {
 		if (navigator.getGamepads()[0]) {
 			$(window).trigger("gamepadconnected");
 			window.clearInterval(checkChrome);
@@ -111,25 +111,26 @@ function startGame() {
 	board.draw();
 
 	window.onkeypress = function () {
-		audioTitleScreen.pause();
-		audioBackground.play();
+		window.onkeypress = null;
+		$("#startView").css("display", "none");
+		setTimeout(function () {
+			audioTitleScreen.pause();
+			audioBackground.play();
 			nrOfPlayers = 1;
-	
-			if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+
+			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
 			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
-			
-	
+
+
 			//add key listeners for player Controls
 			window.onkeydown = playerKeyDown;
 			window.onkeyup = playerKeyUp;
-	
-			renderIntervalId = setInterval(loop, GAME_SPEED);
-			window.onkeypress = null;
-			running = true;
-			$("#startView").css("display", "none");
-			$("#registeredPlayers").css("display", "none");
 
+			renderIntervalId = setInterval(loop, GAME_SPEED);
+			running = true;
+			$("#registeredPlayers").css("display", "none");
+		}, 3000);
 	};
 }
 
@@ -141,16 +142,16 @@ function loop() {
 	drawScreen();
 }
 
-function gameOver(){
+function gameOver() {
 	let nrPlayers = board.players.filter(player => player !== undefined).length;
 	audioBackground.pause();
 	$("#gameOver").css("display", "block");
 
-	if(nrPlayers === 0){
+	if (nrPlayers === 0) {
 		$("#gameOver text").attr("fill", "red");
 		$("#gameOver text").html("GameOver");
 		audioGameOver.play();
-	}else{
+	} else {
 		let winner = score_board.leadingPlayer();
 		$("#gameOver text").attr("fill", "green");
 		$("#gameOver text").html(`Player ${winner + 1} has won`);
