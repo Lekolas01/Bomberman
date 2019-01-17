@@ -14,13 +14,12 @@ class Player extends Character {
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
-
         this.score = 0;
     }
 
     updateKey(input) {
         this.lastKeyInput = input;
-        var l_dir = this.last_direction;
+        let  l_dir = this.last_direction;
         if (!this.idle && !this.canMove) {
             this.updateDirection();
             if (l_dir !== this.last_direction) this.frame_cnt = -1;

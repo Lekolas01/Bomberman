@@ -31,17 +31,17 @@ class Item {
     }
 
     increaseMoveSpeed(player, value) {
-        var newSpeed = Math.min(player.moveSpeed + value, playerMaxStats.moveSpeed);
+        let  newSpeed = Math.min(player.moveSpeed + value, playerMaxStats.moveSpeed);
         player.setSpeed(newSpeed);
     }
 
     increaseBombCount(player, value) {
-        var newBombCount = Math.min(player.maxBombs + value, playerMaxStats.maxBombs);
+        let  newBombCount = Math.min(player.maxBombs + value, playerMaxStats.maxBombs);
         player.maxBombs = newBombCount;
     }
 
     increaseBombStrength(player, value) {
-        var newBombStrength = Math.min(player.bombStrength + value, playerMaxStats.bombStrength);
+        let  newBombStrength = Math.min(player.bombStrength + value, playerMaxStats.bombStrength);
         player.bombStrength = newBombStrength;
     }
 

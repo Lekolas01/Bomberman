@@ -1,21 +1,21 @@
-var game_canvas, game_ctx;
-var scoreboard_canvas, scoreboard_ctx;
-var fontSize = 18; //for matrix anim
+let  game_canvas, game_ctx;
+let  scoreboard_canvas, scoreboard_ctx;
+let  fontSize = 18; //for matrix anim
 
-//game logic variables
-var GAME_SPEED = 9; // 1 tick every 9 ms
-var boardWidth = 17; // how many tiles is the gameboard wide?
-var boardHeight = 15; // how many tiles is the gameboard high?
-var tileSize = 32; // how big is one tile? (width and height)
-var baseTileSize = 32; //used for resizing
-var audioPickupItem, audioBombExplode, audioBackground;
-var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
+//game logic let iables
+let  GAME_SPEED = 9; // 1 tick every 9 ms
+let  boardWidth = 17; // how many tiles is the gameboard wide?
+let  boardHeight = 15; // how many tiles is the gameboard high?
+let  tileSize = 32; // how big is one tile? (width and height)
+let  baseTileSize = 32; //used for resizing
+let  audioPickupItem, audioBombExplode, audioBackground;
+let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
-var board; // board: saves the information about the current gameboard
-var score_board;
-var player_info;
+let  board; // board: saves the information about the current gameboard
+let  score_board;
+let  player_info;
 
-var running = false; // game currently on?
+let  running = false; // game currently on?
 
 //--------------------------------------------------------------------------
 window.onload = function () {
@@ -24,9 +24,10 @@ window.onload = function () {
 	playerinfo_canvas = document.getElementById('playerinfo');	// player info on the left
 	playerinfo_ctx = playerinfo_canvas.getContext('2d');
 	scoreboard_canvas = document.getElementById('scoreboard');	// scoreboard on the right
-	scoreboard_ctx = this.scoreboard_canvas.getContext('2d');
+	scoreboard_ctx = scoreboard_canvas.getContext('2d');
 
 	resizeCanvas();
+	placeRegisteredPlayerDiv();
 
 	audioBackground = new Audio('../sound/newbattle.wav');
 	audioBombExplode = new Audio('../sound/bombExplode.wav');
@@ -69,8 +70,16 @@ function resizeCanvas(){
 
 }
 
+window.onresize = placeRegisteredPlayerDiv;
+
+function placeRegisteredPlayerDiv(){
+	let div = $("#registeredPlayers");
+	let pos = $("#scoreboard").position();
+	div.css("left", pos.left + 30);
+	div.css("top", pos.top + 30);
+}
+
 function startGame() {
-	running = true;
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
 
@@ -78,11 +87,17 @@ function startGame() {
 
 	//add key listeners for player Controls
 	window.addEventListener("gamepadconnected", function (e) {
-		console.log("Gamepad with index " + e.gamepad.index + " connected");
-		gamepads.push(new gamepadController(e.gamepad));
+		if(!running){
+			console.log("Gamepad with index " + e.gamepad.index + " connected");
+			if(e.gamepad.index < 4){
+				let htmlId = "player" + (e.gamepad.index + 2);
+				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
+				gamepads.push(new gamepadController(e.gamepad));
+			}
+		}
 	});
 	//setup an interval for Chrome
-	var checkChrome = window.setInterval(function () {
+	let  checkChrome = window.setInterval(function () {
 		if (navigator.getGamepads()[0]) {
 			$(window).trigger("gamepadconnected");
 			window.clearInterval(checkChrome);
@@ -101,7 +116,7 @@ function startGame() {
 		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
 		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 0, 1, 1);
 		score_board = new scoreboard(nrOfPlayers);
-		//audioBackground.play();
+		audioBackground.play();
 
 
 		//add key listeners for player Controls
@@ -110,6 +125,9 @@ function startGame() {
 
 		renderIntervalId = setInterval(loop, GAME_SPEED);
 		window.onkeypress = null;
+		running = true;
+		$("#startView").css("display", "none");
+		$("#registeredPlayers").css("display", "none");
 	};
 }
 
