@@ -82,9 +82,9 @@ class gameboard {
 
 			//helper function for initPlayers
 			//don't look at it, it's really ugly (works tho)
-			function createPlayer(row, col) {
+			function createPlayer(row, col, number) {
 				board.data[row][col] = tileTypes.empty; // destroy the potential breakable wall on the position of the player
-				board.players.push(new Player(3, row, col, 1));
+				board.players.push(new Player(17 + number * 2, row, col, 1));
 
 				const pos = [
 					{diff_y: -1, diff_x:  0},
@@ -113,7 +113,7 @@ class gameboard {
 			];
 
 			for(let  i = 0; i < numPlayers; i++) {
-				createPlayer(pos[i].row, pos[i].col);
+				createPlayer(pos[i].row, pos[i].col, i);
 			}
 
 		}
@@ -260,10 +260,10 @@ class scoreboard {
 	draw(ctx, players) {
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = '40px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "40px");
 		ctx.fillStyle ='white';
 		ctx.fillText("SCORES", 60, 55);
-		ctx.font = '24px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "24px");
 		for(let  i = 0; i < players.length; i++) {
 			if(players[i] !== undefined) this.playerScores[i] = players[i].score; //update score if player is not dead yet
 			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
@@ -288,30 +288,42 @@ class scoreboard {
 class playerinfoboard {
     constructor() {
 
-		this.playerInfo = [];
-		// for(let  i = 0; i < numPlayers; i++) {
-		// 	this.playerScores.push(0);
-		// }
 	}
 	
 	draw(ctx, players) {
 		// draws the information about 1 player on a given height on the canvas
-		function drawPlayerInfo(ctx,player_index, height) {
+		function drawPlayerInfo(ctx, player, pos_x, pos_y) {
 
-			ctx.fillText(`               `, 15, 100 + player_index * 50);
+
+			ctx.fillStyle ="brown";
+			ctx.fillRect(pos_x, pos_y, ctx.canvas.width * 0.8, 65);
+
+			//draw strength bar
+			ctx.fillStyle ="red";
+			ctx.fillRect(pos_x + 10, pos_y + 5, 
+						 ctx.canvas.width * 0.7 * player.bombStrength / playerMaxStats.bombStrength, 18);
 			
+			// draw bomb bar
+			ctx.fillStyle ="blue";
+			ctx.fillRect(pos_x + 10, pos_y + 25, 
+						ctx.canvas.width * 0.7 * player.maxBombs / playerMaxStats.maxBombs, 18);			
 			
+			// draw speed bar
+			ctx.fillStyle ="purple";
+			ctx.fillRect(pos_x + 10, pos_y + 45, 
+						ctx.canvas.width * 0.7 * (player.moveSpeed - 1) / (playerMaxStats.moveSpeed - 1), 18);
 		}
 		
 		ctx.fillStyle="black";
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		ctx.font = '40px Verdana';
+		ctx.font = ctx.font.replace(/\d+px/, "40px");
 		ctx.fillStyle ='white';
 		ctx.fillText("UPGRADES", 60, 55);
-		ctx.font = '20px Verdana';
-		for(let  i = 0; i < players.length; i++) {
-			ctx.fillText(`Player ${i + 1} - `, 15, 100 + i * 50);
-			drawPlayerInfo(ctx,i, 100 + i * 50);
+		ctx.font = ctx.font.replace(/\d+px/, "20px");
+		for(var i = 0; i < players.length; i++) {
+			ctx.fillStyle="white";
+			ctx.fillText(`P${i + 1} `, 10, 130 + i * 80);
+			drawPlayerInfo(ctx, players[i], 40, 95 + i * 80);
 		}
 	}
 }
