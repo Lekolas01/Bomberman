@@ -8,7 +8,7 @@ let  boardWidth = 17; // how many tiles is the gameboard wide?
 let  boardHeight = 15; // how many tiles is the gameboard high?
 let  tileSize = 32; // how big is one tile? (width and height)
 let  baseTileSize = 32; //used for resizing
-let  audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon;
+let  audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon, audioTitleScreen;
 let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 let  board; // board: saves the information about the current gameboard
@@ -30,15 +30,18 @@ window.onload = function () {
 	resizeCanvas();
 	placeRegisteredPlayerDiv();
 
-	audioBackground = new Audio('../sound/newbattle.wav');
+	audioBackground = new Audio('../sound/background.mp3');
 	audioBombExplode = new Audio('../sound/bombExplode.wav');
 	audioPickupItem = new Audio('../sound/itemPickup.wav');
 	audioGameOver = new Audio('../sound/gameOver.wav');
-	audioGameWon = new Audio('../sound/gameWon.wav');
+	audioGameWon = new Audio('../sound/gameWon.mp3');
+	audioTitleScreen = new Audio('../sound/titleScreen.mp3');
 	audioBackground.volume = 0.3;
-	// audioBackground.playbackRate = 1.2;
 	audioPickupItem.volume = 0.4;
+	audioTitleScreen.volume = 0.8;
 	audioBackground.loop = true;
+	audioTitleScreen.loop = true;
+	audioTitleScreen.play();
 
 	startGame();
 };
@@ -104,27 +107,29 @@ function startGame() {
 		console.log("hm...that's unfortunate");
 	});
 
-	board = new gameboard(boardWidth, boardHeight, 4, 10, 0.7);
+	board = new gameboard(boardWidth, boardHeight, 0, 0, 0);
 	board.draw();
 
 	window.onkeypress = function () {
-		nrOfPlayers = 1;
-
-		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
-		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 8, 0.65, 0.4);
-		score_board = new scoreboard(nrOfPlayers);
+		audioTitleScreen.pause();
 		audioBackground.play();
+			nrOfPlayers = 1;
+	
+			if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
+			score_board = new scoreboard(nrOfPlayers);
+			
+	
+			//add key listeners for player Controls
+			window.onkeydown = playerKeyDown;
+			window.onkeyup = playerKeyUp;
+	
+			renderIntervalId = setInterval(loop, GAME_SPEED);
+			window.onkeypress = null;
+			running = true;
+			$("#startView").css("display", "none");
+			$("#registeredPlayers").css("display", "none");
 
-
-		//add key listeners for player Controls
-		window.onkeydown = playerKeyDown;
-		window.onkeyup = playerKeyUp;
-
-		renderIntervalId = setInterval(loop, GAME_SPEED);
-		window.onkeypress = null;
-		running = true;
-		$("#startView").css("display", "none");
-		$("#registeredPlayers").css("display", "none");
 	};
 }
 
@@ -192,4 +197,9 @@ function drawScreen() {
 	board.draw();
 	score_board.draw(scoreboard_ctx, board.players);
 	player_info.draw(playerinfo_ctx, board.players);
+
+	let playersLeft = board.players.filter(player => player !== undefined).length;
+	if (playersLeft === 0 || (board.enemies.length === 0 && playersLeft !== 0)) {
+		setTimeout(gameOver, 500);
+	}
 }
