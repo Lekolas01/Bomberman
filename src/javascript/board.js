@@ -293,25 +293,29 @@ class playerinfoboard {
 	draw(ctx, players) {
 		// draws the information about 1 player on a given height on the canvas
 		function drawPlayerInfo(ctx, player, pos_x, pos_y) {
+			function drawAttribute(ctx, color, pos_x, pos_y, chargeRate, asset_x, asset_y) {
+				ctx.fillStyle = color;
+				ctx.fillRect(pos_x + 35, pos_y + 5, 
+					ctx.canvas.width * 0.7 * chargeRate, 18);
+				ctx.drawImage(
+					document.getElementById('art_assets'),
+					16 * asset_x,
+					16 * asset_y,
+					32,
+					32,
+					pos_x + 10,
+					pos_y + 3,
+					20,
+					20
+				);
 
-
-			ctx.fillStyle ="brown";
-			ctx.fillRect(pos_x, pos_y, ctx.canvas.width * 0.8, 65);
+			}
 
 			//draw strength bar
-			ctx.fillStyle ="red";
-			ctx.fillRect(pos_x + 10, pos_y + 5, 
-						 ctx.canvas.width * 0.7 * player.bombStrength / playerMaxStats.bombStrength, 18);
 			
-			// draw bomb bar
-			ctx.fillStyle ="blue";
-			ctx.fillRect(pos_x + 10, pos_y + 25, 
-						ctx.canvas.width * 0.7 * player.maxBombs / playerMaxStats.maxBombs, 18);			
-			
-			// draw speed bar
-			ctx.fillStyle ="purple";
-			ctx.fillRect(pos_x + 10, pos_y + 45, 
-						ctx.canvas.width * 0.7 * (player.moveSpeed - 1) / (playerMaxStats.moveSpeed - 1), 18);
+		drawAttribute(ctx, "red", pos_x, pos_y, player.bombStrength / playerMaxStats.bombStrength, 3, 11);
+		drawAttribute(ctx, "blue", pos_x, pos_y + 20, player.maxBombs / playerMaxStats.maxBombs, 0, 11);
+		drawAttribute(ctx, "purple", pos_x, pos_y + 40, player.moveSpeed / playerMaxStats.moveSpeed, 6, 11);
 		}
 		
 		ctx.fillStyle="black";
@@ -322,8 +326,8 @@ class playerinfoboard {
 		ctx.font = ctx.font.replace(/\d+px/, "20px");
 		for(var i = 0; i < players.length; i++) {
 			ctx.fillStyle="white";
-			ctx.fillText(`P${i + 1} `, 10, 130 + i * 80);
-			drawPlayerInfo(ctx, players[i], 40, 95 + i * 80);
+			ctx.fillText(`P${i + 1} `, 10, 130 + i * 90);
+			drawPlayerInfo(ctx, players[i], 40, 95 + i * 90);
 		}
 	}
 }
