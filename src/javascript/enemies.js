@@ -131,7 +131,7 @@ class Ghost extends Enemy {
 
     move(movement) {
         if (this.frame_cnt % 5 === 0) {
-            //every 10th frame, a new animation image is shown
+            //every 5th frame, a new animation image is shown
             this.tick += 1; //counts next animation
         }
 

@@ -81,6 +81,10 @@ h1 {
 	
 }
 
+canvas{
+	font-family: 'Press Start 2P', cursive;
+}
+
 #registeredPlayers{
 	position: fixed;
 	z-index: 1;
