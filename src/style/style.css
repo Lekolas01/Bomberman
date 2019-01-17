@@ -279,6 +279,19 @@ svg{
 	width: 300px; 
 	height: 110px;
 }
+#p1{
+	color: blue;
+}
+#p2{
+	color: green;
+}
+#p3{
+	color: red;
+}
+#p4{
+	color: #e542f4;
+}
+
 
 #gameOver{
 	display: none;
