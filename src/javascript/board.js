@@ -327,7 +327,9 @@ class playerinfoboard {
 		for(var i = 0; i < players.length; i++) {
 			ctx.fillStyle="white";
 			ctx.fillText(`P${i + 1} `, 10, 130 + i * 90);
-			drawPlayerInfo(ctx, players[i], 40, 95 + i * 90);
+			if(players[i] !== undefined){
+				drawPlayerInfo(ctx, players[i], 40, 95 + i * 90);
+			}
 		}
 	}
 }
