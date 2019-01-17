@@ -13,6 +13,14 @@
 	/*prevent unwanted spaces*/
 }
 
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Roboto Light'), local('Roboto-Light'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
+	unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
 body {
 	font-family: 'Roboto', sans-serif;
 	background-color: rgba(83, 83, 83, 0.829);
@@ -50,18 +58,26 @@ h1 {
 	margin-bottom: 3%;
 	margin-left:auto;
 	margin-right:auto;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+}
+
+#playerinfo {
+	background-color: black;
 }
 
 #game_canvas {
 	padding-left: 0;
     padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
     display: block;
 }
 
 #scoreboard {
-	background-color: #eee;
+	float: right;
+	background-color: black;
+	
 }
 
 #art_assets{
@@ -249,6 +265,7 @@ textarea:focus {
 		font-size: 40px;
 	}
 }
+
 
 .success-popup  {
   font-size: 90%;

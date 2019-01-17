@@ -1,13 +1,16 @@
+
 // tile: equals one cell on a bomberman map(1 wall, 1 grass etc.)
 class tile {
-    constructor(breakable, passable, x, y) {
-        this.breakable = breakable;
+	constructor(breakable, passable, x, y) {
+		this.breakable = breakable;
         this.passable = passable;
         // x and y save the position of sprite on png-file (not pretty)
         this.x = x;
         this.y = y
     }
 }
+
+var playerinfo_canvas, playerinfo_ctx;
 
 // tileTypes: enum for all types of tile that can exist on the gameboard
 var tileTypes = Object.freeze({
@@ -219,7 +222,7 @@ class gameboard {
 	}
 
 	// helper function. This returns an array of positions {row, col} on the gameboard where
-	// the tiles on those position all are passable set to true
+	// the tiles on those position have are passable set to true
 	getAllPassableTiles() {
 		let positions = [];
 		for (let row = 0; row < this.height; row++) {
@@ -241,5 +244,22 @@ class gameboard {
 	addRandomItem(row, col) {
 		var itemId = RandNumInRange(0, numDifferentItems);
 		this.items.push(new Item(row, col, itemId));
+	}
+}
+
+
+class scoreboard {
+    constructor() {
+
+		this.playerScores = [];
+		// for(var i = 0; i < numPlayers; i++) {
+		// 	this.playerScores.push(0);
+		// }
+	}
+	
+	draw(ctx) {
+		ctx.font = '30px Press Start 2P';
+		ctx.fillStyle ='white';
+		ctx.fillText("HELLO, WORLD!", 40, 40);
 	}
 }

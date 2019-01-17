@@ -313,4 +313,5 @@ class Bomb {
         this.animation[this.state].animation_size = tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
+    
 }
