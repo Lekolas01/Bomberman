@@ -199,7 +199,7 @@ class gameboard {
 		this.drawObjects(this.bombs);
         this.drawObjects(this.enemies);
         this.drawObjects(this.players);
-        this.explosions.forEach(explosion => this.drawObjects(explosion));
+		this.explosions.forEach(explosion => this.drawObjects(explosion));
 		
 	}
 
@@ -257,9 +257,18 @@ class scoreboard {
 		// }
 	}
 	
-	draw(ctx) {
-		ctx.font = '30px Press Start 2P';
+	draw(ctx, players) {
+		ctx.fillStyle="black";
+		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		ctx.font = '40px Verdana';
 		ctx.fillStyle ='white';
-		ctx.fillText("HELLO, WORLD!", 40, 40);
+		ctx.fillText("SCORES", 60, 55);
+		var scoresHeight = ctx.canvas.height - 100;
+		ctx.font = '24px Verdana';
+		for(var i = 0; i < players.length; i++) {
+			
+			ctx.fillText(`Player ${i + 1}      -      ${players[i].score}`, 15, 100 + i * 50);
+			ctx.fillText(`Player ${i + 1}      -      ${players[i].score}`, 15, 100 + (i + 1) * 50);
+		}
 	}
 }

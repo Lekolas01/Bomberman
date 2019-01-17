@@ -20,7 +20,9 @@ function playerKeyPress(event) {
 
 function playerKeyDown(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
+	var player = board.players[0];
 
+	if(player.dead) return;
 	switch (key) {
 		case KEY.DOWN:
 		case KEY.UP:
@@ -39,7 +41,8 @@ function playerKeyDown(event) {
 function playerKeyUp(event) {
 	var key = event.keyCode ? event.keyCode : event.which;
 	var player = board.players[0];
-
+	//console.log(player);
+	if (player.dead) return;
 	switch (key) {
 		case KEY.DOWN:
 		case KEY.UP:

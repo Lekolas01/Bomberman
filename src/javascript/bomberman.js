@@ -8,7 +8,6 @@ var boardWidth = 17; // how many tiles is the gameboard wide?
 var boardHeight = 15; // how many tiles is the gameboard high?
 var tileSize = 32; // how big is one tile? (width and height)
 var baseTileSize = 32; //used for resizing
-var score = 0;
 var audioPickupItem, audioBombExplode, audioBackground;
 var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
@@ -65,7 +64,7 @@ function resizeCanvas(){
 	scoreboard_canvas.height = height;
 	scoreboard_ctx.canvas.height = height;
 
-	score_board = new scoreboard('scoreboard', height);
+	score_board = new scoreboard();
 
 }
 
@@ -110,7 +109,6 @@ function startGame() {
 
 		renderIntervalId = setInterval(loop, GAME_SPEED);
 		window.onkeypress = null;
-		audioBackground.play();
 	};
 }
 
@@ -156,5 +154,5 @@ function moveEnemies() {
 //--------------------------------------------------------------------------
 function drawScreen() {
 	board.draw();
-	score_board.draw(scoreboard_ctx);
+	score_board.draw(scoreboard_ctx, board.players);
 }

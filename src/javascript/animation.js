@@ -29,7 +29,7 @@ class Character {
 			pix_y: row * tileSize,
 		};
 
-		this.direction = new Array(4); //up, down, right
+		this.direction = new Array(5); //up, down, right
 
 		//up
 		this.direction[0] = new Array(3);
@@ -56,8 +56,13 @@ class Character {
 		this.direction[3][1] = new AnimationFrame(11 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #1
 		this.direction[3][2] = new AnimationFrame(12 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #2
 		this.direction[3][3] = new AnimationFrame(13 * dim_x, rowOnAsset, dim_x, dim_y); //animation left #3
+
+		// empty tile, for if a player has died, but the game still goes on
+		this.direction[4] = new Array(1);
+		this.direction[4][0] = new AnimationFrame(1 * dim_x, 18 * 16, dim_x, dim_y);
         
 		this.last_direction = DIRECTION.UP; //up per default
+		this.dead = false;
 		this.tick = 0; //used for calculating wich animation is displayed
         this.frame_cnt = -1; //used for calculation of pixel offset when moving
 
@@ -119,6 +124,9 @@ class Character {
 	}
 
 	getAnimation() {
+		// if(this.dead) {
+		// 	return this.getEmpty();
+		// }
 		if (this.idle) {
 			return this.getIdle(); //if idle, get idle Animation-Frame
 		} else {
@@ -168,6 +176,11 @@ class Character {
 		}
 	}
 
+	//returns an empty sprite ()
+	getEmpty() {
+		return this.direction[4][0];
+	}
+
 	//changes the movement speed of this characeter
 	setSpeed(value){
 		this.moveSpeed = value;
@@ -197,13 +210,15 @@ class Character {
     //is called by base function.
     die(){
         board.morituri.push(this);
-        this.dead = true;
-        this.idle = true;
-
+		this.dead = true;
+		this.idle = true;
+		this.last_direction = DIRECTION.DOWN;
+		this.position.col = 0; // this moves the player to a point on the gameboard that cannot be reached
+		this.position.row = 0;
         this.tick = -1;
         this.bleed = setInterval(
             (function (self) {         //wrapping necessary to preserve "this"-context
-                return function () {   
+                return function () {
                     self.animateDying();
                 }
             })(this),
