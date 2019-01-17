@@ -269,6 +269,18 @@ class scoreboard {
 			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
 		}
 	}
+
+	leadingPlayer(){
+		let maxIndex = -1;
+		let maxScore = 0;
+		for(let i = 0; i < this.playerScores.length; i++){
+			if(maxScore < this.playerScores[i]){
+				maxIndex = i;
+				maxScore = this.playerScores[i];
+			}	
+		}
+		return maxIndex;
+	}
 }
 
 

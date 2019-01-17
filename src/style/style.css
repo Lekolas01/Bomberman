@@ -269,12 +269,19 @@ textarea:focus {
   color: rgb(124, 31, 31);
 }
 
-#startView{
-	width: 300px; 
-	height: 110px;
+svg{
 	position: fixed;
 	display: block;
 	font-size: 15px;
+}
+
+#startView{
+	width: 300px; 
+	height: 110px;
+}
+
+#gameOver{
+	display: none;
 }
 
 
