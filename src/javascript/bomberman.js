@@ -13,6 +13,7 @@ var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 var board; // board: saves the information about the current gameboard
 var score_board;
+var player_info;
 
 var running = false; // game currently on?
 
@@ -22,9 +23,8 @@ window.onload = function () {
 	game_ctx = game_canvas.getContext('2d');
 	playerinfo_canvas = document.getElementById('playerinfo');	// player info on the left
 	playerinfo_ctx = playerinfo_canvas.getContext('2d');
-		
-	this.scoreboard_canvas = document.getElementById('scoreboard');	// scoreboard on the right
-	this.scoreboard_ctx = this.scoreboard_canvas.getContext('2d');
+	scoreboard_canvas = document.getElementById('scoreboard');	// scoreboard on the right
+	scoreboard_ctx = this.scoreboard_canvas.getContext('2d');
 
 	resizeCanvas();
 
@@ -65,6 +65,7 @@ function resizeCanvas(){
 	scoreboard_ctx.canvas.height = height;
 
 	score_board = new scoreboard();
+	player_info = new playerinfoboard();
 
 }
 
@@ -155,4 +156,5 @@ function moveEnemies() {
 function drawScreen() {
 	board.draw();
 	score_board.draw(scoreboard_ctx, board.players);
+	player_info.draw(playerinfo_ctx, board.players);
 }

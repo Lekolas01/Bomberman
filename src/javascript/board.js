@@ -263,12 +263,43 @@ class scoreboard {
 		ctx.font = '40px Verdana';
 		ctx.fillStyle ='white';
 		ctx.fillText("SCORES", 60, 55);
-		var scoresHeight = ctx.canvas.height - 100;
 		ctx.font = '24px Verdana';
 		for(var i = 0; i < players.length; i++) {
 			
 			ctx.fillText(`Player ${i + 1}      -      ${players[i].score}`, 15, 100 + i * 50);
-			ctx.fillText(`Player ${i + 1}      -      ${players[i].score}`, 15, 100 + (i + 1) * 50);
+		}
+	}
+}
+
+
+
+class playerinfoboard {
+    constructor() {
+
+		this.playerInfo = [];
+		// for(var i = 0; i < numPlayers; i++) {
+		// 	this.playerScores.push(0);
+		// }
+	}
+	
+	draw(ctx, players) {
+		// draws the information about 1 player on a given height on the canvas
+		function drawPlayerInfo(ctx, player, height) {
+
+			ctx.fillText(`               `, 15, 100 + i * 50);
+			
+			
+		}
+		
+		ctx.fillStyle="black";
+		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		ctx.font = '40px Verdana';
+		ctx.fillStyle ='white';
+		ctx.fillText("UPGRADES", 60, 55);
+		ctx.font = '20px Verdana';
+		for(var i = 0; i < players.length; i++) {
+			ctx.fillText(`Player ${i + 1} - `, 15, 100 + i * 50);
+			drawPlayerInfo(ctx, players[i], 100 + i * 50);
 		}
 	}
 }
