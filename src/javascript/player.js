@@ -20,7 +20,7 @@ class Player extends Character {
 
     updateKey(input) {
         this.lastKeyInput = input;
-        var l_dir = this.last_direction;
+        let  l_dir = this.last_direction;
         if (!this.idle && !this.canMove) {
             this.updateDirection();
             if (l_dir !== this.last_direction) this.frame_cnt = -1;

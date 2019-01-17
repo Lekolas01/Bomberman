@@ -1,21 +1,21 @@
-var game_canvas, game_ctx;
-var scoreboard_canvas, scoreboard_ctx;
-var fontSize = 18; //for matrix anim
+let  game_canvas, game_ctx;
+let  scoreboard_canvas, scoreboard_ctx;
+let  fontSize = 18; //for matrix anim
 
-//game logic variables
-var GAME_SPEED = 9; // 1 tick every 9 ms
-var boardWidth = 17; // how many tiles is the gameboard wide?
-var boardHeight = 15; // how many tiles is the gameboard high?
-var tileSize = 32; // how big is one tile? (width and height)
-var baseTileSize = 32; //used for resizing
-var audioPickupItem, audioBombExplode, audioBackground;
-var DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
+//game logic let iables
+let  GAME_SPEED = 9; // 1 tick every 9 ms
+let  boardWidth = 17; // how many tiles is the gameboard wide?
+let  boardHeight = 15; // how many tiles is the gameboard high?
+let  tileSize = 32; // how big is one tile? (width and height)
+let  baseTileSize = 32; //used for resizing
+let  audioPickupItem, audioBombExplode, audioBackground;
+let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
-var board; // board: saves the information about the current gameboard
-var score_board;
-var player_info;
+let  board; // board: saves the information about the current gameboard
+let  score_board;
+let  player_info;
 
-var running = false; // game currently on?
+let  running = false; // game currently on?
 
 //--------------------------------------------------------------------------
 window.onload = function () {
@@ -24,7 +24,7 @@ window.onload = function () {
 	playerinfo_canvas = document.getElementById('playerinfo');	// player info on the left
 	playerinfo_ctx = playerinfo_canvas.getContext('2d');
 	scoreboard_canvas = document.getElementById('scoreboard');	// scoreboard on the right
-	scoreboard_ctx = this.scoreboard_canvas.getContext('2d');
+	scoreboard_ctx = scoreboard_canvas.getContext('2d');
 
 	resizeCanvas();
 
@@ -83,7 +83,7 @@ function startGame() {
 		}
 	});
 	//setup an interval for Chrome
-	var checkChrome = window.setInterval(function () {
+	let  checkChrome = window.setInterval(function () {
 		if (navigator.getGamepads()[0]) {
 			$(window).trigger("gamepadconnected");
 			window.clearInterval(checkChrome);

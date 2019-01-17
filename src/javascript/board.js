@@ -10,10 +10,10 @@ class tile {
     }
 }
 
-var playerinfo_canvas, playerinfo_ctx;
+let  playerinfo_canvas, playerinfo_ctx;
 
 // tileTypes: enum for all types of tile that can exist on the gameboard
-var tileTypes = Object.freeze({
+let  tileTypes = Object.freeze({
     //parameter list: (breakable, passable, x, y)
     "wall": new tile(false, false, 32, 112),
     "empty": new tile(false, true, 32, 0),
@@ -41,35 +41,35 @@ class gameboard {
 
 		//creates a new matrix of any type
 		function matrix(width, height) {
-			var matr = new Array(height);
-			for (var row = 0; row < height; row++) {
+			let  matr = new Array(height);
+			for (let  row = 0; row < height; row++) {
 				matr[row] = new Array(width);
 			}
 			return matr;
 		}
 
 		function initOuterWall(board) {
-			for (var col = 0; col < width; col++) {
+			for (let  col = 0; col < width; col++) {
 				board.data[0][col] = tileTypes.wall;
 				board.data[height - 1][col] = tileTypes.wall;
 			}
-			for (var row = 0; row < height; row++) {
+			for (let  row = 0; row < height; row++) {
 				board.data[row][width - 1] = tileTypes.wall;
 				board.data[row][0] = tileTypes.wall;
 			}
 		}
 
 		function initGrass(board) {
-			for (var row = 1; row < board.height - 1; row++) {
-				for (var col = 1; col < board.width - 1; col++) {
+			for (let  row = 1; row < board.height - 1; row++) {
+				for (let  col = 1; col < board.width - 1; col++) {
 					board.data[row][col] = tileTypes.empty;
 				}
 			}
 		}
 
 		function initGridTiles(board) {
-			for (var row = 2; row < height - 2; row += 2) {
-				for (var col = 2; col < width - 2; col += 2) {
+			for (let  row = 2; row < height - 2; row += 2) {
+				for (let  col = 2; col < width - 2; col += 2) {
 					board.data[row][col] = tileTypes.wall;
 				}
 			}
@@ -93,12 +93,12 @@ class gameboard {
 					{diff_y:  0, diff_x:  1}
 				];
 
-				for(var i = 0; i < pos.length; i++) {
-					var position = {y: row + pos[i].diff_y, x: col + pos[i].diff_x};
+				for(let  i = 0; i < pos.length; i++) {
+					let  position = {y: row + pos[i].diff_y, x: col + pos[i].diff_x};
 					if(board.data[position.y][position.x] === tileTypes.breakableWall) {
 						board.data[position.y][position.x] = tileTypes.empty;
 					}
-					var position2 = {y: position.y + pos[i].diff_y, x: position.x + pos[i].diff_x};
+					let  position2 = {y: position.y + pos[i].diff_y, x: position.x + pos[i].diff_x};
 					if(board.positionExists(position2.y, position2.x)) {
 						board.data[position2.y][position2.x] = tileTypes.breakableWall;
 					}
@@ -112,15 +112,15 @@ class gameboard {
 				{row: 1, col: width - 2},
 			];
 
-			for(var i = 0; i < numPlayers; i++) {
+			for(let  i = 0; i < numPlayers; i++) {
 				createPlayer(pos[i].row, pos[i].col);
 			}
 
 		}
 
 		function initBreakableWalls(board) {
-			for (var row = 1; row < board.height - 1; row++) {
-				for (var col = 1; col < board.width - 1; col++) {
+			for (let  row = 1; row < board.height - 1; row++) {
+				for (let  col = 1; col < board.width - 1; col++) {
 					if (board.data[row][col] == tileTypes.empty && Math.random() <= boxSpawnChance) {
 						board.data[row][col] = tileTypes.breakableWall;
 					}
@@ -129,15 +129,15 @@ class gameboard {
 		}
 
 		function initEnemies(board) {
-			var startingPositions = board.getAllSpawnableTiles();
-			var numStartingPos = startingPositions.length;
+			let  startingPositions = board.getAllSpawnableTiles();
+			let  numStartingPos = startingPositions.length;
 			if(numStartingPos == 0) {
 				board.data[Math.floor(height / 2)][Math.floor(width / 2)] = tileTypes.empty;
 				startingPositions = [{row: Math.floor(height / 2), col: Math.floor(width / 2)}];
 				numStartingPos = 1;
 			}
-			for (var i = 0; i < numEnemies; i++) {
-				var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+			for (let  i = 0; i < numEnemies; i++) {
+				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
             }
 		}
@@ -151,8 +151,8 @@ class gameboard {
     } // end constructor
     
     drawGround() {
-        for (var row = 0; row < this.data.length; row++) {
-			for (var col = 0; col < this.data[0].length; col++) {
+        for (let  row = 0; row < this.data.length; row++) {
+			for (let  col = 0; col < this.data[0].length; col++) {
 				if (this.data[row][col] !== undefined) {
 					game_ctx.drawImage(
 						document.getElementById('art_assets'),
@@ -209,8 +209,8 @@ class gameboard {
 	getAllSpawnableTiles() {
 		let positions = [];
 		positions = this.getAllPassableTiles(); // filter out all tiles with walls
-		for(var i = 0; i < this.players.length; i++) {
-			for(var j = 0; j < positions.length; j++) {
+		for(let  i = 0; i < this.players.length; i++) {
+			for(let  j = 0; j < positions.length; j++) {
 				if (Math.abs(this.players[i].position.row - positions[j].row) <= 1 &&
 					Math.abs(this.players[i].position.col - positions[j].col) <= 1) {
 						positions.splice(j, 1); // filter all tiles with players near it
@@ -242,7 +242,7 @@ class gameboard {
 	}
 
 	addRandomItem(row, col) {
-		var itemId = RandNumInRange(0, numDifferentItems);
+		let  itemId = RandNumInRange(0, numDifferentItems);
 		this.items.push(new Item(row, col, itemId));
 	}
 }
@@ -252,7 +252,7 @@ class scoreboard {
     constructor() {
 
 		this.playerScores = [];
-		// for(var i = 0; i < numPlayers; i++) {
+		// for(let  i = 0; i < numPlayers; i++) {
 		// 	this.playerScores.push(0);
 		// }
 	}
@@ -264,7 +264,7 @@ class scoreboard {
 		ctx.fillStyle ='white';
 		ctx.fillText("SCORES", 60, 55);
 		ctx.font = '24px Verdana';
-		for(var i = 0; i < players.length; i++) {
+		for(let  i = 0; i < players.length; i++) {
 			if(players[i] !== undefined) this.playerScores[i] = players[i].score; //update score if player is not dead yet
 			ctx.fillText(`Player ${i + 1}      -      ${this.playerScores[i]}`, 15, 100 + i * 50);
 		}
@@ -277,16 +277,16 @@ class playerinfoboard {
     constructor() {
 
 		this.playerInfo = [];
-		// for(var i = 0; i < numPlayers; i++) {
+		// for(let  i = 0; i < numPlayers; i++) {
 		// 	this.playerScores.push(0);
 		// }
 	}
 	
 	draw(ctx, players) {
 		// draws the information about 1 player on a given height on the canvas
-		function drawPlayerInfo(ctx, player, height) {
+		function drawPlayerInfo(ctx,player_index, height) {
 
-			ctx.fillText(`               `, 15, 100 + i * 50);
+			ctx.fillText(`               `, 15, 100 + player_index * 50);
 			
 			
 		}
@@ -297,9 +297,9 @@ class playerinfoboard {
 		ctx.fillStyle ='white';
 		ctx.fillText("UPGRADES", 60, 55);
 		ctx.font = '20px Verdana';
-		for(var i = 0; i < players.length; i++) {
+		for(let  i = 0; i < players.length; i++) {
 			ctx.fillText(`Player ${i + 1} - `, 15, 100 + i * 50);
-			drawPlayerInfo(ctx, players[i], 100 + i * 50);
+			drawPlayerInfo(ctx,i, 100 + i * 50);
 		}
 	}
 }

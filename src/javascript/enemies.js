@@ -14,7 +14,7 @@ class Enemy extends Character {
     isValidMove(board, direction) {
         //console.log("isValidMove:");
         //console.log(board === undefined);
-        var diff_x, diff_y;
+        let  diff_x, diff_y;
         switch (direction) {
             case DIRECTION.UP:
                 diff_y = -1;
@@ -47,7 +47,7 @@ class Enemy extends Character {
 
     //returns the number of valid directions this enemy can move to
     numValidDirections(board) {
-        var count = 0;
+        let  count = 0;
 
         //console.log("numValidDirections");
         //console.log(board === undefined);
@@ -128,11 +128,11 @@ class Creep extends Enemy {
 function enemies(board, num) {
     // allEnemies is an array, which at each index saves the enemy object
     // as well as that enemy's current tile position on the gameboard
-    var startingPositions = board.getAllPassableTiles();
-    var numStartingPos = startingPositions.length;
-    var allEnemies = [];
-    for (var i = 0; i < num; i++) {
-        var randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+    let  startingPositions = board.getAllPassableTiles();
+    let  numStartingPos = startingPositions.length;
+    let  allEnemies = [];
+    for (let  i = 0; i < num; i++) {
+        let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
         allEnemies.push(new Enemy(1 * 16, randPos.row, randPos.col, 1, 0.1 * i + 0.3, false));
     }
     return allEnemies;
@@ -148,7 +148,7 @@ function printEnemyStats(enemy) {
 function printAllEnemiesStats(enemies) {
     console.log('---------------------------');
     console.log('Enemies:');
-    for (var i = 0; i < enemies.length; i++) {
+    for (let  i = 0; i < enemies.length; i++) {
         console.log(`   Enemy ${i}`);
         printEnemyStats(enemies[i]);
     }

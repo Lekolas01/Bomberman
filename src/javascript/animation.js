@@ -74,7 +74,7 @@ class Character {
 
 	/*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
 	refreshPos() {
-		var player = this;
+		let  player = this;
 		if (!this.idle) {
 			switch (this.last_direction) {
 				case DIRECTION.DOWN: //based on  direction, the characters position in the matrix is updated
