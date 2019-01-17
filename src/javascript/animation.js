@@ -124,9 +124,6 @@ class Character {
 	}
 
 	getAnimation() {
-		// if(this.dead) {
-		// 	return this.getEmpty();
-		// }
 		if (this.idle) {
 			return this.getIdle(); //if idle, get idle Animation-Frame
 		} else {

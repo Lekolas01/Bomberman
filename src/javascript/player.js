@@ -29,7 +29,7 @@ class Player extends Character {
     }
 
     //based on user input, the last pressed key is updated. 
-    //(which will be used for determining the next tile, the character is moving towards)
+    //(which will be used for determining the next tile that the character is moving towards)
     updateDirection() {
         this.idle = false;
         switch (this.lastKeyInput) {
@@ -261,7 +261,6 @@ class Bomb {
         explosion.push(center);
 
         board.explosions[this.explosionId] = explosion; //push explosion to global explosions array. (multible explosions can happen at the same time)
-        //audioBombExplode.play();
     }
 
     calcDamage() {

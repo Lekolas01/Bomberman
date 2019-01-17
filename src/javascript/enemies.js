@@ -12,8 +12,6 @@ class Enemy extends Character {
 
     //returns boolean value whether enemy can move into that direction on its currents position
     isValidMove(board, direction) {
-        //console.log("isValidMove:");
-        //console.log(board === undefined);
         let row = this.position.row;
         let col = this.position.col;
         switch (direction) {
@@ -45,8 +43,6 @@ class Enemy extends Character {
     numValidDirections(board) {
         let count = 0;
 
-        //console.log("numValidDirections");
-        //console.log(board === undefined);
         if (this.isValidMove(board, DIRECTION.UP)) count++;
         if (this.isValidMove(board, DIRECTION.DOWN)) count++;
         if (this.isValidMove(board, DIRECTION.RIGHT)) count++;

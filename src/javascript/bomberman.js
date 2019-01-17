@@ -40,6 +40,7 @@ window.onload = function () {
 	audioBackground.volume = 0.25;
 	audioPickupItem.volume = 0.4;
 	audioTitleScreen.volume = 0.8;
+	audioGameOver.volume = 0.5;
 	audioBackground.loop = true;
 	audioTitleScreen.loop = true;
 	audioTitleScreen.play();
