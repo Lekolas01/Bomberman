@@ -16,11 +16,12 @@ class Player extends Character {
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
         this.score = 0;
+        this.pointsWhenKilled = 200;
     }
 
     updateKey(input) {
         this.lastKeyInput = input;
-        let  l_dir = this.last_direction;
+        let l_dir = this.last_direction;
         if (!this.idle && !this.canMove) {
             this.updateDirection();
             if (l_dir !== this.last_direction) this.frame_cnt = -1;
@@ -83,9 +84,12 @@ class Player extends Character {
         let playerIndex = board.players.indexOf(this);
         if (playerIndex >= 0) {
             delete board.players[playerIndex];
+            let playersLeft = board.players.filter(player => player !== undefined).length;
             if (playerIndex > 0) gamepads[playerIndex - 1].disconnect();
             super.die();
-            alert("Final Score for player " + (playerIndex + 1) + " is: " + this.score);
+            if (playersLeft === 0 || (board.enemies.length === 0 && playersLeft !== 0)) {
+                setTimeout(gameOver, 3000);
+            }
         }
     }
 
@@ -106,7 +110,7 @@ class Player extends Character {
         }
     }
 
-    updateScore(points){
+    updateScore(points) {
         this.score += points;
     }
 }
@@ -321,5 +325,5 @@ class Bomb {
         this.animation[this.state].animation_size = tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
-    
+
 }

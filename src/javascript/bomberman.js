@@ -8,7 +8,7 @@ let  boardWidth = 17; // how many tiles is the gameboard wide?
 let  boardHeight = 15; // how many tiles is the gameboard high?
 let  tileSize = 32; // how big is one tile? (width and height)
 let  baseTileSize = 32; //used for resizing
-let  audioPickupItem, audioBombExplode, audioBackground;
+let  audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon;
 let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
 let  board; // board: saves the information about the current gameboard
@@ -16,6 +16,7 @@ let  score_board;
 let  player_info;
 
 let  running = false; // game currently on?
+let renderIntervalId = null;
 
 //--------------------------------------------------------------------------
 window.onload = function () {
@@ -80,12 +81,6 @@ function placeRegisteredPlayerDiv(){
 }
 
 function startGame() {
-	//startView.setAttribute("visibility", "hidden");
-	//TODO: init player, init monsters
-
-	//printAllEnemiesStats(board.enemies);
-
-	//add key listeners for player Controls
 	window.addEventListener("gamepadconnected", function (e) {
 		if(!running){
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
@@ -137,6 +132,26 @@ function loop() {
 	board.players.forEach(player => movePlayer(player));
 	moveEnemies();
 	drawScreen();
+}
+
+function gameOver(){
+	let nrPlayers = board.players.filter(player => player !== undefined).length;
+	audioBackground.pause();
+	$("#gameOver").css("display", "block");
+
+	if(nrPlayers === 0){
+		$("#gameOver text").attr("fill", "red");
+		$("#gameOver text").html("GameOver");
+		audioGameOver.play();
+	}else{
+		let winner = score_board.leadingPlayer();
+		$("#gameOver text").attr("fill", "green");
+		$("#gameOver text").html(`Player ${winner + 1} has won`);
+		audioGameWon.play();
+	}
+
+	clearInterval(renderIntervalId);
+	running = false;
 }
 
 function movePlayer(player) {

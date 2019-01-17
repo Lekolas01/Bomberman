@@ -14,7 +14,7 @@ function playerKeyDown(event) {
 	let  key = event.keyCode ? event.keyCode : event.which;
 	let  player = board.players[0];
 
-	if(player.dead) return;
+	if(player === undefined) return;
 	switch (key) {
 		case KEY.DOWN:
 		case KEY.UP:
@@ -34,7 +34,7 @@ function playerKeyUp(event) {
 	let  key = event.keyCode ? event.keyCode : event.which;
 	let  player = board.players[0];
 	//console.log(player);
-	if (player.dead) return;
+	if (player === undefined) return;
 	switch (key) {
 		case KEY.DOWN:
 		case KEY.UP:
