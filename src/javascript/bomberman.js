@@ -109,7 +109,7 @@ function startGame() {
 		nrOfPlayers = 1;
 
 		if(gamepads.length !== undefined) nrOfPlayers += gamepads.length;
-		board = new gameboard(boardWidth, boardHeight, nrOfPlayers +2, 0, 1, 1);
+		board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 8, 0.65, 0.4);
 		score_board = new scoreboard(nrOfPlayers);
 		audioBackground.play();
 
