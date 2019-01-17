@@ -117,16 +117,29 @@ class Ghost extends Enemy {
     constructor(board_col, board_row) {
         super(16, board_col, board_row, 1, 0.35, true);
 
-        this.direction = new Array(12);
+        this.directions = new Array(2);
 
-        this.direction[0] = new AnimationFrame(0, 25 * 16, 48, 48);
-        this.direction[1] = new AnimationFrame(64, 25 * 16, 48, 48);
-        this.direction[2] = new AnimationFrame(129, 25 * 16, 48, 48);
-        this.direction[3] = new AnimationFrame(194, 25 * 16, 48, 48);
-        this.direction[4] = new AnimationFrame(0, 29 * 16, 48, 48);
-        this.direction[5] = new AnimationFrame(66, 29 * 16, 48, 48);
-        this.direction[6] = new AnimationFrame(130, 29 * 16, 48, 48);
-        this.direction[7] = new AnimationFrame(195, 29 * 16, 48, 48);
+        //up and right
+        this.direction[0] = new Array(8);
+        this.direction[0][0] = new AnimationFrame(0, 25 * 16, 48, 48);
+        this.direction[0][1] = new AnimationFrame(64, 25 * 16, 48, 48);
+        this.direction[0][2] = new AnimationFrame(129, 25 * 16, 48, 48);
+        this.direction[0][3] = new AnimationFrame(194, 25 * 16, 48, 48);
+        this.direction[0][4] = new AnimationFrame(0, 29 * 16, 48, 48);
+        this.direction[0][5] = new AnimationFrame(66, 29 * 16, 48, 48);
+        this.direction[0][6] = new AnimationFrame(130, 29 * 16, 48, 48);
+        this.direction[0][7] = new AnimationFrame(195, 29 * 16, 48, 48);
+
+        //down and left
+        this.direction[1] = new Array(8);
+        this.direction[1][0] = new AnimationFrame(0, 36 * 16, 48, 48);
+        this.direction[1][1] = new AnimationFrame(64, 36 * 16, 48, 48);
+        this.direction[1][2] = new AnimationFrame(129, 36 * 16, 48, 48);
+        this.direction[1][3] = new AnimationFrame(194, 36 * 16, 48, 48);
+        this.direction[1][4] = new AnimationFrame(0, 40 * 16, 48, 48);
+        this.direction[1][5] = new AnimationFrame(66, 40 * 16, 48, 48);
+        this.direction[1][6] = new AnimationFrame(130, 40 * 16, 48, 48);
+        this.direction[1][7] = new AnimationFrame(195, 40 * 16, 48, 48);
     }
 
     move(movement) {
@@ -143,11 +156,19 @@ class Ghost extends Enemy {
         }
 
         this.last_direction = movement; //save the direction, the character is heading
-        return this.direction[this.tick % 8];
+        let face = 1;
+        if(this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT){
+            face = 0;
+        }
+        return this.direction[face][this.tick % 8];
     }
 
     getIdle() {
-        return this.direction[0];
+        let face = 1;
+        if(this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT){
+            face = 0;
+        }
+        return this.direction[face][0];
     }
 }
 
