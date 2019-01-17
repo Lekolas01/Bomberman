@@ -27,6 +27,7 @@ window.onload = function () {
 	scoreboard_ctx = scoreboard_canvas.getContext('2d');
 
 	resizeCanvas();
+	placeRegisteredPlayerDiv();
 
 	audioBackground = new Audio('../sound/newbattle.wav');
 	audioBombExplode = new Audio('../sound/bombExplode.wav');
@@ -69,6 +70,15 @@ function resizeCanvas(){
 
 }
 
+window.onresize = placeRegisteredPlayerDiv;
+
+function placeRegisteredPlayerDiv(){
+	let div = $("#registeredPlayers");
+	let pos = $("#scoreboard").position();
+	div.css("left", pos.left + 30);
+	div.css("top", pos.top + 30);
+}
+
 function startGame() {
 	//startView.setAttribute("visibility", "hidden");
 	//TODO: init player, init monsters
@@ -79,7 +89,11 @@ function startGame() {
 	window.addEventListener("gamepadconnected", function (e) {
 		if(!running){
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
-			gamepads.push(new gamepadController(e.gamepad));
+			if(e.gamepad.index < 4){
+				let htmlId = "player" + (e.gamepad.index + 2);
+				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
+				gamepads.push(new gamepadController(e.gamepad));
+			}
 		}
 	});
 	//setup an interval for Chrome
@@ -112,6 +126,8 @@ function startGame() {
 		renderIntervalId = setInterval(loop, GAME_SPEED);
 		window.onkeypress = null;
 		running = true;
+		$("#startView").css("display", "none");
+		$("#registeredPlayers").css("display", "none");
 	};
 }
 

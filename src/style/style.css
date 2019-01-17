@@ -62,6 +62,7 @@ h1 {
 	flex-flow: row nowrap;
 	justify-content: center;
 	align-items: center;
+	overflow: hidden;
 }
 
 #playerinfo {
@@ -78,6 +79,43 @@ h1 {
 	float: right;
 	background-color: black;
 	
+}
+
+#registeredPlayers{
+	position: fixed;
+	z-index: 1;
+	font-size: 18px;;
+	color: lightgray;
+}
+#registeredPlayers h3{
+	font-family: 'Press Start 2P', cursive;
+	font-size: 20px;;
+	color: #135816;
+	text-shadow: 1px 0 0 lightgray;
+	margin-bottom: 10px;
+}
+#registeredPlayers .spacer{
+	width: 5px;
+}
+
+@media (max-width: 1050px) {
+	#registeredPlayers{
+		font-size: 14px;
+	}
+	#registeredPlayers h3{
+		font-size: 17px;
+	}
+
+}
+
+@media (max-width: 780px) {
+	#registeredPlayers{
+		font-size: 11px;
+	}
+	#registeredPlayers h3{
+		font-size: 14px;
+	}
+
 }
 
 #art_assets{
@@ -230,6 +268,15 @@ textarea:focus {
   float: right;
   color: rgb(124, 31, 31);
 }
+
+#startView{
+	width: 300px; 
+	height: 110px;
+	position: fixed;
+	display: block;
+	font-size: 15px;
+}
+
 
 @media (max-width: 850px) {
 	.contact-popup {
