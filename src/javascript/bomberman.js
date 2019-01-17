@@ -110,6 +110,7 @@ function startGame() {
 
 		renderIntervalId = setInterval(loop, GAME_SPEED);
 		window.onkeypress = null;
+		audioBackground.play();
 	};
 }
 
