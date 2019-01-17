@@ -276,19 +276,30 @@ class scoreboard {
 class playerinfoboard {
     constructor() {
 
-		this.playerInfo = [];
-		// for(var i = 0; i < numPlayers; i++) {
-		// 	this.playerScores.push(0);
-		// }
 	}
 	
 	draw(ctx, players) {
 		// draws the information about 1 player on a given height on the canvas
-		function drawPlayerInfo(ctx, player, height) {
+		function drawPlayerInfo(ctx, player, pos_x, pos_y) {
 
-			ctx.fillText(`               `, 15, 100 + i * 50);
+
+			ctx.fillStyle ="brown";
+			ctx.fillRect(pos_x, pos_y, ctx.canvas.width * 0.8, 65);
+
+			//draw strength bar
+			ctx.fillStyle ="red";
+			ctx.fillRect(pos_x + 10, pos_y + 5, 
+						 ctx.canvas.width * 0.7 * player.bombStrength / playerMaxStats.bombStrength, 18);
 			
+			// draw bomb bar
+			ctx.fillStyle ="blue";
+			ctx.fillRect(pos_x + 10, pos_y + 25, 
+						ctx.canvas.width * 0.7 * player.maxBombs / playerMaxStats.maxBombs, 18);			
 			
+			// draw speed bar
+			ctx.fillStyle ="purple";
+			ctx.fillRect(pos_x + 10, pos_y + 45, 
+						ctx.canvas.width * 0.7 * (player.moveSpeed - 1) / (playerMaxStats.moveSpeed - 1), 18);
 		}
 		
 		ctx.fillStyle="black";
@@ -298,8 +309,8 @@ class playerinfoboard {
 		ctx.fillText("UPGRADES", 60, 55);
 		ctx.font = '20px Verdana';
 		for(var i = 0; i < players.length; i++) {
-			ctx.fillText(`Player ${i + 1} - `, 15, 100 + i * 50);
-			drawPlayerInfo(ctx, players[i], 100 + i * 50);
+			ctx.fillText(`P${i + 1} `, 10, 130 + i * 50);
+			drawPlayerInfo(ctx, players[i], 40, 95 + i * 80);
 		}
 	}
 }

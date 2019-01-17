@@ -9,10 +9,9 @@ class Player extends Character {
     constructor(rowOnAsset, row, col, health) {
         super(2, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
-        this.maxBombs = 2;
-        this.bombStrength = 2;
+        this.maxBombs = 1;
+        this.bombStrength = 1;
         this.activeBombs = 0;
-        this.runningSpeed = 5; // not yet used
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
 
