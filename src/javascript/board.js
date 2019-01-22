@@ -136,12 +136,19 @@ class gameboard {
 				startingPositions = [{row: Math.floor(height / 2), col: Math.floor(width / 2)}];
 				numStartingPos = 1;
 			}
-			let nrCreeps = Math.floor(numEnemies * 2 / 3);
+	
+			let nrWitchers = Math.floor(numEnemies * 1 / 8);
+			for (let  i = 0; i < nrWitchers; i++) {
+				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
+				board.enemies.push(new Witcher(randPos.row, randPos.col));
+			}
+
+			let nrCreeps = Math.floor((numEnemies - nrWitchers) * 4 / 8);
 			for (let  i = 0; i < nrCreeps; i++) {
 				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
 			}
-			for (let  i = nrCreeps; i < numEnemies; i++) {
+			for (let  i = nrCreeps + nrWitchers; i < numEnemies; i++) {
 				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Ghost(randPos.row, randPos.col));
             }

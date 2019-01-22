@@ -4,8 +4,8 @@ function RandNumInRange(start, end) {
 }
 
 class Enemy extends Character {
-    constructor(rowOnAsset, board_col, board_row, health, moveSpeed, flying, pointsWhenKilled = 15) {
-        super(moveSpeed, rowOnAsset, board_col, board_row, pointsWhenKilled);
+    constructor(rowOnAsset, board_row, board_col, health, moveSpeed, flying, pointsWhenKilled = 15) {
+        super(moveSpeed, rowOnAsset, board_row, board_col, pointsWhenKilled);
         this.health = health;
         this.flying = flying; // can this enemy type fly over walls?
     }
@@ -110,12 +110,10 @@ class Enemy extends Character {
 
 //flying, but slow
 class Ghost extends Enemy {
-    constructor(board_col, board_row) {
-        super(16, board_col, board_row, 1, 0.35, true);
+    constructor(board_row, board_col) {
+        super(16, board_row, board_col, 1, 0.30, true, 60);
 
         this.directions = new Array(2);
-
-        this.pointsWhenKilled = 30;
 
         //up and right
         this.direction[0] = new Array(8);
@@ -172,8 +170,24 @@ class Ghost extends Enemy {
 
 // basic enemy. 1 life, rather slow, can not fly.
 class Creep extends Enemy {
-    constructor(board_col, board_row) {
-        super(1 * 16, board_col, board_row, 1, 0.5, false);
+    constructor(board_row, board_col) {
+        super(1 * 16, board_row, board_col, 1, 0.5, false, 20);
+    }
+}
+
+// Becomes a Ghost when dying.
+class Witcher extends Enemy {
+    constructor(board_row, board_col) {
+        super(9 * 16, board_row, board_col, 1, 0.75, false, 40);
+    }
+
+    die(){
+        if (board.enemies.filter(enemy => enemy === this).length > 0) {
+            setTimeout(function(ghost){
+                board.enemies.push(ghost);
+            }, 1500 * 17 / GAME_SPEED, new Ghost(this.position.row, this.position.col)); //witcher becomes Ghost after dying animation is finished
+            super.die();
+        }
     }
 }
 
