@@ -164,13 +164,14 @@ class Bomb {
             this.animation.push(new AnimationFrame(14 * 16, i * 16, 16, 16));
         }
         this.state = 0;
+        this.timer = timer;
         this.fuse = setInterval(
             (function (self) {         //wrapping necessary to preserve "this"-context
                 return function () {   //otherwise, interval function would become global, where "this" does not exist
                     self.updateBombState();
                 }
             })(this),
-            timer * 100
+            timer * 110
         );  //Zündschnur
 
         this.animaton_size_factor = 1;
@@ -192,8 +193,15 @@ class Bomb {
             clearInterval(this.animation_fuse);
             this.explode();
             this.calcDamage(board.explosions);
-        } else if (this.state > 6 && this.state < 9) { //explosion is happening
-            //this.calcDamage(); // es sollte nur der erste frame schaden machen, finde ich (tell me what you think)
+            clearInterval(this.fuse);
+            this.fuse = setInterval(
+                (function (self) {         //explosion should be faster
+                    return function () {   
+                        self.updateBombState();
+                    }
+                })(this),
+                this.timer * 30
+            );  
         } else if (this.state === 9) { // Explosion fades out
             this.animation_size_factor = 0.9;
             delete board.explosions[this.explosionId];

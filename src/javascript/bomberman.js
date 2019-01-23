@@ -90,13 +90,15 @@ function placeRegisteredPlayerDiv(){
 }
 
 function startGame() {
+	let nrOfPlayers = 1;
 	window.addEventListener("gamepadconnected", function (e) {
 		if(!running){
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
-			if(e.gamepad.index < 4){
-				let htmlId = "player" + (e.gamepad.index + 2);
+			if(nrOfPlayers < 4){
+				let htmlId = "player" + (nrOfPlayers + 1);
 				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
-				gamepads.push(new gamepadController(e.gamepad));
+				gamepads.push(new gamepadController(e.gamepad, nrOfPlayers));
+				nrOfPlayers++;
 			}
 		}
 	});
@@ -123,11 +125,8 @@ function startGame() {
 		
 		setTimeout(function () {
 			audioBackground.play();
-			nrOfPlayers = 1;
-			
-			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
 			multiplayer = nrOfPlayers > 1;
-			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 3, 0.7, 0.4);
+			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
 			
 			

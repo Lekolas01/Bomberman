@@ -1,20 +1,20 @@
 /* this file contains all the logic for the user controls */
 
 
-let  KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
-let  currently_pressed = []; //keeps track of all relevant keys that are currently pressed
-let  bombKeyPressed = false; 
-let  gamepads = [];
+let KEY = { W: 87, A: 65, S: 83, D: 68, B: 66, Q: 81, SPACE: 32, RIGHT: 39, UP: 38, LEFT: 37, DOWN: 40, NONE: -1 };
+let currently_pressed = []; //keeps track of all relevant keys that are currently pressed
+let bombKeyPressed = false;
+let gamepads = [];
 
 function playerKeyPress(event) {
 
 }
 
 function playerKeyDown(event) {
-	let  key = event.keyCode ? event.keyCode : event.which;
-	let  player = board.players[0];
+	let key = event.keyCode ? event.keyCode : event.which;
+	let player = board.players[0];
 
-	if(player === undefined) return;
+	if (player === undefined) return;
 	switch (key) {
 		case KEY.DOWN:
 		case KEY.UP:
@@ -31,8 +31,8 @@ function playerKeyDown(event) {
 }
 
 function playerKeyUp(event) {
-	let  key = event.keyCode ? event.keyCode : event.which;
-	let  player = board.players[0];
+	let key = event.keyCode ? event.keyCode : event.which;
+	let player = board.players[0];
 	//console.log(player);
 	if (player === undefined) return;
 	switch (key) {
@@ -56,42 +56,78 @@ function playerKeyUp(event) {
 
 //gamepad in inputcontroler.js
 class gamepadController {
-    constructor(gamepad, btnA = 0, btnB = 1) {
-        this.gamepad = gamepad;
-        this.playerId = gamepad.index + 1;
-        this.btnA = btnA;
-        this.btnB = btnB;
-    }
+	constructor(gamepad, player_indx, btnA = 0, btnB = 1, dpad_up = 12, dpad_down = 13, dpad_left = 14, dpad_right = 15) {
+		this.gamepad = gamepad;
+		this.playerId = player_indx;
+		this.btnA = btnA;
+		this.btnB = btnB;
+		this.dpad_up = dpad_up;
+		this.dpad_down = dpad_down;
+		this.dpad_left = dpad_left;
+		this.dpad_right = dpad_right;
+	}
 
-    disconnect() {
-        gamepads = gamepads.filter(pad => pad != this);
-    }
-    checkGamepad() {
-        let horizontal = this.gamepad.axes[0];
-		let vertical = this.gamepad.axes[1];
+	disconnect() {
+		gamepads = gamepads.filter(pad => pad != this);
+	}
+	checkGamepad() {
+		if (board.players[this.playerId] === undefined) {
+			gamepads = gamepads.filter(pad => pad != this);
+			return;
+		}
+
 		let player = board.players[this.playerId];
 
 		if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
-            board.players[this.playerId].plantBomb();
+			board.players[this.playerId].plantBomb();
 		}
-		
-        if (Math.abs(horizontal) > Math.abs(vertical)) { //is vertical or horizontal axe more strongly pressed
-            if (horizontal < -0.5) { //cannot check for ones or zeros, because controller might not be that exact
+
+
+		if (!this.checkDPad(player)) { //if no direction on dpad was pressed, joystick is checked
+			this.checkLeftJoystick(player);
+		}
+	}
+	checkLeftJoystick(player) {
+		let horizontal = this.gamepad.axes[0];
+		let vertical = this.gamepad.axes[1];
+
+		if (Math.abs(horizontal) > Math.abs(vertical)) { //is vertical or horizontal axe more strongly pressed
+			if (horizontal < -0.5) { //cannot check for ones or zeros, because controller might not be that exact
 				player.updateKey(KEY.LEFT);
 				return;
-            } else if (horizontal > 0.5) {
+			} else if (horizontal > 0.5) {
 				player.updateKey(KEY.RIGHT);
 				return;
-            }
-        } else {
-            if (vertical < -0.5) {
+			}
+		} else {
+			if (vertical < -0.5) {
 				player.updateKey(KEY.UP);
 				return;
-            } else if (vertical > 0.5) {
+			} else if (vertical > 0.5) {
 				player.updateKey(KEY.DOWN);
 				return;
-            }
+			}
 		}
 		player.updateKey(KEY.NONE); //if no other Key applied
-    }
+	}
+
+	checkDPad(player){
+		let dpad = this.gamepad.buttons;
+
+		if(dpad[this.dpad_left].pressed){
+			player.updateKey(KEY.LEFT);
+			return true;
+		}else if(dpad[this.dpad_right].pressed){
+			player.updateKey(KEY.RIGHT);
+			return true;
+		}else if(dpad[this.dpad_up].pressed){
+			player.updateKey(KEY.UP);
+			return true;
+		}else if(dpad[this.dpad_down].pressed){
+			player.updateKey(KEY.DOWN);
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
