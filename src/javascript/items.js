@@ -1,4 +1,3 @@
-const numDifferentItems = 3;
 
 
 class Item {
@@ -22,6 +21,10 @@ class Item {
             case 0: this.increaseBombCount(player, 1); break;
             case 1: this.increaseBombStrength(player, 1); break;
             case 2: this.increaseMoveSpeed(player, 0.5); break;
+            case 9:
+                this.increaseBombCount(player, 1);
+                this.increaseBombStrength(player, 1);
+                this.increaseMoveSpeed(player, 1); break;
             default: console.log(" error: item not yet implemented.");
         }
     }

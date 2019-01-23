@@ -5,7 +5,7 @@ let  fontSize = 18; //for matrix anim
 
 //game logic let iables
 let  GAME_SPEED = 9; // 1 tick every 9 ms
-let  boardWidth = 17; // how many tiles is the gameboard wide?
+let  boardWidth = 19; // how many tiles is the gameboard wide?
 let  boardHeight = 15; // how many tiles is the gameboard high?
 let  tileSize = 32; // how big is one tile? (width and height)
 let  baseTileSize = 32; //used for resizing
@@ -116,7 +116,9 @@ function startGame() {
 	board = new gameboard(boardWidth, boardHeight, 0, 0, 0);
 	board.draw();
 
-	window.onkeypress = function () {
+	window.onkeypress = function (event) {
+		let key = event.keyCode ? event.keyCode : event.which;
+		if (key != KEY.SPACE) return;
 		window.onkeypress = null;
 		audioTitleScreen.pause();
 		$("#loadingView").css("display", "inline");
@@ -125,8 +127,17 @@ function startGame() {
 		
 		setTimeout(function () {
 			audioBackground.play();
-			multiplayer = nrOfPlayers > 1;
-			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
+			nrOfPlayers = 1;
+			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+			if(nrOfPlayers > 2) { // if there are more than 2 players, make the board a little bigger
+				boardWidth += 2;
+				boardHeight += 2;
+				resizeCanvas(); 
+			}
+
+			// when you're playing single player, then spawn more enemies
+			nrOfEnemies = nrOfPlayers == 1 ? 12 : (nrOfPlayers * 2) + 4;
+			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, nrOfEnemies, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
 			
 			

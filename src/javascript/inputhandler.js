@@ -79,6 +79,8 @@ class gamepadController {
 		}
 
 		let player = board.players[this.playerId];
+		console.log(`  horizontal: ${horizontal}`);
+		console.log(`  vertical: ${vertical}`);
 
 		if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
 			if (this.bombBtn_newPress) {
