@@ -65,6 +65,8 @@ class gamepadController {
 		this.dpad_down = dpad_down;
 		this.dpad_left = dpad_left;
 		this.dpad_right = dpad_right;
+
+		this.bombBtn_newPress = true; //used to avoid multible bombs beeing planeted despite the key was pressed only once
 	}
 
 	disconnect() {
@@ -79,7 +81,12 @@ class gamepadController {
 		let player = board.players[this.playerId];
 
 		if (this.gamepad.buttons[this.btnA].pressed || this.gamepad.buttons[this.btnB].pressed) {
-			board.players[this.playerId].plantBomb();
+			if (this.bombBtn_newPress) {
+				board.players[this.playerId].plantBomb();
+				this.bombBtn_newPress = false;
+			}
+		} else {
+			this.bombBtn_newPress = true;
 		}
 
 
@@ -111,22 +118,22 @@ class gamepadController {
 		player.updateKey(KEY.NONE); //if no other Key applied
 	}
 
-	checkDPad(player){
+	checkDPad(player) {
 		let dpad = this.gamepad.buttons;
 
-		if(dpad[this.dpad_left].pressed){
+		if (dpad[this.dpad_left].pressed) {
 			player.updateKey(KEY.LEFT);
 			return true;
-		}else if(dpad[this.dpad_right].pressed){
+		} else if (dpad[this.dpad_right].pressed) {
 			player.updateKey(KEY.RIGHT);
 			return true;
-		}else if(dpad[this.dpad_up].pressed){
+		} else if (dpad[this.dpad_up].pressed) {
 			player.updateKey(KEY.UP);
 			return true;
-		}else if(dpad[this.dpad_down].pressed){
+		} else if (dpad[this.dpad_down].pressed) {
 			player.updateKey(KEY.DOWN);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
