@@ -15,6 +15,7 @@ let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 let  board; // board: saves the information about the current gameboard
 let  score_board;
 let  player_info;
+let multiplayer = false;
 
 let  running = false; // game currently on?
 let renderIntervalId = null;
@@ -89,13 +90,15 @@ function placeRegisteredPlayerDiv(){
 }
 
 function startGame() {
+	let nrOfPlayers = 1;
 	window.addEventListener("gamepadconnected", function (e) {
 		if(!running){
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
-			if(e.gamepad.index < 4){
-				let htmlId = "player" + (e.gamepad.index + 2);
+			if(nrOfPlayers < 4){
+				let htmlId = "player" + (nrOfPlayers + 1);
 				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
-				gamepads.push(new gamepadController(e.gamepad));
+				gamepads.push(new gamepadController(e.gamepad, nrOfPlayers));
+				nrOfPlayers++;
 			}
 		}
 	});
@@ -122,9 +125,7 @@ function startGame() {
 		
 		setTimeout(function () {
 			audioBackground.play();
-			nrOfPlayers = 1;
-			
-			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+			multiplayer = nrOfPlayers > 1;
 			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, 10, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
 			
@@ -153,15 +154,23 @@ function gameOver(){
 	let nrPlayers = board.players.filter(player => player !== undefined).length;
 	audioBackground.pause();
 	$("#gameOver").css("display", "block");
-
 	if(nrPlayers === 0){
 		$("#gameOver text").attr("fill", "red");
 		$("#gameOver text").html("GameOver");
 		audioGameOver.play();
 	}else{
-		let winner = score_board.leadingPlayer();
 		$("#gameOver text").attr("fill", "green");
-		$("#gameOver text").html(`Player ${winner + 1} has won`);
+		if(multiplayer){
+			for(let i = 0; i < board.players.length; i++){
+				if(board.players[i] !== undefined){
+					winner = i;
+					break;
+				}
+			}
+			$("#gameOver text").html(`Player ${winner + 1} has won`);
+		}else{
+			$("#gameOver text").html(`You have won the Game!`);
+		}
 		audioGameWon.play();
 	}
 
@@ -205,9 +214,4 @@ function drawScreen() {
 	board.draw();
 	score_board.draw(scoreboard_ctx, board.players);
 	player_info.draw(playerinfo_ctx, board.players);
-
-	let playersLeft = board.players.filter(player => player !== undefined).length;
-	if (playersLeft === 0 || (board.enemies.length === 0 && playersLeft !== 0)) {
-		setTimeout(gameOver, 500);
-	}
 }

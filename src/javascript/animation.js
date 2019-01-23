@@ -4,8 +4,8 @@ class AnimationFrame {
 		this.x = x;
 		this.y = y;
 		this.dim_x = dim_x;
-        this.dim_y = dim_y;
-        this.animation_size = animation_size;
+		this.dim_y = dim_y;
+		this.animation_size = animation_size;
 	}
 }
 
@@ -60,11 +60,10 @@ class Character {
 		// empty tile, for if a player has died, but the game still goes on
 		this.direction[4] = new Array(1);
 		this.direction[4][0] = new AnimationFrame(1 * dim_x, 18 * 16, dim_x, dim_y);
-        
+
 		this.last_direction = DIRECTION.UP; //up per default
-		this.dead = false;
 		this.tick = 0; //used for calculating wich animation is displayed
-        this.frame_cnt = -1; //used for calculation of pixel offset when moving
+		this.frame_cnt = -1; //used for calculation of pixel offset when moving
 
 	}
 
@@ -74,7 +73,7 @@ class Character {
 
 	/*this function is called once every nth frame, where n = MOVEMENT_SPEED*/
 	refreshPos() {
-		let  player = this;
+		let player = this;
 		if (!this.idle) {
 			switch (this.last_direction) {
 				case DIRECTION.DOWN: //based on  direction, the characters position in the matrix is updated
@@ -91,14 +90,14 @@ class Character {
 					break;
 			}
 
-			board.items.forEach(function(item, index, object) {
+			board.items.forEach(function (item, index, object) {
 				if (item.position.row == player.position.row &&
 					item.position.col == player.position.col) {
-						item.updatePlayer(player, item); // trigger the effect on the player
-						audioPickupItem.play();
-						object.splice(index, 1); // destroy the item
+					item.updatePlayer(player, item); // trigger the effect on the player
+					audioPickupItem.play();
+					object.splice(index, 1); // destroy the item
 
-					}
+				}
 			})
 		}
 	}
@@ -179,7 +178,7 @@ class Character {
 	}
 
 	//changes the movement speed of this characeter
-	setSpeed(value){
+	setSpeed(value) {
 		this.moveSpeed = value;
 		this.speed = Math.round((6.66666666667 * GAME_SPEED) / this.moveSpeed);
 	}
@@ -203,37 +202,39 @@ class Character {
 			default:
 				return this.last_direction; //make it more likley that monster keeps moving in the same direction (looks more natural)
 		}
-    }
-    
+	}
 
-    //is called by base function.
-    die(){
-        board.morituri.push(this);
-		this.dead = true;
+
+	//is called by base function.
+	die() {
+		board.morituri.push(this);
 		this.idle = true;
-		this.last_direction = DIRECTION.DOWN;
-		this.position.col = 0; // this moves the player to a point on the gameboard that cannot be reached
-		this.position.row = 0;
-        this.tick = -1;
-        this.bleed = setInterval(
-            (function (self) {         //wrapping necessary to preserve "this"-context
-                return function () {
-                    self.animateDying();
-                }
-            })(this),
-            1500/GAME_SPEED); //~6 times per second
-    }
+		this.tick = -1;
+		this.bleed = setInterval(
+			(function (self) {         //wrapping necessary to preserve "this"-context
+				return function () {
+					self.animateDying();
+				}
+			})(this),
+			1500 / GAME_SPEED); //~6 times per second
+	}
 
 
-    animateDying(){
-        this.tick++;
-        if(this.tick >= 16){
-            this.bleed = null;
-            board.morituri = board.morituri.filter(moribunda => moribunda != this);
-            return;
-        }
+	animateDying() {
+		this.tick++;
+		if(this.tick === 14){
+			let pleft = board.players.filter(player => player !== undefined).length;
+			console.log("pleft: " + pleft + " multiplayer: " + multiplayer + " nr enemies: " + board.enemies.length);
+			if (pleft === 0 || multiplayer && pleft === 1 || !multiplayer && board.enemies.length === 0) gameOver();
+			return;
+		}
+		if (this.tick >= 16) {
+			clearInterval(this.bleed);
+			board.morituri = board.morituri.filter(moribunda => moribunda != this);
+			return;
+		}
 
-        if(this.tick % 4 < 2) this.getAnimation().animation_size = 0;
-        else this.getAnimation().animation_size = tileSize;     
-    }
+		if (this.tick % 4 < 2) this.getAnimation().animation_size = 0;
+		else this.getAnimation().animation_size = tileSize;
+	}
 }
