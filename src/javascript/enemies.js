@@ -102,10 +102,14 @@ class Enemy extends Character {
 
     die() {
         if (board.enemies.filter(enemy => enemy === this).length > 0) {
+            board.enemies.forEach(enemy => {
+                if(enemy === this) board.addBasicItem(enemy.position.row, enemy.position.col);
+            });
             board.enemies = board.enemies.filter(enemy => enemy != this);
             super.die();
         }
     }
+
 }
 
 //flying, but slow

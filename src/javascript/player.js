@@ -10,7 +10,7 @@ class Player extends Character {
         super(2, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
         this.maxBombs = 1;
-        this.bombStrength = 1;
+        this.bombStrength = 1 ;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
@@ -287,7 +287,7 @@ class Bomb {
                     this.plantedBy.updateScore(5); //5 point for destroying walls
 
                     if (Math.random() <= board.itemSpawnChance) {
-                        board.addRandomItem(exp_part.position.row, exp_part.position.col);
+                        board.addBasicItem(exp_part.position.row, exp_part.position.col);
                     }
                 }
 

@@ -143,7 +143,7 @@ class gameboard {
 				board.enemies.push(new Witcher(randPos.row, randPos.col));
 			}
 
-			let nrCreeps = Math.floor((numEnemies - nrWitchers) * 4 / 8);
+			let nrCreeps = Math.floor((numEnemies - nrWitchers) * 5 / 8);
 			for (let  i = 0; i < nrCreeps; i++) {
 				let  randPos = startingPositions[RandNumInRange(0, numStartingPos)];
 				board.enemies.push(new Creep(randPos.row, randPos.col));
@@ -154,12 +154,25 @@ class gameboard {
             }
 		}
 
+		// this spawns a unique upgrade in the middle of the map
+		// it increases all of your stats by 1!! (Each of my stats? This is crazy!)
+		function initStarUpgrade(board) {
+			board.data[Math.floor(height / 2)][Math.floor(width / 2)] = tileTypes.empty;
+			board.data[Math.floor(height / 2) - 1][Math.floor(width / 2)] = tileTypes.breakableWall;
+			board.data[Math.floor(height / 2)][Math.floor(width / 2) - 1] = tileTypes.breakableWall;
+			board.data[Math.floor(height / 2) + 1][Math.floor(width / 2)] = tileTypes.breakableWall;
+			board.data[Math.floor(height / 2)][Math.floor(width / 2) + 1] = tileTypes.breakableWall;
+			board.items.push(new Item(Math.floor(height / 2), Math.floor(width / 2), 9));
+			
+		}
+
 		initOuterWall(this);
 		initGrass(this);
 		initGridTiles(this);
 		initBreakableWalls(this);
 		initPlayers(this);
-        initEnemies(this);
+		initStarUpgrade(this);
+		initEnemies(this);
     } // end constructor
     
     drawGround() {
@@ -230,6 +243,17 @@ class gameboard {
 					}
 			}
 		}
+
+		for(let  i = 0; i < this.items.length; i++) {
+			for(let  j = 0; j < positions.length; j++) {
+				if (this.items[i].position.row == positions[j].row &&
+					this.items[i].position.col == positions[j].col) {
+						positions.splice(j, 1); // filter all tiles with players near it
+						j--;
+					}
+			}
+		}
+		
 		return positions;
 	}
 
@@ -253,8 +277,8 @@ class gameboard {
 			   col >= 0 && this.width > col;
 	}
 
-	addRandomItem(row, col) {
-		let  itemId = RandNumInRange(0, numDifferentItems);
+	addBasicItem(row, col) {
+		let  itemId = RandNumInRange(0, 3);
 		this.items.push(new Item(row, col, itemId));
 	}
 }
