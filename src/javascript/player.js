@@ -83,8 +83,11 @@ class Player extends Character {
     die() {
         let playerIndex = board.players.indexOf(this);
         if (playerIndex >= 0) {
+            if (playerIndex > 0){ 
+                gamepads.filter(pad => pad !== undefined && pad.playerId === playerIndex)[0].disconnect();
+            }
             delete board.players[playerIndex];
-            if (playerIndex > 0) gamepads[playerIndex - 1].disconnect();
+            board.players.forEach(player => player.updateScore(50)); // each surviving player gets 50 Points
             super.die();
         }
     }
@@ -193,15 +196,6 @@ class Bomb {
             clearInterval(this.animation_fuse);
             this.explode();
             this.calcDamage(board.explosions);
-            clearInterval(this.fuse);
-            this.fuse = setInterval(
-                (function (self) {         //explosion should be faster
-                    return function () {   
-                        self.updateBombState();
-                    }
-                })(this),
-                this.timer * 30
-            );  
         } else if (this.state === 9) { // Explosion fades out
             this.animation_size_factor = 0.9;
             delete board.explosions[this.explosionId];
@@ -218,6 +212,17 @@ class Bomb {
 
         this.plantedBy.activeBombs--; //bomb is no longer active, so reduce # of active bombs in player
         audioBombExplode.play();
+
+        clearInterval(this.fuse);
+            this.fuse = setInterval(
+                (function (self) {         //explosion should be faster
+                    return function () {   
+                        self.updateBombState();
+                    }
+                })(this),
+                this.timer * 30);  
+
+
         //up
         for (let i = 1; i <= this.range; i++) {
             if (board.data[row - i][col] === tileTypes.wall) break; //if its a wall, explosion cannot expand further
@@ -315,7 +320,7 @@ class Bomb {
     //when bomb is near another explosion, bomb will go off sooner
     earlyfuze() {
         if (this.state < 6) {
-            this.state = 5;
+            this.state = 6;
             clearInterval(this.animation_fuse);
             this.explode();
             this.calcDamage(board.explosions);

@@ -69,12 +69,18 @@ class gamepadController {
 		this.bombBtn_newPress = true; //used to avoid multible bombs beeing planeted despite the key was pressed only once
 	}
 
-	disconnect() {
-		gamepads = gamepads.filter(pad => pad != this);
+	disconnect(died = true) {//when died === true, player disconects because of gameplay. else because controller was removed
+		if (died) {
+			gamepads = gamepads.filter(pad => pad != this);
+			console.log("Gamepad with index " + this.gamepad.index + " disconnected. Belonging to Player " + (this.playerId + 1));
+		} else if (board.players[this.playerId] !== undefined) {
+			board.players[this.playerId].die(); //when gamepad is disconnected mid game, that player dies
+		}
 	}
+	
 	checkGamepad() {
 		if (board.players[this.playerId] === undefined) {
-			gamepads = gamepads.filter(pad => pad != this);
+			this.disconnect();
 			return;
 		}
 

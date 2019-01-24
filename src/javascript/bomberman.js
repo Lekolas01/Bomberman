@@ -111,6 +111,8 @@ function startGame() {
 	}, 500);
 	window.addEventListener("gamepaddisconnected", function (e) {
 		console.log("hm...that's unfortunate");
+		let pad = gamepads.filter(pad => pad !== undefined && pad.gamepad.index === e.gamepad.index)[0];
+		if(pad !== undefined) pad.disconnect(false);
 	});
 
 	board = new gameboard(boardWidth, boardHeight, 0, 0, 0);
@@ -127,8 +129,7 @@ function startGame() {
 		
 		setTimeout(function () {
 			audioBackground.play();
-			nrOfPlayers = 1;
-			if (gamepads.length !== undefined) nrOfPlayers += gamepads.length;
+			multiplayer = nrOfPlayers > 1;
 			if(nrOfPlayers > 2) { // if there are more than 2 players, make the board a little bigger
 				boardWidth += 2;
 				boardHeight += 2;
@@ -136,7 +137,7 @@ function startGame() {
 			}
 
 			// when you're playing single player, then spawn more enemies
-			nrOfEnemies = nrOfPlayers == 1 ? 12 : (nrOfPlayers * 2) + 4;
+			nrOfEnemies = !multiplayer ? 12 : (nrOfPlayers * 2) + 4;
 			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, nrOfEnemies, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
 			
