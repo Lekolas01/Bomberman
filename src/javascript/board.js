@@ -219,11 +219,11 @@ class gameboard {
 	draw() {
 		//col = x coordinates, row = y
 		this.drawGround();
-		this.drawObjects(this.morituri);
 		this.drawObjects(this.items);
 		this.drawObjects(this.bombs);
 		this.drawObjects(this.enemies);
 		this.drawObjects(this.players);
+		this.drawObjects(this.morituri);
 		this.explosions.forEach(explosion => this.drawObjects(explosion));
 
 	}
