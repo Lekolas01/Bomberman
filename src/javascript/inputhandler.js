@@ -77,7 +77,7 @@ class gamepadController {
 			board.players[this.playerId].die(); //when gamepad is disconnected mid game, that player dies
 		}
 	}
-	
+
 	checkGamepad() {
 		if (board.players[this.playerId] === undefined) {
 			this.disconnect();

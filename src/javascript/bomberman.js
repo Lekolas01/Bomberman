@@ -1,23 +1,23 @@
-let  game_canvas, game_ctx;
-let  scoreboard_canvas, scoreboard_ctx;
+let game_canvas, game_ctx;
+let scoreboard_canvas, scoreboard_ctx;
 let loading_canvas, loading_canvas_ctx;
-let  fontSize = 18; //for matrix anim
+let fontSize = 18; //for matrix anim
 
 //game logic let iables
-let  GAME_SPEED = 9; // 1 tick every 9 ms
-let  boardWidth = 19; // how many tiles is the gameboard wide?
-let  boardHeight = 15; // how many tiles is the gameboard high?
-let  tileSize = 32; // how big is one tile? (width and height)
-let  baseTileSize = 32; //used for resizing
-let  audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon, audioTitleScreen;
-let  DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
+let GAME_SPEED = 9; // 1 tick every 9 ms
+let boardWidth = 19; // how many tiles is the gameboard wide?
+let boardHeight = 15; // how many tiles is the gameboard high?
+let tileSize = 32; // how big is one tile? (width and height)
+let baseTileSize = 32; //used for resizing
+let audioPickupItem, audioBombExplode, audioBackground, audioGameOver, audioGameWon, audioTitleScreen;
+let DIRECTION = { UP: 'UP', DOWN: 'DOWN', LEFT: 'LEFT', RIGHT: 'RIGHT' };
 
-let  board; // board: saves the information about the current gameboard
-let  score_board;
-let  player_info;
+let board; // board: saves the information about the current gameboard
+let score_board;
+let player_info;
 let multiplayer = false;
 
-let  running = false; // game currently on?
+let running = false; // game currently on?
 let renderIntervalId = null;
 
 //--------------------------------------------------------------------------
@@ -50,12 +50,12 @@ window.onload = function () {
 	startGame();
 };
 
-function resizeCanvas(){
-	if(document.body.offsetWidth < 1000){
+function resizeCanvas() {
+	if (document.body.offsetWidth < 1000) {
 		tileSize = Math.floor(0.07 * document.body.offsetWidth - 7);
 	}
-	if(document.body.offsetHeight < 1000){
-		let tmp = Math.floor(0.07 * document.body.offsetHeight -  9.6);
+	if (document.body.offsetHeight < 1000) {
+		let tmp = Math.floor(0.07 * document.body.offsetHeight - 9.6);
 		tileSize = Math.min(tileSize, tmp);
 	}
 
@@ -82,7 +82,7 @@ function resizeCanvas(){
 
 window.onresize = placeRegisteredPlayerDiv;
 
-function placeRegisteredPlayerDiv(){
+function placeRegisteredPlayerDiv() {
 	let div = $("#registeredPlayers");
 	let pos = $("#scoreboard").position();
 	div.css("left", pos.left + 30);
@@ -92,9 +92,9 @@ function placeRegisteredPlayerDiv(){
 function startGame() {
 	let nrOfPlayers = 1;
 	window.addEventListener("gamepadconnected", function (e) {
-		if(!running){
+		if (!running) {
 			console.log("Gamepad with index " + e.gamepad.index + " connected");
-			if(nrOfPlayers < 4){
+			if (nrOfPlayers < 4) {
 				let htmlId = "player" + (nrOfPlayers + 1);
 				document.getElementById(htmlId).innerHTML = "Gamepad " + (e.gamepad.index + 1);
 				gamepads.push(new gamepadController(e.gamepad, nrOfPlayers));
@@ -103,7 +103,7 @@ function startGame() {
 		}
 	});
 	//setup an interval for Chrome
-	let  checkChrome = window.setInterval(function () {
+	let checkChrome = window.setInterval(function () {
 		if (navigator.getGamepads()[0]) {
 			$(window).trigger("gamepadconnected");
 			window.clearInterval(checkChrome);
@@ -112,7 +112,7 @@ function startGame() {
 	window.addEventListener("gamepaddisconnected", function (e) {
 		console.log("hm...that's unfortunate");
 		let pad = gamepads.filter(pad => pad !== undefined && pad.gamepad.index === e.gamepad.index)[0];
-		if(pad !== undefined) pad.disconnect(false);
+		if (pad !== undefined) pad.disconnect(false);
 	});
 
 	board = new gameboard(boardWidth, boardHeight, 0, 0, 0);
@@ -125,33 +125,33 @@ function startGame() {
 		audioTitleScreen.pause();
 		$("#loadingView").css("display", "inline");
 		$("#startView").css("display", "none");
-		
-		
+
+
 		setTimeout(function () {
 			audioBackground.play();
 			multiplayer = nrOfPlayers > 1;
-			if(nrOfPlayers > 2) { // if there are more than 2 players, make the board a little bigger
+			if (nrOfPlayers > 2) { // if there are more than 2 players, make the board a little bigger
 				boardWidth += 2;
 				boardHeight += 2;
-				resizeCanvas(); 
+				resizeCanvas();
 			}
 
 			// when you're playing single player, then spawn more enemies
 			nrOfEnemies = !multiplayer ? 12 : (nrOfPlayers * 2) + 4;
 			board = new gameboard(boardWidth, boardHeight, nrOfPlayers, nrOfEnemies, 0.7, 0.4);
 			score_board = new scoreboard(nrOfPlayers);
-			
-			
+
+
 			//add key listeners for player Controls
 			window.onkeydown = playerKeyDown;
 			window.onkeyup = playerKeyUp;
-			
+
 			renderIntervalId = setInterval(loop, GAME_SPEED);
 			running = true;
 			$("#loadingView").css("display", "none");
-		  	$("#registeredPlayers").css("display", "none");
+			$("#registeredPlayers").css("display", "none");
 		}, 3000);
-	  };
+	};
 }
 
 // is called every 9 ms
@@ -162,25 +162,25 @@ function loop() {
 	drawScreen();
 }
 
-function gameOver(){
+function gameOver() {
 	let nrPlayers = board.players.filter(player => player !== undefined).length;
 	audioBackground.pause();
 	$("#gameOver").css("display", "block");
-	if(nrPlayers === 0){
+	if (nrPlayers === 0) {
 		$("#gameOver text").attr("fill", "red");
 		$("#gameOver text").html("GameOver");
 		audioGameOver.play();
-	}else{
+	} else {
 		$("#gameOver text").attr("fill", "green");
-		if(multiplayer){
-			for(let i = 0; i < board.players.length; i++){
-				if(board.players[i] !== undefined){
+		if (multiplayer) {
+			for (let i = 0; i < board.players.length; i++) {
+				if (board.players[i] !== undefined) {
 					winner = i;
 					break;
 				}
 			}
 			$("#gameOver text").html(`Player ${winner + 1} has won`);
-		}else{
+		} else {
 			$("#gameOver text").html(`You have won the Game!`);
 		}
 		audioGameWon.play();

@@ -17,7 +17,7 @@ class Item {
     }
 
     updatePlayer(player, item) {
-        switch(item.itemId) {
+        switch (item.itemId) {
             case 0: this.increaseBombCount(player, 1); break;
             case 1: this.increaseBombStrength(player, 1); break;
             case 2: this.increaseMoveSpeed(player, 0.5); break;
@@ -34,19 +34,17 @@ class Item {
     }
 
     increaseMoveSpeed(player, value) {
-        let  newSpeed = Math.min(player.moveSpeed + value, playerMaxStats.moveSpeed);
+        let newSpeed = Math.min(player.moveSpeed + value, playerMaxStats.moveSpeed);
         player.setSpeed(newSpeed);
     }
 
     increaseBombCount(player, value) {
-        let  newBombCount = Math.min(player.maxBombs + value, playerMaxStats.maxBombs);
+        let newBombCount = Math.min(player.maxBombs + value, playerMaxStats.maxBombs);
         player.maxBombs = newBombCount;
     }
 
     increaseBombStrength(player, value) {
-        let  newBombStrength = Math.min(player.bombStrength + value, playerMaxStats.bombStrength);
+        let newBombStrength = Math.min(player.bombStrength + value, playerMaxStats.bombStrength);
         player.bombStrength = newBombStrength;
     }
-
-    
 }

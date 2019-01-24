@@ -6,7 +6,7 @@ function openForm() {
         document.getElementById("contact").setAttribute("class", "active");
     }
 
-    let  popup = document.getElementById("contact_form");
+    let popup = document.getElementById("contact_form");
 
     popup.style.display = "block";
 
@@ -18,9 +18,9 @@ function openForm() {
 function submitForm() {
     /*if we had a real server, we would send our input to the server here*/
 
-    let  contact_form = document.getElementById("contact_form");
+    let contact_form = document.getElementById("contact_form");
     contact_form.style.opacity = 1;
-    let  fade_effect = setInterval(function () {
+    let fade_effect = setInterval(function () {
         if (contact_form.style.opacity > 0) {
             contact_form.style.opacity -= 0.02;
         } else {
@@ -56,8 +56,8 @@ function closeForm() {
     document.getElementById("contact_form").style.opacity = 1;
 }
 
-$(window).load(function(){
-    $("#header").load("nav.html #nav-bar > *", function(){
+$(window).load(function () {
+    $("#header").load("nav.html #nav-bar > *", function () {
         let active = document.getElementsByTagName("title")[0].innerText.toLowerCase();
         last_active = document.getElementById(active);
         last_active.setAttribute("class", "active");

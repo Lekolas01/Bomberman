@@ -31,8 +31,7 @@ class Enemy extends Character {
 
         // check for out of bounds, for more robust code
         if (typeof board.data[row] !== 'undefined' &&
-            typeof board.data[row][col] !== 'undefined') 
-        {
+            typeof board.data[row][col] !== 'undefined') {
             return board.data[row][col].passable || (this.flying && board.data[row][col] !== tileTypes.wall);
         } else {
             return false;
@@ -103,7 +102,7 @@ class Enemy extends Character {
     die() {
         if (board.enemies.filter(enemy => enemy === this).length > 0) {
             board.enemies.forEach(enemy => {
-                if(enemy === this) board.addBasicItem(enemy.position.row, enemy.position.col);
+                if (enemy === this) board.addBasicItem(enemy.position.row, enemy.position.col);
             });
             board.enemies = board.enemies.filter(enemy => enemy != this);
             super.die();
@@ -148,7 +147,7 @@ class Ghost extends Enemy {
             this.tick += 1; //counts next animation
         }
 
-        if(this.tick === 13) this.tick = 0;
+        if (this.tick === 13) this.tick = 0;
 
         if (movement !== this.last_direction) {
             //direction changed
@@ -157,7 +156,7 @@ class Ghost extends Enemy {
 
         this.last_direction = movement; //save the direction, the character is heading
         let face = 1;
-        if(this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT){
+        if (this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT) {
             face = 0;
         }
         return this.direction[face][this.tick % 8];
@@ -165,7 +164,7 @@ class Ghost extends Enemy {
 
     getIdle() {
         let face = 1;
-        if(this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT){
+        if (this.last_direction === DIRECTION.UP || this.last_direction === DIRECTION.RIGHT) {
             face = 0;
         }
         return this.direction[face][0];
@@ -185,9 +184,9 @@ class Witcher extends Enemy {
         super(9 * 16, board_row, board_col, 1, 0.75, false, 40);
     }
 
-    die(){
+    die() {
         if (board.enemies.filter(enemy => enemy === this).length > 0) {
-            setTimeout(function(ghost){
+            setTimeout(function (ghost) {
                 board.enemies.push(ghost);
             }, 1500 * 17 / GAME_SPEED, new Ghost(this.position.row, this.position.col)); //witcher becomes Ghost after dying animation is finished
             super.die();

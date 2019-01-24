@@ -222,7 +222,7 @@ class Character {
 
 	animateDying() {
 		this.tick++;
-		if(this.tick === 14){
+		if (this.tick === 14) {
 			let pleft = board.players.filter(player => player !== undefined).length;
 			console.log("pleft: " + pleft + " multiplayer: " + multiplayer + " nr enemies: " + board.enemies.length);
 			if (pleft === 0 || multiplayer && pleft === 1 || !multiplayer && board.enemies.length === 0) gameOver();

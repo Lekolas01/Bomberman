@@ -10,7 +10,7 @@ class Player extends Character {
         super(2, rowOnAsset * 16, row, col, 100); //100 points another player kills this
         this.health = health;
         this.maxBombs = 1;
-        this.bombStrength = 1 ;
+        this.bombStrength = 1;
         this.activeBombs = 0;
         this.lastKeyInput = KEY.NONE;
         this.canMove = true; // used for checking passable walls
@@ -83,7 +83,7 @@ class Player extends Character {
     die() {
         let playerIndex = board.players.indexOf(this);
         if (playerIndex >= 0) {
-            if (playerIndex > 0){ 
+            if (playerIndex > 0) {
                 gamepads.filter(pad => pad !== undefined && pad.playerId === playerIndex)[0].disconnect();
             }
             delete board.players[playerIndex];
@@ -214,13 +214,13 @@ class Bomb {
         audioBombExplode.play();
 
         clearInterval(this.fuse);
-            this.fuse = setInterval(
-                (function (self) {         //explosion should be faster
-                    return function () {   
-                        self.updateBombState();
-                    }
-                })(this),
-                this.timer * 30);  
+        this.fuse = setInterval(
+            (function (self) {         //explosion should be faster
+                return function () {
+                    self.updateBombState();
+                }
+            })(this),
+            this.timer * 30);
 
 
         //up
@@ -333,5 +333,4 @@ class Bomb {
         this.animation[this.state].animation_size = tileSize * this.animation_size_factor;
         return this.animation[this.state];
     }
-
 }
