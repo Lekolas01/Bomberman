@@ -315,7 +315,7 @@ class Bomb {
     //when bomb is near another explosion, bomb will go off sooner
     earlyfuze() {
         if (this.state < 6) {
-            this.state = 6;
+            this.state = 5;
             clearInterval(this.animation_fuse);
             this.explode();
             this.calcDamage(board.explosions);
